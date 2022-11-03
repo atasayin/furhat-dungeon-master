@@ -1,0 +1,4 @@
+15:42:08 [Skill] INFO  Skill:137 - Connecting to Furhat server on 0.0.0.0:1932
+15:42:08 [NewskillSkill] INFO  NewskillSkill:164 - Starting skill
+15:50:24 [EventSystem] ERROR EventSystem:182 - Timed out while waiting for class furhatos.event.responses.ResponseFaceEngine
+15:50:24 [EventSystem] WARN  FurhatFace:255 - Exception while waiting for FaceEngine
