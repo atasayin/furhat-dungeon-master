@@ -12,13 +12,7 @@ val Greeting : State = state(Parent) {
             { furhat.say("Oh, hello there")}
         )
 
-       // furhat.say{
-        //    +"Welcome to our Progress Meeting."
-        //    +"In this presentation, we will talk about what we have done in this week. "
-         //   + furhatos.gestures.Gestures.BigSmile(duration=2.0, strength = 10.0)
-        //}
-
-        goto(Ezekiel)
+        goto(TakingOrder)
     }
 
 }
