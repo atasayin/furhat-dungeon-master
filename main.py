@@ -76,6 +76,6 @@ while run:
 
 	if time.time() - furhat_last_spoke > 5:
 		furhat_last_spoke = time.time()
-		furhat.say(text="n-word")
+		furhat.say(text="n")
 
 # pygame.quit()
