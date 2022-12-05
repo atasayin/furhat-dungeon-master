@@ -1,7 +1,0 @@
-18:20:17 [Skill] INFO  Skill:137 - Connecting to Furhat server on 0.0.0.0:1932
-18:20:17 [NewskillSkill] INFO  NewskillSkill:164 - Starting skill
-18:25:47 [EventSystem] WARN  FurhatSpeech:150 - Cannot find voice Miguel (es-US) - Amazon Polly
-18:26:57 [EventSystem] ERROR EventSystem:182 - Timed out while waiting for class furhatos.event.responses.ResponseFaceEngine
-18:26:57 [EventSystem] WARN  FurhatFace:255 - Exception while waiting for FaceEngine
-18:26:58 [EventSystem] ERROR EventSystem:182 - Timed out while waiting for class furhatos.event.responses.ResponseFaceEngine
-18:26:58 [EventSystem] WARN  FurhatFace:255 - Exception while waiting for FaceEngine
