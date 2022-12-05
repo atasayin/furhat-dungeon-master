@@ -10,7 +10,6 @@ from time import sleep
 import time
 from Scenes.title_screen import TitleScene
 import threading
-import multiprocessing
 
 furhat_last_spoke = time.time()
 
