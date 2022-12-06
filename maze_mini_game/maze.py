@@ -1,3 +1,5 @@
+from collections import deque
+
 class Maze:
     def __init__(self, grid, start_point, end_point):
         self.isWin = False
@@ -21,6 +23,15 @@ class Maze:
             self.current_point = move_point
             self.win()
             return True
+
+    def moveLeft(self):
+        return self.move((0,-1))
+    def moveRight(self):
+        return self.move((0,1))
+    def moveUp(self):
+        return self.move((-1,0))
+    def moveDown(self):
+        return self.move((1,0))
     def win(self):
         self.isWin = True
         print(f"You have reached the end point at {self.current_point}")
@@ -29,6 +40,8 @@ class Maze:
         pass
     def solver(self):
         pass
+        
+
 
 
 
@@ -37,7 +50,4 @@ class Maze:
 
     
     
-
-
-
 
