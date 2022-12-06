@@ -1,19 +1,23 @@
 from .scene_base import SceneBase
 import pygame
+from Scenes.rps_game import RPSScene
 
 class FurhatPhotoScene(SceneBase):
 	def __init__(self):
 		SceneBase.__init__(self)
 		self.slide = 0
 		self.furhat_img = pygame.image.load("furhat.jpeg").convert_alpha()
+		print("New Photo Scene")
 
 	
 	def ProcessInput(self, events, pressed_keys):
 		if pressed_keys[pygame.K_SPACE]:
-			self.Terminate()
+			self.SwitchToScene(RPSScene())
+
 		
 	def Update(self):
-		print("update furhat")
+		# print("update furhat")
+		pass
 	
 	def Render(self, WIN):
 		# The game scene is just a blank blue screen 

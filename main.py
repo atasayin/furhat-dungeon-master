@@ -9,6 +9,7 @@ from furhat_remote_api import FurhatRemoteAPI
 from time import sleep
 import time
 from Scenes.title_screen import TitleScene
+from Scenes.furhat_photo_screen import FurhatPhotoScene
 import threading
 
 furhat_last_spoke = time.time()
@@ -44,6 +45,7 @@ def render_method(scene, event, fps):
 def run_game(width, height, fps, starting_scene):
 
 	pygame.display.set_caption("Dungeon Master")
+	print("running")
 
 	change_scene_event = threading.Event()
 
@@ -55,7 +57,9 @@ def run_game(width, height, fps, starting_scene):
 
 	# render_thread = multiprocessing.Process(target=render_method, args=(active_scene,120))
 	# render_thread.start()
-
+	update_result = None
+	manual_change = False
+	
 	while active_scene != None:
 		pressed_keys = pygame.key.get_pressed()
 		
@@ -80,11 +84,26 @@ def run_game(width, height, fps, starting_scene):
 				filtered_events.append(event)
 		
 		active_scene.ProcessInput(filtered_events, pressed_keys)
-		active_scene.Update()
+		if update_result is None:
+			# print(f"UPDATE YERI : {active_scene}")
+			sleep(0.05)
+			update_result = active_scene.Update()
+		# active_scene.SwitchToScene(TitleScene())
 		# active_scene.Render(screen)
+
+		if update_result is not None:
+			# active_scene.SwitchToScene(FurhatPhotoScene())
+			# active_scene = active_scene.next
+			active_scene = FurhatPhotoScene()
+			manual_change = True
+
+			# active_scene = FurhatPhotoScene()
+			print(f" NEXT SCENE when switch to furhat: {active_scene.next}")
+			update_result = None
 		
-		if active_scene != active_scene.next:
-			print("SCENE CHANGE")
+		if active_scene != active_scene.next or manual_change:
+			manual_change = False
+			print(f"SCENE CHANGE from {active_scene} to {active_scene.next}")
 			change_scene_event.set()
 			render_thread.join()
 
@@ -105,7 +124,7 @@ game_state = "intro"
 slide = 0
 
 run_game(WIDTH, HEIGHT, 120, TitleScene())
-# while run:
+
 
 # 	if game_state is "intro":
 # 		WIN.fill(WHITE)
