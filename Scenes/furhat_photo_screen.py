@@ -1,6 +1,6 @@
 from .scene_base import SceneBase
 import pygame
-from Scenes.rps_game import RPSScene
+from Scenes.rps_game import *
 
 class FurhatPhotoScene(SceneBase):
 	def __init__(self):
@@ -13,6 +13,8 @@ class FurhatPhotoScene(SceneBase):
 	def ProcessInput(self, events, pressed_keys):
 		if pressed_keys[pygame.K_SPACE]:
 			self.SwitchToScene(RPSScene())
+		elif pressed_keys[pygame.K_m]:
+			self.SwitchToScene(MazeScene())
 
 		
 	def Update(self):
