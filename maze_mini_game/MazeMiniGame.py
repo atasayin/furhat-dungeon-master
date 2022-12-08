@@ -1,4 +1,4 @@
-from maze import Maze
+from .maze import Maze
 
 class MazeMiniGame():
     def __init__(self, maze):
@@ -19,7 +19,7 @@ class MazeMiniGame():
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         start_point = 1, 1
-        end_point = 1, 2 #2,5
+        end_point = 2, 5 #1,2
         self.maze = Maze(grid,start_point,end_point)
     
     def play_game(self):
@@ -30,11 +30,11 @@ class MazeMiniGame():
                 if answer == "left":
                     self.maze.moveLeft()
                 elif answer == "right":
-                    self.mazemoveRight()
+                    self.maze.moveRight()
                 elif answer == "up":
-                    self.mazemoveUp()
+                    self.maze.moveUp()
                 elif answer == "down":
-                    self.mazemoveDown()
+                    self.maze.moveDown()
                 elif answer == "q":
                     return 0
                 else:
