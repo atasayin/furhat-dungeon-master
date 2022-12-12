@@ -3,7 +3,7 @@ import pygame
 from UI_Objects.button import Button
 from CONSTANTS import *
 from time import sleep
-import maze_mini_game 
+import maze_mini_game as maze
 
 
 class MazeScene(SceneBase):
@@ -13,6 +13,8 @@ class MazeScene(SceneBase):
 		self.deg = 0
 		self.result = None
 		self.slide = 0
+		self.game = maze.MazeMiniGame()			
+		self.game.test_maze()
 		print("New Maze game")
 	
 	def ProcessInput(self, events, pressed_keys):
@@ -24,11 +26,8 @@ class MazeScene(SceneBase):
 	def Update(self):
 		if self.result is None:
 			print("Maze run")
-			game = maze_mini_game.MazeMiniGame()
-			game.test_maze()
-			self.result = game.play_game()
+			self.result = self.game.play_game()
 			# sleep(1.5)
-			
 			# self.result = 0
 		return 0
 

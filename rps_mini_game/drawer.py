@@ -1,12 +1,6 @@
 import cv2 as cv
 import mediapipe as mp
-from results import RPSResults
-from moves import Moves
-
-ROCK_INDEX = 0
-SCISSOR_INDEX = 1
-PAPER_INDEX = 2
-
+from .moves import Moves
 
 class Drawer():
     def __init__(self):
@@ -41,13 +35,10 @@ class Drawer():
             gameText = "Ready?"
         elif clock < 30:
             gameText = "3..."
-            # furhat.say(text="Rock")
         elif clock < 40:
             gameText = "2..."
-            # furhat.say(text="Paper")
         elif clock < 50:
             gameText = "1..."
-            # furhat.say(text="Scissor")
         elif clock < 60:
             gameText = "GO!"
         elif clock < 100:

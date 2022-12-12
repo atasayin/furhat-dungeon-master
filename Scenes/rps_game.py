@@ -4,8 +4,7 @@ import pygame
 from UI_Objects.button import Button
 from CONSTANTS import *
 import math
-#from rps_mini_game.RockPaperScissor import play_game
-import rps_mini_game
+import rps_mini_game as rps
 from time import sleep
 
 class RPSScene(SceneBase):
@@ -15,6 +14,8 @@ class RPSScene(SceneBase):
 		self.deg = 0
 		self.result = None
 		self.slide = 0
+		self.game = rps.RockPaperScissor()
+		
 		print("New RPS game")
 	
 	def ProcessInput(self, events, pressed_keys):
@@ -25,8 +26,7 @@ class RPSScene(SceneBase):
 	
 	def Update(self):
 		if self.result is None:
-			game = rps_mini_game.RockPaperScissor()
-			game.play_game()
+			self.game.play_game()
 			# sleep(1.5)
 			print("RPS run")
 			# self.result = 0

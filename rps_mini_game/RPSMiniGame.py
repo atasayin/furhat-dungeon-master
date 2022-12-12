@@ -1,10 +1,10 @@
 import cv2 as cv
 import mediapipe as mp
 from furhat_remote_api import FurhatRemoteAPI
-from drawer import Drawer
-from moves import Moves
-from handpoints import HandPoints
-from results import RPSResults
+from .drawer import Drawer
+from .moves import Moves
+from .handpoints import HandPoints
+from .results import RPSResults
 
 
 N_POINTS_PER_FINGER = 4
