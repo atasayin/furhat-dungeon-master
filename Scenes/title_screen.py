@@ -13,7 +13,7 @@ class TitleScene(SceneBase):
 		self.PLAY_BUTTON = Button(image=pygame.image.load("play_button.jpeg").convert_alpha(), pos=(WIDTH/2, HEIGHT-200), text_input=None, font=font, base_color=(240, 0, 0), hovering_color=(0,0,0), scale=0.35)
 		self.deg = 0
 	
-	def ProcessInput(self, events, pressed_keys):
+	def ProcessInput(self, events, pressed_keys, game_params):
 		mousepos = pygame.mouse.get_pos()
 		for event in events:
 			if event.type == pygame.MOUSEBUTTONDOWN:

@@ -15,7 +15,7 @@ class EmotionScene(SceneBase):
 		self.game = emotion.EmotionMiniGame()			
 		print("New Emotion game")
 	
-	def ProcessInput(self, events, pressed_keys):
+	def ProcessInput(self, events, pressed_keys, game_params):
 		mousepos = pygame.mouse.get_pos()
 		for event in events:
 			if event.type == pygame.MOUSEBUTTONDOWN:
