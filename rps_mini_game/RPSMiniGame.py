@@ -127,14 +127,14 @@ class RPSMiniGame():
                             self.pright_score += round_result
 
                         if self.pleft_score == - self.win_count:
-                            self.furhat.say(
-                                text="Left Player Wins!", blocking=True)
+                            # self.furhat.say(
+                            #     text="Left Player Wins!", blocking=True)
                             print("Left Player Wins")
                             print(self.hist)
                             return -1
                         if self.pright_score == self.win_count:
-                            self.furhat.say(
-                                text="Right Player Wins!", blocking=True)
+                            # self.furhat.say(
+                            #     text="Right Player Wins!", blocking=True)
                             print("Right Player Wins")
                             print(self.hist)
                             return 1
