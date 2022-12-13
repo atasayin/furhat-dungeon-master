@@ -14,7 +14,7 @@ class RPSScene(SceneBase):
 		self.deg = 0
 		self.result = None
 		self.slide = 0
-		self.game = rps.RockPaperScissor()
+		self.game = rps.RPSMiniGame()
 		
 		print("New RPS game")
 	
@@ -29,7 +29,7 @@ class RPSScene(SceneBase):
 			self.game.play_game()
 			# sleep(1.5)
 			print("RPS run")
-			# self.result = 0
+			self.result = 0
 		
 		return 0
 
@@ -41,7 +41,7 @@ class RPSScene(SceneBase):
 		# print(self.result)
 		if self.result is None:
 			WIN.fill((255, 255, 255))
-			WIN.blit(self.img, (0-self.slide,0))
+			# WIN.blit(self.img, (0-self.slide,0))
 			self.slide += 0.1
 		else:
 			# self.SwitchToScene(self.main)

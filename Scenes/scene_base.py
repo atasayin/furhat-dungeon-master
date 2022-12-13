@@ -16,3 +16,5 @@ class SceneBase:
     
     def Terminate(self):
         self.SwitchToScene(None)
+
+        

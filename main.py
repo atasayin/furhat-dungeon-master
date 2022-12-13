@@ -23,8 +23,6 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 # furhat.say(text="Kafana sikacagim gunu bekle hahaha", blocking=True)
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-WHITE = (255,255,255)
-BLACK = (0,0,0)
 
 
 FPS = 120
