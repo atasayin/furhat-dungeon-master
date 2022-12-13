@@ -51,7 +51,7 @@ class EmotionMiniGame():
             attempt = 3
             while attempt >0:
                 if not result:
-                    print("IN WHILEEE attempt is ", attempt)
+                    print("Attempt for this turn is ", attempt)
                     print(f"IN TURN {i} YOU NEED TO MATCH {emotion_list[i-1][0]} percentages ")
                     time.sleep(3)
                     capture = self.capture_write()

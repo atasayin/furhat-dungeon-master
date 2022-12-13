@@ -26,6 +26,7 @@ class FurhatPhotoScene(SceneBase):
 		
 		self.game_discontent , self.game_hope = game_params
 
+
 		
 	def Update(self):
 		# print("update furhat")
