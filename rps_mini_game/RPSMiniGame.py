@@ -10,8 +10,9 @@ from .results import RPSResults
 N_POINTS_PER_FINGER = 4
 DIST_EPSILON_COEF = 0.8  # TEST THIS
 
+
 class RPSMiniGame():
-    def __init__(self,win_count=3,drawer=None):
+    def __init__(self, win_count=3, drawer=None):
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
         self.mp_hands = mp.solutions.hands
@@ -22,19 +23,24 @@ class RPSMiniGame():
         self.pleft_move = -1
         self.pright_score = 0
         self.pright_move = -1
-        self.hist = []   
+        self.hist = []
         self.drawer = drawer
         self.is_draw = drawer is not None
-        
-    def compute_hand_move(self,hand_landmarks):
+        self.furhat = FurhatRemoteAPI("localhost")
+
+    def compute_hand_move(self, hand_landmarks):
         landmarks = hand_landmarks.landmark
-        is_finger_down = {}  #finger_index -> true, false
-        dist = lambda x1,x2,y1,y2,z1,z2 : (x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2
+        is_finger_down = {}  # finger_index -> true, false
+        def dist(x1, x2, y1, y2, z1, z2): return (
+            x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2
 
         for finger in range(HandPoints.INDEX_FINGER_MCP, HandPoints.PINKY_TIP, N_POINTS_PER_FINGER):
-            mcp_distance = dist(landmarks[finger].x, landmarks[HandPoints.WRIST_NUMBER].x,landmarks[finger].y, landmarks[HandPoints.WRIST_NUMBER].y,landmarks[finger].z, landmarks[HandPoints.WRIST_NUMBER].z)
-            tip_distance = dist(landmarks[finger + 3].x, landmarks[HandPoints.WRIST_NUMBER].x,landmarks[finger + 3].y, landmarks[HandPoints.WRIST_NUMBER].y, landmarks[finger + 3].z, landmarks[HandPoints.WRIST_NUMBER].z)
-            is_finger_down[finger] = mcp_distance > tip_distance * DIST_EPSILON_COEF #TEST THIS
+            mcp_distance = dist(landmarks[finger].x, landmarks[HandPoints.WRIST_NUMBER].x, landmarks[finger].y,
+                                landmarks[HandPoints.WRIST_NUMBER].y, landmarks[finger].z, landmarks[HandPoints.WRIST_NUMBER].z)
+            tip_distance = dist(landmarks[finger + 3].x, landmarks[HandPoints.WRIST_NUMBER].x, landmarks[finger + 3].y,
+                                landmarks[HandPoints.WRIST_NUMBER].y, landmarks[finger + 3].z, landmarks[HandPoints.WRIST_NUMBER].z)
+            is_finger_down[finger] = mcp_distance > tip_distance * \
+                DIST_EPSILON_COEF  # TEST THIS
 
         if all([down for down in is_finger_down.values()]):
             return Moves.ROCK_INDEX
@@ -43,13 +49,13 @@ class RPSMiniGame():
         else:
             return Moves.PAPER_INDEX
 
-    def compute_direction_hands(self,hls,handedness):
+    def compute_direction_hands(self, hls, handedness):
         if handedness[0].classification[0].label == "Left":
             return hls[0], hls[1]
-        else:                                   
+        else:
             return hls[1], hls[0]
 
-    def compute_result_round(self,pleft_move, pright_move):
+    def compute_result_round(self, pleft_move, pright_move):
         if pleft_move == pright_move:
             return RPSResults.TIE_RESULT
         elif pleft_move == Moves.PAPER_INDEX and pright_move == Moves.ROCK_INDEX:
@@ -63,8 +69,8 @@ class RPSMiniGame():
 
     def play_game(self):
         with self.mp_hands.Hands(model_complexity=0,
-                        min_tracking_confidence=0.5,
-                        min_detection_confidence=0.5) as hands:
+                                 min_tracking_confidence=0.5,
+                                 min_detection_confidence=0.5) as hands:
             while True:
                 ret, frame = self.vid.read()
 
@@ -77,47 +83,58 @@ class RPSMiniGame():
                 frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
                 round_result = -1
 
-                if 0 < self.clock < 20:
+                if 0 < self.clock < 10:
                     success = True
-                    pass
-                elif self.clock  < 30:
-                    # furhat.say(text="Rock")
+                elif self.clock < 20:
                     print("3...")
-                elif self.clock  < 40:
-                    # furhat.say(text="Paper")
+                elif self.clock == 20:
+                    self.furhat.say(text="Rock", blocking=True)
+                elif self.clock < 25:
                     print("2...")
-                elif self.clock < 50:
-                    # furhat.say(text="Scissor")
+                elif self.clock == 25:
+                    self.furhat.say(text="Paper", blocking=True)
+                elif self.clock < 30:
                     print("1...")
-                elif self.clock  < 60:
+                elif self.clock == 35:
+                    self.furhat.say(text="Scissor", blocking=True)
+                elif self.clock < 40:
                     print("GO!")
-                    # furhat.say(text="Go!") ?
-                elif self.clock  == 60:
+                elif self.clock == 40:
+                    self.furhat.say(text="Go!", blocking=True)
+                elif self.clock == 45:
                     hls = results.multi_hand_landmarks
                     handedness = results.multi_handedness
                     if hls and len(hls) == 2:
-                        pleft_landmarks, pright_landmarks = self.compute_direction_hands(hls, handedness)
-                        self.pleft_move = self.compute_hand_move(pleft_landmarks)
-                        self.pright_move = self.compute_hand_move(pright_landmarks)
+                        pleft_landmarks, pright_landmarks = self.compute_direction_hands(
+                            hls, handedness)
+                        self.pleft_move = self.compute_hand_move(
+                            pleft_landmarks)
+                        self.pright_move = self.compute_hand_move(
+                            pright_landmarks)
                     else:
                         success = False
-                elif self.clock  < 100:
+                elif self.clock < 60:
                     if success:
-                        round_result = self.compute_result_round(self.pleft_move,self.pright_move)
+                        round_result = self.compute_result_round(
+                            self.pleft_move, self.pright_move)
                         self.hist.append(round_result)
                         print(round_result)
-                        
+
                         if round_result == RPSResults.PLEFT_WIN_RESULT:
                             self.pleft_score += round_result
 
                         elif round_result == RPSResults.PRIGHT_WIN_RESULT:
                             self.pright_score += round_result
-                                                
+
                         if self.pleft_score == - self.win_count:
+                            self.furhat.say(
+                                text="Left Player Wins!", blocking=True)
                             print("Left Player Wins")
                             print(self.hist)
                             return -1
                         if self.pright_score == self.win_count:
+                            self.furhat.say(
+                                text="Right Player Wins!", blocking=True)
                             print("Right Player Wins")
                             print(self.hist)
                             return 1
@@ -126,15 +143,13 @@ class RPSMiniGame():
                         pass
                         #furhat.say(text="I couldn't caught that")
 
-                self.clock = (self.clock + 1) % 100
+                self.clock = (self.clock + 1) % 60
 
                 if self.is_draw:
-                    self.drawer.draw_results(frame,self,results)
+                    self.drawer.draw_results(frame, self, results)
 
                 if cv.waitKey(1) == ord('q'):
                     break
 
         self.vid.release()
         cv.destroyAllWindows()
-
-
