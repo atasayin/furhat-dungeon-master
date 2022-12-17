@@ -15,6 +15,7 @@ class MazeScene(SceneBase):
         self.slide = 0
         self.game = maze.MazeMiniGame()
         self.game.test_maze()
+        self.view = maze.MazeView(self.game)
         print("New Maze game")
 
     def ProcessInput(self, events, pressed_keys, game_params):
@@ -27,37 +28,13 @@ class MazeScene(SceneBase):
         if self.result is None:
             print("Maze run")
             self.result = self.game.play_game()
-            # sleep(1.5)
-            # self.result = 0
         return 0
 
     def Render(self, WIN):
         # For the sake of brevity, the title scene is a blank red screen
-        # print(self.result)
         if self.result is None:
-            maze = self.game.maze
-            WIN.fill((255, 255, 255))
-            WIN.blit(self.img, (0-self.slide, 0))
-
-            for y in range(maze.Row):
-                for x in range(maze.Col):
-                    if maze.grid[x][y] == 1:
-                        pygame.draw.rect(WIN, (255, 0, 0),
-                                     pygame.Rect(30 * y, 30 * x, 60, 60))
-                    
-                    elif maze.grid[x][y] == 0:
-                        pygame.draw.rect(WIN, (0, 255, 0),
-                                         pygame.Rect(30 * y, 30 * x, 60, 60))
-                      
-                    elif maze.grid[x][y] == 2:
-                        pygame.draw.rect(WIN, (0, 0, 255),
-                                         pygame.Rect(30 * y, 30 * x, 60, 60))
-
-                    elif maze.grid[x][y] == 3:
-                        pygame.draw.rect(WIN, (255, 255, 255),
-                                         pygame.Rect(30 * y, 30 * x, 60, 60))                         
-                
-            self.slide += 0.1
+            self.view.draw_background(WIN)
+            self.view.draw_board(WIN)                   
         else:
              # self.SwitchToScene(self.main)
             self.result = 0

@@ -1,6 +1,5 @@
 from .maze import Maze
 from time import perf_counter
-import signal
 from Util import dotimer
 
 class MazeMiniGame():
@@ -28,7 +27,7 @@ class MazeMiniGame():
         self.time_left = 10 #60 * 2
     
     def play_game(self):       
-        dotimer.do_intime(self.play_flow,self.end_flow,self.time_left)
+        dotimer.do_intime(self.play_flow, self.end_flow, self.time_left)
 
     def play_flow(self):
         while True:
