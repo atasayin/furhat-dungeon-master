@@ -26,7 +26,7 @@ class ChessScene(SceneBase):
 			print("CHESS GAME STARTED")
 			self.result = self.game.play_game()
 			# sleep(1.5)
-			# self.result = 0
+			#self.result = 0
 		return 0
 
 	def Render(self, WIN):

@@ -20,7 +20,7 @@ class ChessMiniGame():
             print(type(solution))
             path =  "chess_mini_game/ChessOneMove"
             win  = 0
-            life = 2
+            life = 3
             to_exculude = []
             while life > 0 and win < 3:
                 attempt = 2
@@ -46,16 +46,15 @@ class ChessMiniGame():
                     print("Black's move mate in one move")
                 
                 sleep(2)
-
                 move= key[2:]
                 piece = key[1]
                 answer = key[1:]
                 print(move)
                 print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                
+                sleep(2)
                 while attempt >0:
+                    furhat.say(text="I am listening",blocking=True)
                     response = furhat.listen()
-                    sleep(3)
                     print(response)
                     furhat.listen_stop()
                     piece,cord,row,result = self.is_Valid(response)
@@ -107,11 +106,11 @@ class ChessMiniGame():
         print(response.message)
         message = response.message
         message = message.upper()
-        chess_piece = {'Q': ('QUEEN','Queen','Green','green','GREEN','queen'),'R': ('ROOK','Cook','COOK','rook','Rook'),'N': ('KNIGHT','LIKE','Knigth','knigth' ,'NIGTH','igth','IGTH','nigth'),
-            'B': ('BISHOP','ISHOP','ishop','Bishop','bishop'),'K' : 'KING','P':'PAWN'}
-        coordinate = {'A':('A'), 'B':('B','BE'),'C':('C','SEE','SEA'),'D':('D'),'E':('E'), 'F':('F','EF'), 'G':('G','J','JEE'), 'H':('H','8','AGE') }
-        row = {'1':('1'), '2':('2'),'3':('3'),'4':('4'),
-        '5':('5'),'6':('6','SEX'), '7':('7'), '8':('8') }
+        print(message)
+        chess_piece = {'Q': ('QUEEN','Queen','Green','green','GREEN','queen'),'R': ('ROOK','RIBBED','Rick','BROOKE','Cook','COOK','rook','Rook'),'N': ('KNIGHT','KNIGHTS','LIKE','Knigth','knigth' ,'NIGTH','igth','IGTH','nigth'),
+            'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
+        coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BE'),'D':('D','DC'),'E':('E'), 'F':('F','EF'), 'G':('G','J','JEE'), }
+        row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4'),'5':('5'),'6':('6','SEX'), '7':('7'), '8':('8') }
         for piece, value in chess_piece.items():
             for val in value:
                 if val in response.message:
@@ -120,6 +119,9 @@ class ChessMiniGame():
                     
         if check:
             print("first check")
+            for piece in chess_piece.get(m_piece):
+                if piece in message:
+                    message = message.replace(m_piece, '')
             for coord_key, cor_val in coordinate.items():
                 for cor_value in cor_val:
                     if cor_value in response.message :

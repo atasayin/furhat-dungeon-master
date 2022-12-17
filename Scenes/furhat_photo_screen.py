@@ -2,6 +2,8 @@ from .scene_base import SceneBase
 import pygame
 from Scenes.rps_game import RPSScene
 from Scenes.maze_scene import MazeScene
+from Scenes.emotion_scene import EmotionScene
+from Scenes.chess_scene import ChessScene
 from CONSTANTS import WIDTH, HEIGHT
 import math
 
@@ -23,6 +25,10 @@ class FurhatPhotoScene(SceneBase):
 			self.SwitchToScene(RPSScene())
 		elif pressed_keys[pygame.K_m]:
 			self.SwitchToScene(MazeScene())
+		elif pressed_keys[pygame.K_c]:
+			self.SwitchToScene(ChessScene())
+		elif pressed_keys[pygame.K_e]:
+			self.SwitchToScene(EmotionScene())
 		
 		self.game_discontent , self.game_hope = game_params
 
