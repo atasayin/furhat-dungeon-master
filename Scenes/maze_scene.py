@@ -34,7 +34,8 @@ class MazeScene(SceneBase):
         # For the sake of brevity, the title scene is a blank red screen
         if self.result is None:
             self.view.draw_background(WIN)
-            self.view.draw_board(WIN)                   
+            self.view.draw_board(WIN)    
+            self.view.draw_timeleft(WIN)               
         else:
              # self.SwitchToScene(self.main)
             self.result = 0
