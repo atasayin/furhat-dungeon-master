@@ -5,7 +5,6 @@ from CONSTANTS import *
 from time import sleep
 import maze_mini_game as maze
 
-
 class MazeScene(SceneBase):
     def __init__(self):
         SceneBase.__init__(self)
@@ -13,9 +12,7 @@ class MazeScene(SceneBase):
         self.deg = 0
         self.result = None
         self.slide = 0
-        self.game = maze.MazeMiniGame()
-        self.game.test_maze()
-        self.view = maze.MazeView(self.game)
+        self.game, self.view = maze.MazeFactory(maze.TerrainTypes.COMP_MAZE)       
         print("New Maze game")
 
     def ProcessInput(self, events, pressed_keys, game_params):
