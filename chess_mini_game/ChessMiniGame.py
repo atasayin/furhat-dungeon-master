@@ -5,10 +5,19 @@ import random
 from time import sleep
 from furhat_remote_api import FurhatRemoteAPI
 from PIL import Image as PImage
+import pygame
+from CONSTANTS import HEIGHT, WIDTH
+from Scenes.scene_base import SceneBase
 
 class ChessMiniGame():
-    def __init__(self):
+    def __init__(self,Scene):
         self.is_win = 0
+        self.SceneBase = Scene
+        self.win_count = 0
+        self.attempt_count = -1
+        self.life_count = 3
+        
+
     def OneMoveChess(self):
             furhat = FurhatRemoteAPI("localhost")
             solution = {1:'WQB7', 2:'WRE5', 3:'BQH5',4:'BQD4',5:'BQA1',6:'WRH4',7:'WQF7',8:'WQH7',9:'WQG7',10:'WNF7',
@@ -20,10 +29,13 @@ class ChessMiniGame():
             print(type(solution))
             path =  "chess_mini_game/ChessOneMove"
             win  = 0
+            self.win_count = win
             life = 3
+            self.life_count =life
             to_exculude = []
             while life > 0 and win < 3:
                 attempt = 2
+                self.attempt_count = attempt
                 print("REMANING Life : ",life, "Total Win : ", win)
                 number =random.randint(1,20)
                 print("TO EXCULUDE : ", to_exculude)
@@ -35,8 +47,11 @@ class ChessMiniGame():
                 print(key)
                 
                 to_exculude.append(number)
-                img = PImage.open(path + '/'+str(number)+'.png')
-                img.show() 
+                #img = PImage.open(path + '/'+str(number)+'.png')
+                self.SceneBase.img = pygame.image.load(path + '/'+str(number)+'.png').convert_alpha()
+                self.SceneBase.img = pygame.transform.scale(self.SceneBase.img, (WIDTH, HEIGHT))
+
+                #img.show() 
                 
                 if 'W' in  key:
                     furhat.say(text="White's move mate in one move",blocking=True)
@@ -51,7 +66,8 @@ class ChessMiniGame():
                 answer = key[1:]
                 print(move)
                 print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                sleep(2)
+                furhat.say(text="You have 10 seconds to think, when I say I am listening, please say your answer",blocking=True)
+                sleep(10)
                 while attempt >0:
                     furhat.say(text="I am listening",blocking=True)
                     response = furhat.listen()
@@ -64,6 +80,7 @@ class ChessMiniGame():
                         tried = piece+''+cord+''+row
                         break
                     attempt = attempt -1
+                    self.attempt_count = attempt
                 print(piece)
                 if piece in chess_piece.keys():
                     print("I UNDERSTAND")
@@ -76,14 +93,17 @@ class ChessMiniGame():
                     print("YASS")
                     print(tried,answer)
                     win  += 1
+                    self.win_count = win
                 else :
                     furhat.say(text="NOOO, that was wrong",blocking=True)
                     print("NOOO")
                     print(tried,answer)
                     life -=1
+                    self.life_count =life
             if life > 0 and win >= 3:
                     furhat.say(text="YOU WON THE GAME")
-                    self.is_win = 1  
+                    self.is_win = 1 
+
     def evaluate_chose(self,choice):
         flag = True
         while flag:
@@ -107,10 +127,10 @@ class ChessMiniGame():
         message = response.message
         message = message.upper()
         print(message)
-        chess_piece = {'Q': ('QUEEN','Queen','Green','green','GREEN','queen'),'R': ('ROOK','RIBBED','Rick','BROOKE','Cook','COOK','rook','Rook'),'N': ('KNIGHT','KNIGHTS','LIKE','Knigth','knigth' ,'NIGTH','igth','IGTH','nigth'),
+        chess_piece = {'Q': ('QUEEN','Queen','Green','green','GREEN','queen'),'R': ('ROOK','RIBBED','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),'N': ('KNIGHT','KNIGHTS','LIKE','Knigth','knigth' ,'NIGTH','igth','IGTH','nigth'),
             'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
-        coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BE'),'D':('D','DC'),'E':('E'), 'F':('F','EF'), 'G':('G','J','JEE'), }
-        row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4'),'5':('5'),'6':('6','SEX'), '7':('7'), '8':('8') }
+        coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BEE','BE'),'D':('D','DC'),'E':('E'), 'F':('F','S','EF','X'), 'G':('G','J','JEE'), }
+        row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4'),'5':('5'),'6':('6','SEX'), '7':('7','11'), '8':('8') }
         for piece, value in chess_piece.items():
             for val in value:
                 if val in response.message:
