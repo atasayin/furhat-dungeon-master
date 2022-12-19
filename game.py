@@ -83,6 +83,7 @@ class Game:
                 if quit_attempt:
                     change_scene_event.set()
                     active_scene.Terminate()
+                    pygame.quit()
                 else:
                     filtered_events.append(event)
             game_params = (self.discontent, self.hope)

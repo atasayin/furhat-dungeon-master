@@ -1,5 +1,5 @@
 import cv2
-from deepface import DeepFace
+# from deepface import DeepFace
 import time
 import warnings
 
@@ -56,9 +56,9 @@ class EmotionMiniGame():
                     time.sleep(3)
                     capture = self.capture_write()
                     if capture:
-                        obj = DeepFace.analyze(img_path = "image.jpeg", 
-                            actions = ['emotion'])
-                        attempt,result = self.check_emotion(obj,emotion_list,i,attempt)
+                        # obj = DeepFace.analyze(img_path = "image.jpeg", 
+                        #     actions = ['emotion'])
+                        # attempt,result = self.check_emotion(obj,emotion_list,i,attempt)
                         time.sleep(3)
                 else:
                     win_count = win_count +1

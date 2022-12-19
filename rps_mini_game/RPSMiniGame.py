@@ -88,15 +88,15 @@ class RPSMiniGame():
                 elif self.clock < 20:
                     print("3...")
                 elif self.clock == 20:
-                    self.furhat.say(text="Rock", blocking=True)
+                    self.furhat.say(text="Rock", blocking=False)
                 elif self.clock < 25:
                     print("2...")
                 elif self.clock == 25:
-                    self.furhat.say(text="Paper", blocking=True)
+                    self.furhat.say(text="Paper", blocking=False)
                 elif self.clock < 30:
                     print("1...")
                 elif self.clock == 35:
-                    self.furhat.say(text="Scissor", blocking=True)
+                    self.furhat.say(text="Scissor", blocking=False)
                 elif self.clock < 40:
                     print("GO!")
                 elif self.clock == 40:
