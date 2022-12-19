@@ -111,6 +111,8 @@ class RPSMiniGame():
                             pleft_landmarks)
                         self.pright_move = self.compute_hand_move(
                             pright_landmarks)
+                        
+                        print(f"Left: {Moves(self.pleft_move)}, Right: {Moves(self.pright_move)}")
                     else:
                         success = False
                 elif self.clock < 60:

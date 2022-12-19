@@ -1,6 +1,6 @@
 from .scene_base import SceneBase
 import pygame
-from Scenes.rps_game import RPSScene
+from Scenes.rps_scene import RPSScene
 from Scenes.maze_scene import MazeScene
 from Scenes.emotion_scene import EmotionScene
 from Scenes.chess_scene import ChessScene

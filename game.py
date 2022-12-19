@@ -1,5 +1,7 @@
 import threading
 import pygame
+from core.furhat_driver import FurhatDriver
+from core.player import Player
 pygame.init()
 
 from CONSTANTS import *
@@ -9,6 +11,7 @@ from UI_Objects.button import Button
 from furhat_remote_api import FurhatRemoteAPI
 from time import sleep
 import time
+import random
 from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
 
@@ -27,9 +30,15 @@ clock = pygame.time.Clock()
 class Game:
     def __init__(self) -> None:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-        self.furhat = FurhatRemoteAPI("localhost")
         self.hope = 50
         self.discontent = 50
+        self.furhat = FurhatDriver()
+        self.player1, self.player2 = Player(), Player()
+        self.captain, self.assistant = None, None
+        self.assign_user_ids()
+
+
+        
         self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
 
 
@@ -49,7 +58,7 @@ class Game:
         pygame.display.set_caption("Dungeon Master")
         print("running")
         try:
-            self.furhat.say(text="Let's Play a game. N-word", blocking=True)
+            self.furhat.furhat.say(text="Let's Play a game. N-word", blocking=True)
         except Exception:
             print("FURHAT CANNOT BE FOUND")
         change_scene_event = threading.Event()
@@ -90,14 +99,13 @@ class Game:
             active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
             if update_result is None:
                 # print(f"UPDATE YERI : {active_scene}")
-                sleep(0.05)
                 update_result = active_scene.Update()
             # active_scene.SwitchToScene(TitleScene())
             # active_scene.Render(screen)
 
             if update_result is not None:
-                # active_scene.SwitchToScene(FurhatPhotoScene())
-                # active_scene = active_scene.next
+                # resulta bakarak skorlari guncelleme
+
                 active_scene = FurhatPhotoScene()
                 manual_change = True
 
@@ -116,6 +124,19 @@ class Game:
                 render_thread.start()
 
             active_scene = active_scene.next
+
+    def assign_user_ids(self):
+        ids = None
+        while ids is None:
+            ids = self.furhat.get_user_ids()    
+            if ids is None:
+                txts = ["Where are you?", "Are you coming?", "I do not see you"]
+                ind = random.randint(0,2)
+                self.furhat.furhat.say(text=txts[ind]) 
+                time.sleep(5)
+            else:
+                self.player1.id, self.player2.id = ids
+                self.furhat.furhat.say(text="Welcome players.")
 
 
 Game()
