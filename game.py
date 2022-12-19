@@ -37,9 +37,10 @@ class Game:
         self.captain, self.assistant = None, None
         self.assign_user_ids()
 
-
+        self.furhat.introduce_players((self.player1.id, self.player2.id))
         
         self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
+
 
 
     def render_method(self, scene, event, fps):
@@ -57,6 +58,9 @@ class Game:
 
         pygame.display.set_caption("Dungeon Master")
         print("running")
+
+        self.furhat.look_at_screen()
+
         try:
             self.furhat.furhat.say(text="Let's Play a game. N-word", blocking=True)
         except Exception:
