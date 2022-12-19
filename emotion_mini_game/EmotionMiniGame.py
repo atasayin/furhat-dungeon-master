@@ -1,5 +1,5 @@
 import cv2
-from deepface import DeepFace
+# from deepface import DeepFace
 import time
 import warnings
 from furhat_remote_api import FurhatRemoteAPI
@@ -97,6 +97,7 @@ class EmotionMiniGame():
                             print("YOUR FACE CANNOT BE FOUND")
                             attempt = attempt +1
                             result = False
+
                 else:
                     win_count = win_count +1
                     break
