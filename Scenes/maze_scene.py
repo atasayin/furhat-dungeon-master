@@ -8,7 +8,6 @@ import maze_mini_game as maze
 class MazeScene(SceneBase):
     def __init__(self):
         SceneBase.__init__(self)
-        self.img = pygame.image.load("maze_mini_game/hugo.png").convert_alpha()
         self.deg = 0
         self.result = None
         self.slide = 0

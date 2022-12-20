@@ -10,3 +10,4 @@ save_flow.xml
 .DS_Store
 __pycache__/
 furhat_env/
+vscode/

@@ -43,6 +43,9 @@ class FurhatDriver:
     def look_at_player(self, player_id):
         self.furhat.attend(userid=player_id)
 
+    def look_at_other_player(self):
+        self.furhat.attend(user="OTHER")
+
   
 
 
