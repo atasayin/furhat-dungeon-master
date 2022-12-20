@@ -141,6 +141,7 @@ class Game:
             else:
                 self.player1.id, self.player2.id = ids
                 self.furhat.furhat.say(text="Welcome players.")
-
+    
+    
 
 Game()

@@ -46,6 +46,9 @@ class FurhatDriver:
     def look_at_other_player(self):
         self.furhat.attend(user="OTHER")
 
+    def look_at_raised_hands(self):
+        
+
   
 
 
