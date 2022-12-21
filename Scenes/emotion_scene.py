@@ -64,7 +64,6 @@ class EmotionScene(SceneBase):
 			WIN.fill((255, 255, 255))
 			WIN.blit(self.img, (0, 0))
 
-
 			pn_emotion_text = f"{self.game.n_emotion}"
 			pd_emotion_text = f"{self.game.d_emotion}"
 			pn_emotion_score_text = f"{self.game.n_percantage}"

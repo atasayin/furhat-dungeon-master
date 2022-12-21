@@ -70,7 +70,6 @@ class ChessScene(SceneBase):
 			WIN.blit(life_text, life_text.get_rect(
 				center=(3*(WIDTH//12), HEIGHT//4)))
 										   
-
 		else:
 			# self.SwitchToScene(self.main)
 			self.result = 0
