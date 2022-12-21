@@ -1,6 +1,9 @@
 from furhat_remote_api import FurhatRemoteAPI
 import json
+import random
 
+
+positive = ["yes", "sure", "i do", "of course", "alright", "i will"]
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
@@ -46,7 +49,59 @@ class FurhatDriver:
     def look_at_other_player(self):
         self.furhat.attend(user="OTHER")
 
-  
+    def get_volunteer_status(self, player1, player2):
+        self.look_at_player(player1)
+        self.say("Player 1, do you want to be the captain?")
+        answer = str(self.furhat.listen().message).lower()
+        print(answer)
+        volunteer1, volunteer2 = False, False
+        if answer in positive:
+            volunteer1 = True
+            self.say("Alright then. We have our first volunteer.")
+        else:
+            self.say("OK, let's see if your friend will volunteer.")
+
+        self.look_at_player(player2)
+        if volunteer1:
+            print("Volunteer 1")
+            self.say("Would you also want to volunteer to be the captain?")
+        else:
+            self.say("We might need a captain. Will you take the responsibility?")
+
+        answer = str(self.furhat.listen().message).lower()
+
+        if answer in positive:
+            print("Volunteer 2")
+            volunteer2 = True
+            if volunteer1:
+                self.say("Wow. We have two volunteers for role, eh. There has to be a solution for this.")
+                return volunteer1, volunteer2
+            else:
+                self.say("Alright then. Since you are the sole volunteer. You will be our captain from now on.")
+        else:
+            self.look_at_player(player1)
+            if volunteer1:
+                self.say("Alright then. Since you are the sole volunteer. You will be our captain from now on.")
+            else:
+                self.say("Alright. Since we need a captain. I will select one of you randomly.")
+                rand = random.choice(["Player 1", "Player 2"])
+                print(rand)
+                if rand == "Player 1":
+                    volunteer1 = True
+                    self.say("Player 1. From now on, you are the captain of this rebellion.")
+                else:
+                    self.look_at_player(player2)
+                    self.say("Player 2. From now on, you are the captain of this rebellion.")
+
+
+        
+        return volunteer1, volunteer2
+        
+
+
+
+
+
 
 
 
