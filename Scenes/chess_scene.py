@@ -8,12 +8,13 @@ from time import sleep
 class ChessScene(SceneBase):
 	def __init__(self):
 		SceneBase.__init__(self)
-		self.img = pygame.image.load("rps_mini_game/rock.jpeg").convert_alpha()
+		self.img = pygame.image.load("chess_mini_game/chess.jpg").convert_alpha()
 		self.deg = 0
 		self.result = None
 		self.slide = 0
 		self.font = pygame.font.Font('freesansbold.ttf', 20)
-		self.game = chess.ChessMiniGame(self)			
+		self.game = chess.ChessMiniGame()	
+
 		print("New CHESS game")
 	
 	def ProcessInput(self, events, pressed_keys, game_params):
@@ -32,7 +33,9 @@ class ChessScene(SceneBase):
 
 	def Render(self, WIN):
 		# For the sake of brevity, the title scene is a blank red screen
-
+		path = self.game.path
+		self.img = pygame.image.load(path).convert_alpha()
+		self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
 		# print(self.result)
 		if self.result is None:
 			WIN.fill((255, 255, 255))

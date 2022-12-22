@@ -1,6 +1,7 @@
 from .scene_base import SceneBase
 # from Scenes.title_screen import TitleScene
-import pygame
+import pygame 
+#import mixer
 from UI_Objects.button import Button
 from CONSTANTS import *
 import math
@@ -15,14 +16,19 @@ from furhat_remote_api import FurhatRemoteAPI
 class QuizScene(SceneBase):
 	def __init__(self):
 		SceneBase.__init__(self)
-		self.img = pygame.image.load("rps_mini_game/rock.jpeg").convert_alpha()
+		self.img = pygame.image.load("quiz_mini_game/millionaire.jpeg").convert_alpha()
 		self.winner = None
 		self.won = False
 		self.wontime = 0
 		self.result = None
-		self.font = pygame.font.Font('freesansbold.ttf', 200)
-		self.game = quiz.QuizMiniGame(self)
+		self.font = pygame.font.Font('freesansbold.ttf', 20)
+		self.game = quiz.QuizMiniGame()
 		self.furhat = FurhatRemoteAPI("localhost")
+		#Load audio file
+		# self.mixer = mixer.init()
+		# self.mixer.music.load('song.mp3')
+		# self.mixer.music.set_volume(0.2)
+
 
 		print("New QUIZ game")
 
@@ -57,49 +63,42 @@ class QuizScene(SceneBase):
 		return self.result
 
 	def Render(self, WIN):
+		path = self.game.path
+		self.img = pygame.image.load(path).convert_alpha()
+		self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
 		if self.result is None:
+			# if self.game.intro:
+			# 	self.mixer.music.play()
+			# 	print("music is resumed....")
+			# else:
+			# 	self.mixer.music.stop()
 			WIN.fill((255, 255, 255))
 			WIN.blit(self.img, (0, 0))
-
-			pleft_score_text = f"{-self.game.pleft_score}"
-			pright_score_text = f"{self.game.pright_score}"
-			pleft_text = self.font.render(pleft_score_text, True,
+			win_text = 'WIN COUNT:'
+			pwin_text = f"{self.game.win_count}"
+			quest_text = 'Question Number:'
+			pquestion_text = f"{self.game.question_count}"
+			
+			pwin_text = self.font.render(pwin_text, True,
 										  (0, 0, 0))
-			pright_text = self.font.render(pright_score_text, True,
+			win_text = self.font.render(win_text, True,
+										  (0, 0, 0))
+			pquestion_text = self.font.render(pquestion_text, True,
 										   (0, 0, 0))
-			vs_text = self.font.render("vs", True,
-									   (0, 0, 0))
+			quest_text = self.font.render(quest_text, True,
+										   (0, 0, 0))
 
-			WIN.blit(pleft_text, pleft_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(vs_text, pleft_text.get_rect(
-				center=(WIDTH//2 - 60, HEIGHT//2)))
-			WIN.blit(pright_text, pright_text.get_rect(
-				center=(3*WIDTH//4, HEIGHT//2)))
+			WIN.blit(win_text, win_text.get_rect(
+				center=((WIDTH//8), HEIGHT//5)))
+			WIN.blit(pwin_text, pwin_text.get_rect(
+				center=((WIDTH//8)+100, HEIGHT//5)))
+			WIN.blit(pquestion_text, pquestion_text.get_rect(
+				center=((WIDTH//8)+100, HEIGHT//4)))
+			WIN.blit(quest_text, quest_text.get_rect(
+				center=((WIDTH//8), HEIGHT//4)))
+
 		else:
 			WIN.fill((255, 255, 255))
 			WIN.blit(self.img, (0, 0))
 
-			pleft_score_text = f"{-self.game.pleft_score}"
-			pright_score_text = f"{self.game.pright_score}"
-			pleft_text = self.font.render(pleft_score_text, True,
-										  (0, 0, 0))
-			pright_text = self.font.render(pright_score_text, True,
-										   (0, 0, 0))
-			vs_text = self.font.render("vs", True,
-									   (0, 0, 0))
-			if self.winner == 1:
-				winner_text = self.font.render("Right Player Wins!", True,
-										   (0, 0, 0))
-			else:
-				winner_text = self.font.render("Left Player Wins!", True,
-										   (0, 0, 0))
-
-			WIN.blit(pleft_text, pleft_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(vs_text, pleft_text.get_rect(
-				center=(WIDTH//2 - 60, HEIGHT//2)))
-			WIN.blit(pright_text, pright_text.get_rect(
-				center=(3*WIDTH//4, HEIGHT//2)))
-			WIN.blit(winner_text, winner_text.get_rect(
-				center=(WIDTH/2, HEIGHT/2 - 60)))
+		

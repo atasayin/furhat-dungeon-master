@@ -1,21 +1,18 @@
 
 from os import getcwd
-from pathlib import Path
 import random
 from time import sleep
 from furhat_remote_api import FurhatRemoteAPI
-from PIL import Image as PImage
-import pygame
 from CONSTANTS import HEIGHT, WIDTH
-from Scenes.scene_base import SceneBase
+
 
 class ChessMiniGame():
-    def __init__(self,Scene):
+    def __init__(self):
         self.is_win = 0
-        self.SceneBase = Scene
         self.win_count = 0
         self.attempt_count = -1
         self.life_count = 3
+        self.path = 'chess_mini_game/chess.jpg'	
         
 
     def OneMoveChess(self):
@@ -45,8 +42,7 @@ class ChessMiniGame():
                 
                 to_exculude.append(number)
                 #img = PImage.open(path + '/'+str(number)+'.png')
-                self.SceneBase.img = pygame.image.load(path + '/'+str(number)+'.png').convert_alpha()
-                self.SceneBase.img = pygame.transform.scale(self.SceneBase.img, (WIDTH, HEIGHT))
+                self.path = path + '/'+str(number)+'.png'
 
                 #img.show() 
                 
@@ -63,8 +59,8 @@ class ChessMiniGame():
                 answer = key[1:]
                 print(move)
                 print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                furhat.say(text="You have 10 seconds to think, when I say I am listening, please say your answer",blocking=True)
-                sleep(10)
+                furhat.say(text="You have 3 seconds to think, when I say I am listening, please say your answer",blocking=True)
+                sleep(3)
                 while attempt >0:
                     furhat.say(text="I am listening",blocking=True)
                     response = furhat.listen()
@@ -174,5 +170,6 @@ class ChessMiniGame():
             return None,None,None,flag 
 
     def play_game(self):
+            sleep(3)
             self.evaluate_chose(1)
             return self.is_win
