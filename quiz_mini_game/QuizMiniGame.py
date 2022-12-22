@@ -1,88 +1,104 @@
 
 from os import getcwd
 from pathlib import Path
+from pickle import NONE
 import random
 from time import sleep
 from PIL import Image as PImage
+import pygame
+from CONSTANTS import HEIGHT, WIDTH
 from furhat_remote_api import FurhatRemoteAPI
+from Scenes.scene_base import SceneBase
 
 class QuizMiniGame():
-    def __init__(self):
-        pass
+    def __init__(self, Scene):
+        self.SceneBase = Scene
+        self.solution = {1:'C',2:'C',3:'C',4:'C',5:'C'}
+        self.answers = {'A':('A'),'B':('B','BEE','BE'),'C':('C','SEE','SAY','SEA'),'D':('D','DC')}
+        self.questions = {1:'How many undergraduate programs there are at Koç University?',
+        2:'How many undergraduate programs there are at Koç University?',
+        3:'How many undergraduate programs there are at Koç University?',
+        4:'How many undergraduate programs there are at Koç University?',
+        5:'How many undergraduate programs there are at Koç University?'}
+        self.choices = {1:('A is 18','B is 20','C is 22 ','D is 24'),
+        2:('A is 22','B is 20','C is 22','D is 45'),
+        3:('A is 22','B is 20','C is 212','D is 46'),
+        4:('A is 22','B is 20','C is 21','D is 46'),
+        5:('A is 22','B is 20','C is 21','D is 45')}
+        self.furhat = FurhatRemoteAPI("localhost")
+        self.win_count  = 0
+        self.question_number = 0
+        self.attempt_count = 3
+        self.correct = True
 
-    def evaluate_chose(choice):
-        flag = True
-        while flag:
-            if choice == 1:
-                flag= False
-                OneMoveChess()
-            #elif choice == 2:
-            #    flag= False
-            #    TwoMoveChess()
-            else:
-                print("NOT A VALID CHOICE")
 
-        def OneMoveChess():
-            did_win = 0
-            furhat = FurhatRemoteAPI("localhost")
-            solution = {1:'WQB7', 2:'WRE5', 3:'BQH5',4:'BQD4',5:'BQA1',6:'WRH4',7:'WQF7',8:'WQH7',9:'WQG7',10:'WNF7',
-                        11:'WBG6',12:'BQH2', 13:'WQE5',14:'WBH6',15:'WQC6',16:'WBH7',
-                        17:'WNH6',18:'WRD8',19:'WRH4',20:'WNF6'}
+    def is_valid(self,response):
+        message = response.message
+        message = message.upper()
+        print(message)
+        answer = None
+        result = False
+        for choice, value in self.answers.items():
+            for val in value:
+                if val in message:
+                    answer= choice
+                    result = True
+        return answer,result
 
-            chess_piece = {'Q': 'QUEEN','R': 'ROOK','N': 'KNIGHT',
-            'B': 'BISHOP','K' : 'KING','P':'PAWN'}
-            print(type(solution))
-            path = getcwd() + "/chess/ChessOneMove"
-            win  = 0
-            life = 2
-            to_exculude = []
-            while life > 0 and win < 5:
-                print("REMANING Life : ",life, "Total Win : ", win)
-                number =random.randint(1,20)
-                print("TO EXCULUDE : ", to_exculude)
-                while number in to_exculude :
-                    number =random.randint(1,20)
-                print(number)
+    def is_correct(self,answer):
+        key = self.solution.get(self.question_number)
+        if key == answer:
+            self.furhat.say(text=f"{key} is correct!", blocking=True)
+            print("YASS")
+            self.win_count = self.win_count +1
+        else:
+            self.furhat.say(text=f"NOOO, {answer} is the wrong choice the correct one was {key}",blocking=True)
+            print("NOOO")
+            self.correct =False
 
-                key = solution[number]
-                print(key)
-                if 'W' in  key:
-                    furhat.say(text="White's move mate in one move",blocking=True)
-                    print("White's move mate in one move")
-                else:
-                    furhat.say(text="Black's move mate in one move",blocking=True)
-                    print("Black's move mate in one move")
-                
-                sleep(2)
-                to_exculude.append(number)
-                img = PImage.open(path + '/'+str(number)+'.png')
-                img.show() 
-
-                move= key[2:]
-                piece = key[1]
-                answer = key[1:]
-                print(move)
-                print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                response = furhat.listen()
-                sleep(3)
-                print(response)
-                furhat.listen_stop()
-                tried = input('Your Move : ')
-                if tried == answer:
-                    furhat.say(text="YASS, that was the needed move", blocking=True)
-                    print("YASS")
-                    print(tried,answer)
-                    win  += 1
-                else :
-                    furhat.say(text="NOOO, that was wrong",blocking=True)
-                    print("NOOO")
-                    print(tried,answer)
-                    life -=1
-            if life > 0 and win >= 3:
-                    furhat.say(text="YOU WON THE GAME")
-                    did_win =1
-            return did_win
-        
     def play_game(self):
-        result = self.evaluate_chose(1)
+
+        path =  "quiz_mini_game/Questions"
+        
+        to_exculude = []
+        while self.win_count < 3 or self.correct:
+            print("Total Win : ", self.win_count)
+            number =random.randint(1,5)
+            print("THE QUESTION NUMBER IS : ", number)
+            while number in to_exculude :
+                number =random.randint(1,5)
+            self.question_number = number
+            
+            to_exculude.append(number)
+            #img = PImage.open(path + '/'+str(number)+'.png')
+            self.SceneBase.img = pygame.image.load(path + '/'+str(number)+'.png').convert_alpha()
+            self.SceneBase.img = pygame.transform.scale(self.SceneBase.img, (WIDTH, HEIGHT))
+
+            self.furhat.say(text=self.questions.get(number),blocking=True)
+            self.furhat.say(text=f'THE CHOICES ARE {self.choices.get(number)}') 
+            self.furhat.say(text='YOU HAVE 10 SECONDS TO ANSWER',blocking=True)
+               
+            sleep(5)
+            while self.attempt_count >0:
+                self.furhat.say(text="AND YOUR ANSWER IS?",blocking=True)
+                response = self.furhat.listen()
+                print(response)
+                self.furhat.listen_stop()
+                try:
+                    answer,result = self.is_valid(response)
+                except:
+                     answer,result = None,False 
+                print("Answer AND RESULT IS ",answer,result)
+                if result:
+                    print("GOT IT")
+                    break
+                else:
+                    self.attempt_count =  self.attempt_count - 1
+                    self.furhat.say(text="I couldn't understand your response", blocking=True)
+            self.is_correct(answer)
+
+           
+        if self.correct and self.win_countwin >= 3:
+                self.furhat.say(text="YOU WON THE GAME")
+                result =1
         return result

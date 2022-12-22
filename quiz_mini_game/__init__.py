@@ -1,4 +1,3 @@
-__all__ = ["ChessMiniGame"]
+__all__ = ["QuizMiniGame"]
 
-from maze_mini_game.maze import *
-from maze_mini_game.MazeMiniGame import *
+from quiz_mini_game.QuizMiniGame import *

@@ -35,7 +35,7 @@ class Game:
         self.furhat = FurhatDriver()
         self.player1, self.player2 = Player(), Player()
         self.captain, self.assistant = None, None
-        self.assign_user_ids()
+        #self.assign_user_ids()
 
 
         
