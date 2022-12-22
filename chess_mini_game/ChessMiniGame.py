@@ -1,31 +1,28 @@
 
 from os import getcwd
-from pathlib import Path
 import random
 from time import sleep
 from furhat_remote_api import FurhatRemoteAPI
-from PIL import Image as PImage
-import pygame
 from CONSTANTS import HEIGHT, WIDTH
-from Scenes.scene_base import SceneBase
+
 
 class ChessMiniGame():
-    def __init__(self,Scene):
+    def __init__(self):
         self.is_win = 0
-        self.SceneBase = Scene
         self.win_count = 0
         self.attempt_count = -1
         self.life_count = 3
+        self.path = 'chess_mini_game/chess.jpg'	
         
 
     def OneMoveChess(self):
             furhat = FurhatRemoteAPI("localhost")
-            solution = {1:'WQB7', 2:'WRE5', 3:'BQH5',4:'BQD4',5:'BQA1',6:'WRH4',7:'WQF7',8:'WQH7',9:'WQG7',10:'WNF7',
-                        11:'WBG6',12:'BQH2', 13:'WQE5',14:'WBH6',15:'WQC6',16:'WBH7',
-                        17:'WNH6',18:'WRD8',19:'WRH4',20:'WNF6'}
+            solution = {1:'BQH5',2:'BQD4',3:'BQA1',4:'WQF7',5:'WQH7',6:'WQG7',7:'WNF7',
+                        8:'WBG6',9:'BQH2', 10:'WQE5',11:'WBH6',12:'WQC6',13:'WBH7',
+                        14:'WNH6',15:'WNF6',16:'WQB7',17:'WRH4',18:'WRD8',19:'WRE5',20:'WRH4'}
 
             chess_piece = {'Q': 'QUEEN','R': 'ROOK','N': 'KNIGHT',
-            'B': 'BISHOP','K' : 'KING','P':'PAWN'}
+            'B': 'BISHOP','P':'PAWN'}
             print(type(solution))
             path =  "chess_mini_game/ChessOneMove"
             win  = 0
@@ -37,19 +34,15 @@ class ChessMiniGame():
                 attempt = 2
                 self.attempt_count = attempt
                 print("REMANING Life : ",life, "Total Win : ", win)
-                number =random.randint(1,20)
-                print("TO EXCULUDE : ", to_exculude)
+                number =random.randint(1,15)
                 while number in to_exculude :
-                    number =random.randint(1,20)
-                print(number)
+                    number =random.randint(1,15)
 
                 key = solution[number]
-                print(key)
                 
                 to_exculude.append(number)
                 #img = PImage.open(path + '/'+str(number)+'.png')
-                self.SceneBase.img = pygame.image.load(path + '/'+str(number)+'.png').convert_alpha()
-                self.SceneBase.img = pygame.transform.scale(self.SceneBase.img, (WIDTH, HEIGHT))
+                self.path = path + '/'+str(number)+'.png'
 
                 #img.show() 
                 
@@ -66,14 +59,17 @@ class ChessMiniGame():
                 answer = key[1:]
                 print(move)
                 print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                furhat.say(text="You have 10 seconds to think, when I say I am listening, please say your answer",blocking=True)
-                sleep(10)
+                furhat.say(text="You have 3 seconds to think, when I say I am listening, please say your answer",blocking=True)
+                sleep(3)
                 while attempt >0:
                     furhat.say(text="I am listening",blocking=True)
                     response = furhat.listen()
                     print(response)
                     furhat.listen_stop()
-                    piece,cord,row,result = self.is_Valid(response)
+                    try:
+                        piece,cord,row,result = self.is_Valid(response)
+                    except:
+                        piece,cord,row,result = None,None,None,False 
                     print("PIECE AND RESULT IS ",piece,cord,row,result)
                     if result:
                         print("GOT IT")
@@ -127,31 +123,44 @@ class ChessMiniGame():
         message = response.message
         message = message.upper()
         print(message)
-        chess_piece = {'Q': ('QUEEN','Queen','Green','green','GREEN','queen'),'R': ('ROOK','RIBBED','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),'N': ('KNIGHT','KNIGHTS','LIKE','Knigth','knigth' ,'NIGTH','igth','IGTH','nigth'),
+        chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
+        'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
             'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
-        coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BEE','BE'),'D':('D','DC'),'E':('E'), 'F':('F','S','EF','X'), 'G':('G','J','JEE'), }
-        row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4'),'5':('5'),'6':('6','SEX'), '7':('7','11'), '8':('8') }
+        coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BEE','BE'),'D':('D','DC'),'E':('E'), 'F':('F','FS','S','EF','X'), 'G':('G','J','JEE'), }
+        row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4','FOR'),'5':('5'),'6':('6','SEX'), '7':('7','11'), '8':('8') }
         for piece, value in chess_piece.items():
             for val in value:
-                if val in response.message:
+                if val in message:
                     check = True
-                    m_piece = piece                  
-                    
+                    m_piece = piece  
+                    message = message.replace(val,'')      
+                    message = message.replace('MOVE','')
+                    message = message.replace('MOVES','')
+                    message = message.replace('MODE','')    
+                    message = message.replace('MODES','')   
+                    message = message.replace('MOODS','')  
+                    message = message.replace('MOOD','')                  
         if check:
             print("first check")
             for piece in chess_piece.get(m_piece):
                 if piece in message:
-                    message = message.replace(m_piece, '')
+                    message = message.replace(piece, '')
+            print("NEW Messeage 2 ", message)   
             for coord_key, cor_val in coordinate.items():
+                if check2:
+                    break
                 for cor_value in cor_val:
-                    if cor_value in response.message :
+                    print("cor_value",cor_value)
+                    if cor_value in message :
+                        print("IN IF")
                         check2 = True
                         m_coord = coord_key
+                        break
             if check2:
                 print("second check")
                 for row_key, row_val in row.items():
                     for row_value in row_val:
-                        if row_value in response.message :
+                        if row_value in message :
                             flag = True
                             m_row = row_key
                             return m_piece,m_coord,m_row,flag            
@@ -161,5 +170,6 @@ class ChessMiniGame():
             return None,None,None,flag 
 
     def play_game(self):
+            sleep(3)
             self.evaluate_chose(1)
             return self.is_win
