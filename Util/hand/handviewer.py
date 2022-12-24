@@ -37,9 +37,6 @@ class HandViewer:
                 self.hands.append(hand)        
 
 h = HandViewer()
-h.capture_hands()
-print(len(h.get_hand_point_coordinates()))
-print(h.get_multi_handedness())
-print(h.hands[0].__str__())
-print(h.hands[1].__str__())
+
+
 
