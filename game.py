@@ -37,24 +37,24 @@ class Game:
         self.captain, self.assistant = None, None
         self.assign_user_ids()
 
-        self.furhat.introduce_players((self.player1.id, self.player2.id))
+        # self.furhat.introduce_players((self.player1.id, self.player2.id))
 
-        vol1, vol2 = self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
-        if vol1 is not None:
-            if vol1:
-                self.captain = self.player1
-                self.assistant = self.player2
-                self.player1.role = "Captain"
-                self.player2.role = "Assistant"
-            else:
-                self.assistant = self.player1
-                self.captain = self.player2
-                self.player2.role = "Captain"
-                self.player1.role = "Assistant"
+        # vol1, vol2 = self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
+        # if vol1 is not None:
+        #     if vol1:
+        #         self.captain = self.player1
+        #         self.assistant = self.player2
+        #         self.player1.role = "Captain"
+        #         self.player2.role = "Assistant"
+        #     else:
+        #         self.assistant = self.player1
+        #         self.captain = self.player2
+        #         self.player2.role = "Captain"
+        #         self.player1.role = "Assistant"
         
-        self.furhat.define_the_roles(self.captain, self.assistant)
+        # self.furhat.define_the_roles(self.captain.id, self.assistant.id)
         
-        self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
+        self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
 
 
 
@@ -115,7 +115,9 @@ class Game:
                 else:
                     filtered_events.append(event)
 
-            game_params = (self.discontent, self.hope)
+            game_params = {"discontent": self.discontent, "hope": self.hope, 
+            "player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
+
             active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
             if update_result is None:
                 sleep(0.05)
@@ -126,9 +128,24 @@ class Game:
 
             if update_result is not None:
                 # resulta bakarak skorlari guncelleme
+                if update_result[0] == "VOLUNTEER":
+                    vol1, vol2 = update_result[1:3]
+                    if vol1 is not None:
+                        if vol1:
+                            self.captain = self.player1
+                            self.assistant = self.player2
+                            self.player1.role = "Captain"
+                            self.player2.role = "Assistant"
+                        else:
+                            self.assistant = self.player1
+                            self.captain = self.player2
+                            self.player2.role = "Captain"
+                            self.player1.role = "Assistant"
+                
+                self.furhat.define_the_roles(self.captain.id, self.assistant.id)
                 update_result = None
 
-                active_scene.next = FurhatPhotoScene()
+                active_scene.next = FurhatPhotoScene(self.furhat)
                 manual_change = True
 
                 # active_scene = FurhatPhotoScene()

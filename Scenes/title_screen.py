@@ -1,5 +1,5 @@
 from .scene_base import SceneBase
-from .furhat_photo_screen import FurhatPhotoScene
+from.volunteer_scene import VolunteerScene
 import pygame
 from UI_Objects.button import Button
 from CONSTANTS import *
@@ -8,11 +8,12 @@ from time import sleep
 
 
 class TitleScene(SceneBase):
-	def __init__(self):
+	def __init__(self, furhat):
 		SceneBase.__init__(self)
 		self.PLAY_BUTTON = Button(image=pygame.image.load("play_button.jpeg").convert_alpha(), pos=(WIDTH/2, HEIGHT-200), text_input=None, font=font, base_color=(240, 0, 0), hovering_color=(0,0,0), scale=0.35)
 		self.deg = 0
 		self.state = "intro"
+		self.furhat = furhat
 	
 	def ProcessInput(self, events, pressed_keys, game_params):
 		mousepos = pygame.mouse.get_pos()
@@ -20,7 +21,7 @@ class TitleScene(SceneBase):
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				print("MOUSE CLICK: ", end="")
 				if self.PLAY_BUTTON.checkForInput(mousepos):
-					self.SwitchToScene(FurhatPhotoScene())
+					self.SwitchToScene(VolunteerScene(self.furhat))
 					# print("SWITCHED")
 					# print(self.next)
 	
