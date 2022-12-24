@@ -42,7 +42,6 @@ class FurhatPhotoScene(SceneBase):
 
 		
 	def Update(self):
-		# print("update furhat")
 		pass
 	
 	def Render(self, WIN):

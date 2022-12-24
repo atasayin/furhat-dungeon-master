@@ -35,11 +35,22 @@ class Game:
         self.furhat = FurhatDriver()
         self.player1, self.player2 = Player(), Player()
         self.captain, self.assistant = None, None
-        #self.assign_user_ids()
+        self.assign_user_ids()
 
-        # self.furhat.introduce_players((self.player1.id, self.player2.id))
+        self.furhat.introduce_players((self.player1.id, self.player2.id))
 
-        self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
+        vol1, vol2 = self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
+        if vol1 is not None:
+            if vol1:
+                self.captain = self.player1
+                self.assistant = self.player2
+                self.player1.role = "Captain"
+                self.player2.role = "Assistant"
+            else:
+                self.assistant = self.player1
+                self.captain = self.player2
+                self.player2.role = "Captain"
+                self.player1.role = "Assistant"
         
         self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
 
@@ -101,9 +112,11 @@ class Game:
                     pygame.quit()
                 else:
                     filtered_events.append(event)
+
             game_params = (self.discontent, self.hope)
             active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
             if update_result is None:
+                sleep(0.05)
                 # print(f"UPDATE YERI : {active_scene}")
                 update_result = active_scene.Update()
             # active_scene.SwitchToScene(TitleScene())
@@ -111,15 +124,15 @@ class Game:
 
             if update_result is not None:
                 # resulta bakarak skorlari guncelleme
+                update_result = None
 
-                active_scene = FurhatPhotoScene()
+                active_scene.next = FurhatPhotoScene()
                 manual_change = True
 
                 # active_scene = FurhatPhotoScene()
                 print(f" NEXT SCENE when switch to furhat: {active_scene.next}")
-                update_result = None
             
-            if active_scene != active_scene.next or manual_change:
+            if (active_scene != active_scene.next) or manual_change:
                 manual_change = False
                 print(f"SCENE CHANGE from {active_scene} to {active_scene.next}")
                 change_scene_event.set()

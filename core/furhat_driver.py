@@ -3,7 +3,7 @@ import json
 import random
 
 
-positive = ["yes", "sure", "i do", "of course", "alright", "i will"]
+positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will"]
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
@@ -90,6 +90,7 @@ class FurhatDriver:
                     volunteer1 = True
                     self.say("Player 1. From now on, you are the captain of this rebellion.")
                 else:
+                    volunteer2 = True
                     self.look_at_player(player2)
                     self.say("Player 2. From now on, you are the captain of this rebellion.")
 
