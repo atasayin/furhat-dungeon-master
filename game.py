@@ -52,6 +52,8 @@ class Game:
                 self.player2.role = "Captain"
                 self.player1.role = "Assistant"
         
+        self.furhat.define_the_roles(self.captain, self.assistant)
+        
         self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
 
 
