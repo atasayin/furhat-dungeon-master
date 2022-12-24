@@ -22,6 +22,7 @@ class FurhatDriver:
         usr1 = json.loads(str(users[0]).replace("'", '"'))["id"]
         usr2 = json.loads(str(users[1]).replace("'", '"'))["id"]
 
+
         return (usr1, usr2)
 
     
@@ -120,6 +121,27 @@ class FurhatDriver:
         """
         self.say(ass)
 
+
+    def find_the_player_on_the_right(self, player1, player2):
+        users = self.furhat.get_users()
+        
+        usr1 = json.loads(str(users[0]).replace("'", '"'))
+        usr2 = json.loads(str(users[1]).replace("'", '"'))
+
+        if usr1["location"]["x"] > usr2["location"]["x"]:
+            if usr1["id"] == str(player1):
+                player = player1
+            else:
+                player = player2
+
+        else:
+            if usr2["id"] == str(player1):
+                player = player1
+            else:
+                player = player2
+        
+
+        return player
         
 
 
