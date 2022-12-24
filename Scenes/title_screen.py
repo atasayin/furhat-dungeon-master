@@ -20,8 +20,7 @@ class TitleScene(SceneBase):
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				print("MOUSE CLICK: ", end="")
 				if self.PLAY_BUTTON.checkForInput(mousepos):
-					self.state = "selection"
-					# self.SwitchToScene(FurhatPhotoScene())
+					self.SwitchToScene(FurhatPhotoScene())
 					# print("SWITCHED")
 					# print(self.next)
 	
@@ -31,26 +30,17 @@ class TitleScene(SceneBase):
 	
 	def Render(self, WIN):
 
-		if self.state == "intro":
-			WIN.fill((255, 255, 255))
-			mousepos = pygame.mouse.get_pos()
+		WIN.fill((255, 255, 255))
+		mousepos = pygame.mouse.get_pos()
 
 
-			self.PLAY_BUTTON.changeColor(mousepos)
-			self.PLAY_BUTTON.update(WIN)
-			
+		self.PLAY_BUTTON.changeColor(mousepos)
+		self.PLAY_BUTTON.update(WIN)
+		
 
-			self.deg += 0.03
+		self.deg += 0.03
 
-			text = font.render("Furhat the Dungeon Master", True, (0,0,0))
-			text_rect = text.get_rect(center=(WIDTH/2, 150  + math.sin(self.deg) * 40))
-			WIN.blit(text, text_rect)
-		else:
-			WIN.fill((255, 255, 255))
-			mousepos = pygame.mouse.get_pos()
-
-
-			text = font.render("Who will be our captain?", True, (0,0,0))
-			text_rect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
-			WIN.blit(text, text_rect)
+		text = font.render("Furhat the Dungeon Master", True, (0,0,0))
+		text_rect = text.get_rect(center=(WIDTH/2, 150  + math.sin(self.deg) * 40))
+		WIN.blit(text, text_rect)
 
