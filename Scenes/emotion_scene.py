@@ -6,30 +6,31 @@ from time import sleep
 
 
 class EmotionScene(SceneBase):
-    def __init__(self):
-        SceneBase.__init__(self)
-        self.img = pygame.image.load("emotion_mini_game/balck_gate.jpg").convert_alpha()
-        self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
-        self.deg = 0
-        self.result = None
-        self.slide = 0
-        self.game = emotion.EmotionMiniGame()       
-        self.font = pygame.font.Font('freesansbold.ttf', 70)    
-        print("New Emotion game")
-    
-    def ProcessInput(self, events, pressed_keys, game_params):
-        mousepos = pygame.mouse.get_pos()
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                print("MOUSE CLICK: ", end="")
-    
-    def Update(self):
-        if self.result is None:
-            print("Emotion GAME STARTED")
-            self.result = self.game.play_game()
-            # sleep(1.5)
-            #self.result = 0
-        return 0
+	def __init__(self,furhat):
+		SceneBase.__init__(self)
+		self.img = pygame.image.load("emotion_mini_game/balck_gate.jpg").convert_alpha()
+		self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
+		self.deg = 0
+		self.result = None
+		self.slide = 0
+		self.game = emotion.EmotionMiniGame()	
+		self.game.furhat = furhat
+		self.font = pygame.font.Font('freesansbold.ttf', 80)	
+		print("New Emotion game")
+	
+	def ProcessInput(self, events, pressed_keys, game_params):
+		mousepos = pygame.mouse.get_pos()
+		for event in events:
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				print("MOUSE CLICK: ", end="")
+	
+	def Update(self):
+		if self.result is None:
+			print("Emotion GAME STARTED")
+			self.result = self.game.play_game()
+			# sleep(1.5)
+			#self.result = 0
+		return 0
 
     def Render(self, WIN):
         # For the sake of brevity, the title scene is a blank red screen

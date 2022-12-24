@@ -26,7 +26,7 @@ class RPSMiniGame():
         self.hist = []
         self.drawer = drawer
         self.is_draw = drawer is not None
-        self.furhat = FurhatRemoteAPI("localhost")
+        self.furhat = None
 
     def compute_hand_move(self, hand_landmarks):
         landmarks = hand_landmarks.landmark
@@ -88,19 +88,19 @@ class RPSMiniGame():
                 elif self.clock < 20:
                     print("3...")
                 elif self.clock == 20:
-                    self.furhat.say(text="Rock", blocking=False)
+                    self.furhat.say("Rock")
                 elif self.clock < 25:
                     print("2...")
                 elif self.clock == 25:
-                    self.furhat.say(text="Paper", blocking=False)
+                    self.furhat.say("Paper")
                 elif self.clock < 30:
                     print("1...")
                 elif self.clock == 35:
-                    self.furhat.say(text="Scissor", blocking=False)
+                    self.furhat.say("Scissor")
                 elif self.clock < 40:
                     print("GO!")
                 elif self.clock == 40:
-                    self.furhat.say(text="Go!", blocking=True)
+                    self.furhat.say("Go!")
                 elif self.clock == 45:
                     hls = results.multi_hand_landmarks
                     handedness = results.multi_handedness

@@ -27,6 +27,8 @@ FPS = 60
 font = pygame.font.SysFont(None, 100)
 clock = pygame.time.Clock()
 
+
+
 class Game:
     def __init__(self) -> None:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -37,7 +39,7 @@ class Game:
         self.captain, self.assistant = None, None
         self.assign_user_ids()
 
-        # self.furhat.introduce_players((self.player1.id, self.player2.id))
+        # furhat.introduce_players((self.player1.id, self.player2.id))
 
         # vol1, vol2 = self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
         # if vol1 is not None:
@@ -52,8 +54,9 @@ class Game:
         #         self.player2.role = "Captain"
         #         self.player1.role = "Assistant"
         
+
         # self.furhat.define_the_roles(self.captain.id, self.assistant.id)
-        
+       
         self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
 
 
@@ -144,8 +147,9 @@ class Game:
                 
                 self.furhat.define_the_roles(self.captain.id, self.assistant.id)
                 update_result = None
-
+                
                 active_scene.next = FurhatPhotoScene(self.furhat)
+
                 manual_change = True
 
                 # active_scene = FurhatPhotoScene()

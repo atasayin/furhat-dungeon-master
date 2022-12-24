@@ -26,17 +26,17 @@ class FurhatPhotoScene(SceneBase):
 	
 	def ProcessInput(self, events, pressed_keys, game_params):
 		if pressed_keys[pygame.K_SPACE]:
-			self.SwitchToScene(RPSScene())
+			self.SwitchToScene(RPSScene(self.furhat))
 		elif pressed_keys[pygame.K_m]:
-			self.SwitchToScene(MazeScene())
+			self.SwitchToScene(MazeScene(self.furhat))
 		elif pressed_keys[pygame.K_c]:
-			self.SwitchToScene(ChessScene())
+			self.SwitchToScene(ChessScene(self.furhat))
 		elif pressed_keys[pygame.K_e]:
-			self.SwitchToScene(EmotionScene())
+			self.SwitchToScene(EmotionScene(self.furhat))
 		elif pressed_keys[pygame.K_o]:
-			self.SwitchToScene(OpeningScene())
+			self.SwitchToScene(OpeningScene(self.furhat))
 		elif pressed_keys[pygame.K_a]:
-			self.SwitchToScene(QuizScene())
+			self.SwitchToScene(QuizScene(self.furhat))
 		
 		self.game_discontent , self.game_hope = game_params["discontent"], game_params["hope"]
 

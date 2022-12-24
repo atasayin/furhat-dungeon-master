@@ -22,26 +22,18 @@ class TitleScene(SceneBase):
 				print("MOUSE CLICK: ", end="")
 				if self.PLAY_BUTTON.checkForInput(mousepos):
 					self.SwitchToScene(VolunteerScene(self.furhat))
-					# print("SWITCHED")
-					# print(self.next)
 	
 	def Update(self):
 		self.PLAY_BUTTON = Button(image=None, pos=(WIDTH/2, HEIGHT-200), text_input="Start Game", font=font, base_color=(240, 0, 0), hovering_color=(100,100,100), scale=0.35)
-		# logic
 	
 	def Render(self, WIN):
-
 		WIN.fill((255, 255, 255))
 		mousepos = pygame.mouse.get_pos()
-
-
 		self.PLAY_BUTTON.changeColor(mousepos)
 		self.PLAY_BUTTON.update(WIN)
-		
-
 		self.deg += 0.03
-
 		text = font.render("Furhat the Dungeon Master", True, (0,0,0))
 		text_rect = text.get_rect(center=(WIDTH/2, 150  + math.sin(self.deg) * 40))
 		WIN.blit(text, text_rect)
+
 

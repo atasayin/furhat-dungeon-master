@@ -2,7 +2,6 @@
 from os import getcwd
 import random
 from time import sleep
-from furhat_remote_api import FurhatRemoteAPI
 from CONSTANTS import HEIGHT, WIDTH
 
 
@@ -13,10 +12,10 @@ class ChessMiniGame():
         self.attempt_count = -1
         self.life_count = 3
         self.path = 'chess_mini_game/chess.jpg'	
+        self.furhat = None
         
 
     def OneMoveChess(self):
-            furhat = FurhatRemoteAPI("localhost")
             solution = {1:'BQH5',2:'BQD4',3:'BQA1',4:'WQF7',5:'WQH7',6:'WQG7',7:'WNF7',
                         8:'WBG6',9:'BQH2', 10:'WQE5',11:'WBH6',12:'WQC6',13:'WBH7',
                         14:'WNH6',15:'WNF6',16:'WQB7',17:'WRH4',18:'WRD8',19:'WRE5',20:'WRH4'}
@@ -47,10 +46,10 @@ class ChessMiniGame():
                 #img.show() 
                 
                 if 'W' in  key:
-                    furhat.say(text="White's move mate in one move",blocking=True)
+                    self.furhat.say("White's move mate in one move")
                     print("White's move mate in one move")
                 else:
-                    furhat.say(text="Black's move mate in one move",blocking=True)
+                    self.furhat.say("Black's move mate in one move")
                     print("Black's move mate in one move")
                 
                 sleep(2)
@@ -59,13 +58,12 @@ class ChessMiniGame():
                 answer = key[1:]
                 print(move)
                 print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                furhat.say(text="You have 3 seconds to think, when I say I am listening, please say your answer",blocking=True)
+                self.furhat.say("You have 3 seconds to think, when I say I am listening, please say your answer")
                 sleep(3)
                 while attempt >0:
-                    furhat.say(text="I am listening",blocking=True)
-                    response = furhat.listen()
+                    response = self.furhat.listen("I am listening")
                     print(response)
-                    furhat.listen_stop()
+                    self.furhat.listen_stop()
                     try:
                         piece,cord,row,result = self.is_Valid(response)
                     except:
@@ -81,23 +79,23 @@ class ChessMiniGame():
                 if piece in chess_piece.keys():
                     print("I UNDERSTAND")
                 else:
-                    furhat.say(text="I couldn't understand your response please enter it", blocking=True)
+                    self.furhat.say("I couldn't understand your response please enter it")
                     tried = 'AB6'
 
                 if tried == answer:
-                    furhat.say(text="YASS, that was the needed move", blocking=True)
+                    self.furhat.say("YASS, that was the needed move")
                     print("YASS")
                     print(tried,answer)
                     win  += 1
                     self.win_count = win
                 else :
-                    furhat.say(text="NOOO, that was wrong",blocking=True)
+                    self.furhat.say("NOOO, that was wrong")
                     print("NOOO")
                     print(tried,answer)
                     life -=1
                     self.life_count =life
             if life > 0 and win >= 3:
-                    furhat.say(text="YOU WON THE GAME")
+                    self.furhat.say("YOU WON THE GAME")
                     self.is_win = 1 
 
     def evaluate_chose(self,choice):
