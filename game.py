@@ -27,6 +27,8 @@ FPS = 60
 font = pygame.font.SysFont(None, 100)
 clock = pygame.time.Clock()
 
+
+
 class Game:
     def __init__(self) -> None:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -37,11 +39,11 @@ class Game:
         self.captain, self.assistant = None, None
         #self.assign_user_ids()
 
-        # self.furhat.introduce_players((self.player1.id, self.player2.id))
+        # furhat.introduce_players((self.player1.id, self.player2.id))
 
         self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
         
-        self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
+        self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
 
 
 
@@ -112,7 +114,7 @@ class Game:
             if update_result is not None:
                 # resulta bakarak skorlari guncelleme
 
-                active_scene = FurhatPhotoScene()
+                active_scene = FurhatPhotoScene(self.furhat)
                 manual_change = True
 
                 # active_scene = FurhatPhotoScene()

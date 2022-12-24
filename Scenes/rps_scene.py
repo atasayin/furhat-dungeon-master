@@ -7,13 +7,10 @@ import math
 import rps_mini_game as rps
 from time import sleep, time
 
-from furhat_remote_api import FurhatRemoteAPI
-
-
 
 
 class RPSScene(SceneBase):
-	def __init__(self):
+	def __init__(self, furhat):
 		SceneBase.__init__(self)
 		self.img = pygame.image.load("rps_mini_game/rock.jpeg").convert_alpha()
 		self.winner = None
@@ -22,7 +19,8 @@ class RPSScene(SceneBase):
 		self.result = None
 		self.font = pygame.font.Font('freesansbold.ttf', 200)
 		self.game = rps.RPSMiniGame()
-		self.furhat = FurhatRemoteAPI("localhost")
+		self.game.furhat = furhat
+		self.furhat = furhat
 
 		print("New RPS game")
 
@@ -42,11 +40,11 @@ class RPSScene(SceneBase):
 			self.result = ("RPS", self.winner, None, None)
 			self.won = True
 			self.wontime = time()
-			self.furhat.say(text="Congrats!")
+			self.furhat.say("Congrats!")
 			if self.winner == 1:
-				self.furhat.say(text="Right Player wins!", blocking=True)
+				self.furhat.say("Right Player wins!")
 			else:
-				self.furhat.say(text="Left Player wins!", blocking=True)
+				self.furhat.say("Left Player wins!")
 
 
 		# else:

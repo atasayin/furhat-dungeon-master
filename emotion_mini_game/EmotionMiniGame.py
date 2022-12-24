@@ -2,7 +2,7 @@ import cv2
 # from deepface import DeepFace
 import time
 import warnings
-from furhat_remote_api import FurhatRemoteAPI
+
 
 class EmotionMiniGame():
     def __init__(self):
@@ -10,7 +10,7 @@ class EmotionMiniGame():
         self.n_percantage = ""
         self.d_emotion = ""
         self.d_emotion_percantege = ""
-        self.furhat = FurhatRemoteAPI("localhost")
+        self.furhat = None
 
     def capture_write(self,filename="image.jpeg", port=0, ramp_frames=30, x=1280, y=720):
             camera = cv2.VideoCapture(port)
@@ -48,13 +48,13 @@ class EmotionMiniGame():
         print("emotion[2] is",emotion[2])
         if 20+ int(self.n_percantage) >= emotion_status >= int(self.n_percantage)-20:
                     print(f" YOU MATCHED {emotion[1]} WITH {int(emotion[1+1])} percent")
-                    self.furhat.say(text=f" YOU MATCHED {emotion[1]} WITH {int(emotion[1+1])} percent",blocking=True)
+                    self.furhat.say(f" YOU MATCHED {emotion[1]} WITH {int(emotion[1+1])} percent")
                     result = True
                     self.d_emotion = d_emotion
                     self.d_emotion_percantege = max
         else:
                     print(f" YOU DID NOT MATCHED YOUR EMOTIONS WERE : {obj}")
-                    self.furhat.say(text=f" YOU DID NOT MATCHED YOUR EMOTIONS , YOUR MOST DOMINANT EMOTION WAS : {d_emotion}",blocking=True)
+                    self.furhat.say(f" YOU DID NOT MATCHED YOUR EMOTIONS , YOUR MOST DOMINANT EMOTION WAS : {d_emotion}")
                     attempt = attempt + 1
                     self.d_emotion = d_emotion
                     self.d_emotion_percantege = max
@@ -69,16 +69,16 @@ class EmotionMiniGame():
         win_count = 0
         for i in range(1,4):
             print(f"NOW YOU ARE IN TURN {i} ")
-            self.furhat.say(text=f"NOW YOU ARE IN TURN {i} AND YOUR Total Attempt count is 3 ",blocking=True)
+            self.furhat.say(f"NOW YOU ARE IN TURN {i} AND YOUR Total Attempt count is 3 ")
             result =False
             attempt = 0
             while attempt <3:
                 if not result:
                     print("Attempt for this turn is ", attempt)
-                    self.furhat.say(text=f"Attempt for this turn is {attempt} ",blocking=True)
+                    self.furhat.say(f"Attempt for this turn is {attempt} ")
                     print(f"IN TURN {i} YOU NEED TO MATCH {emotion_list[i-1][0]} percentages ")
-                    self.furhat.say(text=f"IN TURN {i} YOU NEED TO MATCH {emotion_list[i-1][0]} ",blocking=True)
-                    self.furhat.say(text=f"GET READY You Have 3 Seconds ",blocking=True)
+                    self.furhat.say(f"IN TURN {i} YOU NEED TO MATCH {emotion_list[i-1][0]} ")
+                    self.furhat.say(f"GET READY You Have 3 Seconds ")
                     time.sleep(3)
                     capture = self.capture_write()
                     if capture:

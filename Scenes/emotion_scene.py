@@ -6,14 +6,15 @@ from time import sleep
 
 
 class EmotionScene(SceneBase):
-	def __init__(self):
+	def __init__(self,furhat):
 		SceneBase.__init__(self)
 		self.img = pygame.image.load("emotion_mini_game/balck_gate.jpg").convert_alpha()
 		self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
 		self.deg = 0
 		self.result = None
 		self.slide = 0
-		self.game = emotion.EmotionMiniGame()		
+		self.game = emotion.EmotionMiniGame()	
+		self.game.furhat = furhat
 		self.font = pygame.font.Font('freesansbold.ttf', 80)	
 		print("New Emotion game")
 	

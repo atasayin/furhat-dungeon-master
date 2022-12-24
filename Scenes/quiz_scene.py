@@ -8,13 +8,8 @@ import math
 import quiz_mini_game as quiz
 from time import sleep, time
 
-from furhat_remote_api import FurhatRemoteAPI
-
-
-
-
 class QuizScene(SceneBase):
-	def __init__(self):
+	def __init__(self,furhat):
 		SceneBase.__init__(self)
 		self.img = pygame.image.load("quiz_mini_game/millionaire.jpeg").convert_alpha()
 		self.winner = None
@@ -23,7 +18,7 @@ class QuizScene(SceneBase):
 		self.result = None
 		self.font = pygame.font.Font('freesansbold.ttf', 20)
 		self.game = quiz.QuizMiniGame()
-		self.furhat = FurhatRemoteAPI("localhost")
+		self.furhat = furhat
 		#Load audio file
 		# self.mixer = mixer.init()
 		# self.mixer.music.load('song.mp3')
@@ -48,11 +43,11 @@ class QuizScene(SceneBase):
 			self.result = ("RPS", self.winner, None, None)
 			self.won = True
 			self.wontime = time()
-			self.furhat.say(text="Congrats!")
+			self.furhat.say("Congrats!")
 			if self.winner == 1:
-				self.furhat.say(text="Right Player wins!", blocking=True)
+				self.furhat.say("Right Player wins!")
 			else:
-				self.furhat.say(text="Left Player wins!", blocking=True)
+				self.furhat.say("Left Player wins!")
 
 
 		# else:

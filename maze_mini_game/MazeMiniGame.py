@@ -6,14 +6,17 @@ class MazeMiniGame():
     def __init__(self, maze,time_left):
         self.maze = maze
         self.time_left = time_left
+        self.furhat = None
     
     def play_game(self):       
         dotimer.do_intime(self.play_flow, self.end_flow, self.time_left)
 
     def play_flow(self):
         while True:
-            if not self.maze.isWin:            
-                answer = input("Where do you wanna go? (left,right, up, down)\n")                
+            if not self.maze.isWin: 
+                answer = self.furhat.listen("Where do you wanna go? (left,right, up, down)\n")
+                            
+                #answer = input("Where do you wanna go? (left,right, up, down)\n")                
                 if answer == "left":
                     self.maze.moveLeft()
                 elif answer == "right":

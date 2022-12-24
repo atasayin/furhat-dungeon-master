@@ -37,6 +37,14 @@ class FurhatDriver:
 
     def say(self, text, blocking=True):
         self.furhat.say(text=text, blocking=blocking)
+    
+    def listen(self, text = None, blocking=True):
+        if text:
+            self.furhat.say(text=text,blocking=blocking)
+        return str(self.furhat.listen().message).lower()
+    
+    def listen_stop(self):
+        self.furhat.listen_stop()
 
 
     def look_at_screen(self):

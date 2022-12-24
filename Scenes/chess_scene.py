@@ -6,14 +6,16 @@ from time import sleep
 
 
 class ChessScene(SceneBase):
-	def __init__(self):
+	def __init__(self, furhat):
 		SceneBase.__init__(self)
 		self.img = pygame.image.load("chess_mini_game/chess.jpg").convert_alpha()
 		self.deg = 0
 		self.result = None
 		self.slide = 0
 		self.font = pygame.font.Font('freesansbold.ttf', 20)
-		self.game = chess.ChessMiniGame()	
+		self.game = chess.ChessMiniGame()
+		self.game.furhat = furhat
+
 
 		print("New CHESS game")
 	
