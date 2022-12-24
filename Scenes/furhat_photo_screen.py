@@ -11,7 +11,7 @@ from CONSTANTS import WIDTH, HEIGHT
 import math
 
 class FurhatPhotoScene(SceneBase):
-	def __init__(self):
+	def __init__(self, furhat):
 		SceneBase.__init__(self)
 		self.slide = 0
 		self.furhat_img = pygame.image.load("furhat.jpeg").convert_alpha()
@@ -21,6 +21,7 @@ class FurhatPhotoScene(SceneBase):
 		print("New Photo Scene")
 		self.font = pygame.font.SysFont(None, 50)
 		self.direction = "left"
+		self.furhat = furhat
 
 	
 	def ProcessInput(self, events, pressed_keys, game_params):
@@ -37,7 +38,7 @@ class FurhatPhotoScene(SceneBase):
 		elif pressed_keys[pygame.K_a]:
 			self.SwitchToScene(QuizScene())
 		
-		self.game_discontent , self.game_hope = game_params
+		self.game_discontent , self.game_hope = game_params["discontent"], game_params["hope"]
 
 
 		
