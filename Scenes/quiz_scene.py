@@ -7,7 +7,7 @@ from CONSTANTS import *
 import math
 import quiz_mini_game as quiz
 from time import sleep, time
-
+from UI_Objects import button
 from furhat_remote_api import FurhatRemoteAPI
 
 
@@ -24,6 +24,11 @@ class QuizScene(SceneBase):
 		self.font = pygame.font.Font('freesansbold.ttf', 20)
 		self.game = quiz.QuizMiniGame()
 		self.furhat = FurhatRemoteAPI("localhost")
+		self.button = button.Button(image=None, pos=(WIDTH/4, HEIGHT-300), text_input="", font=pygame.font.SysFont(None, 50), base_color=(0, 0, 0), hovering_color=(255,255,0), scale=0.35)
+		self.button3 = button.Button(image=None, pos=(WIDTH/4, HEIGHT-120), text_input="", font=pygame.font.SysFont(None, 50), base_color=(0, 0, 0), hovering_color=(255,255,0), scale=0.35)
+		self.button2 = button.Button(image=None, pos=(WIDTH/2+200, HEIGHT-300), text_input="", font=pygame.font.SysFont(None, 50), base_color=(0, 0, 0), hovering_color=(255,255,0), scale=0.35)
+		self.button4 = button.Button(image=None, pos=(WIDTH/2+200, HEIGHT-120), text_input="", font=pygame.font.SysFont(None, 50), base_color=(0, 0, 0), hovering_color=(255,255,0), scale=0.35)
+
 		#Load audio file
 		# self.mixer = mixer.init()
 		# self.mixer.music.load('song.mp3')
@@ -44,16 +49,10 @@ class QuizScene(SceneBase):
 			# +1 right
 			self.winner = self.game.play_game()
 			# sleep(1.5)
-			print("RPS run")
 			self.result = ("RPS", self.winner, None, None)
 			self.won = True
 			self.wontime = time()
 			self.furhat.say(text="Congrats!")
-			if self.winner == 1:
-				self.furhat.say(text="Right Player wins!", blocking=True)
-			else:
-				self.furhat.say(text="Left Player wins!", blocking=True)
-
 
 		# else:
 		# 	if time() - self.wontime < 10:
@@ -74,6 +73,15 @@ class QuizScene(SceneBase):
 			# 	self.mixer.music.stop()
 			WIN.fill((255, 255, 255))
 			WIN.blit(self.img, (0, 0))
+			self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+			self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-104), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+			self.button2 = button.Button(image=None, pos=(WIDTH/2+228, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+			self.button4 = button.Button(image=None, pos=(WIDTH/2+228, HEIGHT-104), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+
+			self.button.update(WIN)
+			self.button2.update(WIN)
+			self.button3.update(WIN)
+			self.button4.update(WIN)
 			win_text = 'WIN COUNT:'
 			pwin_text = f"{self.game.win_count}"
 			quest_text = 'Question Number:'
@@ -96,6 +104,15 @@ class QuizScene(SceneBase):
 				center=((WIDTH//8)+100, HEIGHT//4)))
 			WIN.blit(quest_text, quest_text.get_rect(
 				center=((WIDTH//8), HEIGHT//4)))
+
+			if self.game.user_choice == 'A':
+				self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+			elif self.game.user_choice == 'B':
+				self.button2 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+			elif self.game.user_choice == 'C':
+				self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+			elif self.game.user_choice == 'D':
+				self.button4 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
 
 		else:
 			WIN.fill((255, 255, 255))
