@@ -35,19 +35,10 @@ class QuizScene(SceneBase):
 
 	def Update(self):
 		if self.result is None:
-			# -1 left
-			# +1 right
 			self.winner = self.game.play_game()
 			# sleep(1.5)
-			print("RPS run")
-			self.result = ("RPS", self.winner, None, None)
-			self.won = True
-			self.wontime = time()
+			self.result = ("QUIZ", self.winner, None, None)
 			self.furhat.say("Congrats!")
-			if self.winner == 1:
-				self.furhat.say("Right Player wins!")
-			else:
-				self.furhat.say("Left Player wins!")
 
 
 		# else:

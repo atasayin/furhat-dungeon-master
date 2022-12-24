@@ -1,5 +1,5 @@
 import cv2
-# from deepface import DeepFace
+from deepface import DeepFace
 import time
 import warnings
 
@@ -46,18 +46,20 @@ class EmotionMiniGame():
         print("max STATUS IS ",max)
         print("d_emotion STATUS IS ",d_emotion)
         print("emotion[2] is",emotion[2])
+        print("emotion[1] is",emotion[1])
+        print("emotion_status is",emotion_status)
         if 20+ int(self.n_percantage) >= emotion_status >= int(self.n_percantage)-20:
                     print(f" YOU MATCHED {emotion[1]} WITH {int(emotion[1+1])} percent")
                     self.furhat.say(f" YOU MATCHED {emotion[1]} WITH {int(emotion[1+1])} percent")
                     result = True
                     self.d_emotion = d_emotion
-                    self.d_emotion_percantege = max
+                    self.d_emotion_percantege = str(float("{:.2f}".format(max)))
         else:
                     print(f" YOU DID NOT MATCHED YOUR EMOTIONS WERE : {obj}")
                     self.furhat.say(f" YOU DID NOT MATCHED YOUR EMOTIONS , YOUR MOST DOMINANT EMOTION WAS : {d_emotion}")
                     attempt = attempt + 1
                     self.d_emotion = d_emotion
-                    self.d_emotion_percantege = max
+                    self.d_emotion_percantege = str(float("{:.2f}".format(max)))
                     result = False
                     
         return attempt,result
@@ -92,9 +94,10 @@ class EmotionMiniGame():
                             obj = DeepFace.analyze(img_path = "image.jpeg", 
                                 actions = ['emotion'])
                             attempt,result = self.check_emotion(obj,emotion_list,i,attempt)
-                            time.sleep(3)
+                            time.sleep(5)
                         except:
                             print("YOUR FACE CANNOT BE FOUND")
+                            self.furhat.say(text=f"DO NOT HIDE YOUR FACE ",blocking=True)
                             attempt = attempt +1
                             result = False
 
@@ -102,3 +105,4 @@ class EmotionMiniGame():
                     win_count = win_count +1
                     break
         return win_count
+

@@ -3,7 +3,7 @@ import json
 import random
 
 
-positive = ["yes", "sure", "i do", "of course", "alright", "i will"]
+positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
@@ -98,12 +98,28 @@ class FurhatDriver:
                     volunteer1 = True
                     self.say("Player 1. From now on, you are the captain of this rebellion.")
                 else:
+                    volunteer2 = True
                     self.look_at_player(player2)
                     self.say("Player 2. From now on, you are the captain of this rebellion.")
 
 
         
         return volunteer1, volunteer2
+
+    
+    def define_the_roles(self, captain, assistant):
+        self.look_at_player(captain)
+        capt = """Oh captain, my captain. The responsibility you are about to take on is 
+        one that is hard to bear. The future of many students are on your shoulders. 
+        You must lead wisely."""
+        self.say(capt)
+
+        self.look_at_player(assistant)
+        ass = """ No rebellion can succeed without proper motivation, patience, and resilience. 
+        Throughout the game, you must not let the hope replenish.
+        """
+        self.say(ass)
+
         
 
 

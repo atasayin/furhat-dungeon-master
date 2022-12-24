@@ -38,12 +38,11 @@ class FurhatPhotoScene(SceneBase):
 		elif pressed_keys[pygame.K_a]:
 			self.SwitchToScene(QuizScene(self.furhat))
 		
-		self.game_discontent , self.game_hope = game_params
+		self.game_discontent , self.game_hope = game_params["discontent"], game_params["hope"]
 
 
 		
 	def Update(self):
-		# print("update furhat")
 		pass
 	
 	def Render(self, WIN):

@@ -32,53 +32,54 @@ class EmotionScene(SceneBase):
 			#self.result = 0
 		return 0
 
-	def Render(self, WIN):
-		# For the sake of brevity, the title scene is a blank red screen
+    def Render(self, WIN):
+        # For the sake of brevity, the title scene is a blank red screen
 
-		if self.result is None:
-			WIN.fill((255, 255, 255))
-			WIN.blit(self.img, (0, 0))
+        if self.result is None:
+            WIN.fill((255, 255, 255))
+            WIN.blit(self.img, (0, 0))
 
-			pn_emotion_text = f"{self.game.n_emotion}"
-			pd_emotion_text = f"{self.game.d_emotion}"
-			pn_emotion_score_text = f"{self.game.n_percantage}"
-			pd_emotion_score_text = f"{self.game.d_emotion_percantege}"
-			pn_emotion_text = self.font.render(pn_emotion_text, True,
-										  (0, 0, 0))
-			pd_emotion_text = self.font.render(pd_emotion_text, True,
-										   (0, 0, 0))
-			pn_emotion_score_text = self.font.render(pn_emotion_score_text, True,
-										   (0, 0, 0))
-			pd_emotion_score_text = self.font.render(pd_emotion_score_text, True,
-										   (0, 0, 0))
-			
+            pn_emotion_text = f"{self.game.n_emotion}"
+            pd_emotion_text = f"{self.game.d_emotion}"
+                
+            pn_emotion_score_text = f"{self.game.n_percantage}"
+            pd_emotion_score_text = f"{self.game.d_emotion_percantege}"
+            pn_emotion_text = self.font.render(pn_emotion_text, True,
+                                          (255,255,255))
+            pd_emotion_text = self.font.render(pd_emotion_text, True,
+                                           (255,255,255))
+            pn_emotion_score_text = self.font.render(pn_emotion_score_text, True,
+                                           (255,255,255))
+            pd_emotion_score_text = self.font.render(pd_emotion_score_text, True,
+                                           (255,255,255))
+            
 
-			WIN.blit(pn_emotion_text, pn_emotion_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(pd_emotion_text, pd_emotion_text.get_rect(
-				center=(WIDTH//8 -400, HEIGHT//2)))
-			WIN.blit(pn_emotion_text, pn_emotion_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(pn_emotion_score_text, pn_emotion_score_text.get_rect(
-				center=(WIDTH//8 -400, HEIGHT//2)))
-		else:
-			WIN.fill((255, 255, 255))
-			WIN.blit(self.img, (0, 0))
+            WIN.blit(pn_emotion_text, pn_emotion_text.get_rect(
+                center=(WIDTH//4+22, HEIGHT//3)))
+            WIN.blit(pd_emotion_text, pd_emotion_text.get_rect(
+                center=(WIDTH//4 +480, HEIGHT//3)))
+            WIN.blit(pd_emotion_score_text, pd_emotion_score_text.get_rect(
+                center=(WIDTH//4+480, HEIGHT//2)))
+            WIN.blit(pn_emotion_score_text, pn_emotion_score_text.get_rect(
+                center=(WIDTH//4+22, HEIGHT//2)))
+        else:
+            WIN.fill((255, 255, 255))
+            WIN.blit(self.img, (0, 0))
 
-			pn_emotion_text = f"{self.game.n_emotion}"
-			pd_emotion_text = f"{self.game.d_emotion}"
-			pn_emotion_score_text = f"{self.game.n_percantage}"
-			pd_emotion_score_text = f"{self.game.d_emotion_percantege}"
-			pn_emotion_text = self.font.render(pn_emotion_text, True,
-										  (0, 0, 0))
-			pd_emotion_text = self.font.render(pd_emotion_text, True,
-										   (0, 0, 0))
-			pn_emotion_score_text = self.font.render(pn_emotion_score_text, True,
-										   (0, 0, 0))
-			pd_emotion_score_text = self.font.render(pd_emotion_score_text, True,
-										   (0, 0, 0))
-			
-			WIN.blit(pn_emotion_text, pn_emotion_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(pd_emotion_text, pd_emotion_text.get_rect(
-				center=(WIDTH//8-400, HEIGHT//2)))
+            pn_emotion_text = f"{self.game.n_emotion}"
+            pd_emotion_text = f"{self.game.d_emotion}"
+            pn_emotion_score_text = f"{self.game.n_percantage}"
+            pd_emotion_score_text = f"{self.game.d_emotion_percantege}"
+            pn_emotion_text = self.font.render(pn_emotion_text, True,
+                                          (0, 0, 0))
+            pd_emotion_text = self.font.render(pd_emotion_text, True,
+                                           (0, 0, 0))
+            pn_emotion_score_text = self.font.render(pn_emotion_score_text, True,
+                                           (0, 0, 0))
+            pd_emotion_score_text = self.font.render(pd_emotion_score_text, True,
+                                           (0, 0, 0))
+            
+            WIN.blit(pn_emotion_text, pn_emotion_text.get_rect(
+                center=(WIDTH//4, HEIGHT//2)))
+            WIN.blit(pd_emotion_text, pd_emotion_text.get_rect(
+                center=(WIDTH//4-20, HEIGHT//2)))
