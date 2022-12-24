@@ -37,7 +37,9 @@ class Game:
         self.captain, self.assistant = None, None
         #self.assign_user_ids()
 
-        self.furhat.introduce_players((self.player1.id, self.player2.id))
+        # self.furhat.introduce_players((self.player1.id, self.player2.id))
+
+        self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
         
         self.run_game(WIDTH, HEIGHT, FPS, TitleScene())
 
@@ -62,7 +64,7 @@ class Game:
         self.furhat.look_at_screen()
 
         try:
-            self.furhat.furhat.say(text="Let's Play a game. N-word", blocking=True)
+            self.furhat.furhat.say(text="Let's Play a game.", blocking=True)
         except Exception:
             print("FURHAT CANNOT BE FOUND")
         change_scene_event = threading.Event()

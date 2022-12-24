@@ -1,7 +1,7 @@
 import pygame
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 1000
+HEIGHT = 800
 
 # light shade of the button
 color_light = (170,170,170)
