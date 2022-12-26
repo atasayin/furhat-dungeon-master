@@ -133,6 +133,8 @@ class Game:
 
 			if update_result is not None:
 				# resulta bakarak skorlari guncelleme
+				print(update_result)
+				print(update_result[0])
 				if update_result[0] == "VOLUNTEER":
 					vol1, vol2 = update_result[1:3]
 					if vol1 is not None:
@@ -156,6 +158,7 @@ class Game:
 							continue
 
 				elif update_result[0] == "RPS":
+					print("RPS result.")
 					#  right player wins
 					if update_result[1] == 1:
 						if self.right_player == self.player1.id:
@@ -163,6 +166,12 @@ class Game:
 							self.assistant = self.player2
 							self.player1.role = "Captain"
 							self.player2.role = "Assistant"
+							self.furhat.define_the_roles(self.captain.id, self.assistant.id)
+						else:
+							self.captain = self.player2
+							self.assistant = self.player1
+							self.player2.role = "Captain"
+							self.player1.role = "Assistant"
 							self.furhat.define_the_roles(self.captain.id, self.assistant.id)
 
 					# left player wins
@@ -172,6 +181,12 @@ class Game:
 							self.assistant = self.player1
 							self.player2.role = "Captain"
 							self.player1.role = "Assistant"
+							self.furhat.define_the_roles(self.captain.id, self.assistant.id)
+						else:
+							self.captain = self.player1
+							self.assistant = self.player2
+							self.player1.role = "Captain"
+							self.player2.role = "Assistant"
 							self.furhat.define_the_roles(self.captain.id, self.assistant.id)
 				update_result = None
 
