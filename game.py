@@ -188,6 +188,10 @@ class Game:
 							self.player1.role = "Captain"
 							self.player2.role = "Assistant"
 							self.furhat.define_the_roles(self.captain.id, self.assistant.id)
+				else:
+					self.handle_results(update_result)
+
+
 				update_result = None
 
 				active_scene.next = FurhatPhotoScene(self.furhat)
@@ -221,6 +225,10 @@ class Game:
 			else:
 				self.player1.id, self.player2.id = ids
 				self.furhat.furhat.say(text="Welcome players.")
+
+
+	def handle_results(self, update_result):
+		pass
 
 
 Game()
