@@ -14,29 +14,29 @@ class QuizMiniGame:
         self.intro = True
         self.solution = {1: "C", 2: "B", 3: "C", 4: "C", 5: "C"}
         self.answers = {
-            "A": ("A", "18"),
-            "B": ("B", "BEE", "BE", "20"),
-            "C": ("C", "SEE", "SAY", "SEA", "22"),
-            "D": ("D", "THE", "DC", "24"),
+            "A": ("A", "18","1992",'42'),
+            "B": ("B", "BEE", "BE", "20","1993",'33'),
+            "C": ("C", "SEE", "SAY", "SEA", "22","1994",'27'),
+            "D": ("D", "THE", "DC", "24","1995",'25'),
         }
         self.questions = {
             1: "How many undergraduate programs there are at Koç University?",
             2: "Which year Koç University was founded?",
-            3: "How many undergraduate programs there are at Koç University?",
+            3: "What is the ratio between double major graduates and non-double major graduates in 2019?",
             4: "How many undergraduate programs there are at Koç University?",
             5: "How many undergraduate programs there are at Koç University?",
         }
         self.choices = {
             1: ("A is 18", "B is 20", "C is 22", "D is 24"),
             2: ("A is 1992", "B is 1993", "C is 1994", "D is 1995"),
-            3: ("A is 22", "B is 20", "C is 212", "D is 46"),
+            3: ("A is 42", "B is 33 ", "C is 27", "D is 25"),
             4: ("A is 22", "B is 20", "C is 21", "D is 46"),
             5: ("A is 22", "B is 20", "C is 21", "D is 45"),
         }
         self.button_choices = {
             1: {"A": 18, "B": 20, "C": 22, "D": 24},
             2: {"A": 1992, "B": 1993, "C": 1994, "D": 1995},
-            3: {"A": 18, "B": 20, "C": 22, "D": 24},
+            3: {"A": 42, "B": 33, "C": 27, "D": 25},
             4: {"A": 18, "B": 20, "C": 22, "D": 24},
             5: {"A": 18, "B": 20, "C": 22, "D": 24},
         }
