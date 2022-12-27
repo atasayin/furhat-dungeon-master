@@ -3,7 +3,7 @@ import json
 import random
 
 
-positive = ["yes", "sure", "i do", "of course", "alright", "i will"]
+positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
@@ -22,6 +22,7 @@ class FurhatDriver:
         usr1 = json.loads(str(users[0]).replace("'", '"'))["id"]
         usr2 = json.loads(str(users[1]).replace("'", '"'))["id"]
 
+
         return (usr1, usr2)
 
     
@@ -37,6 +38,14 @@ class FurhatDriver:
 
     def say(self, text, blocking=True):
         self.furhat.say(text=text, blocking=blocking)
+    
+    def listen(self, text = None, blocking=True):
+        if text:
+            self.furhat.say(text=text,blocking=blocking)
+        return str(self.furhat.listen().message).lower()
+    
+    def listen_stop(self):
+        self.furhat.listen_stop()
 
 
     def look_at_screen(self):
@@ -90,12 +99,49 @@ class FurhatDriver:
                     volunteer1 = True
                     self.say("Player 1. From now on, you are the captain of this rebellion.")
                 else:
+                    volunteer2 = True
                     self.look_at_player(player2)
                     self.say("Player 2. From now on, you are the captain of this rebellion.")
 
 
         
         return volunteer1, volunteer2
+
+    
+    def define_the_roles(self, captain, assistant):
+        self.look_at_player(captain)
+        capt = """Oh captain, my captain. The responsibility you are about to take on is 
+        one that is hard to bear. The future of many students are on your shoulders. 
+        You must lead wisely."""
+        self.say(capt)
+
+        self.look_at_player(assistant)
+        ass = """ No rebellion can succeed without proper motivation, patience, and resilience. 
+        Throughout the game, you must not let the hope replenish.
+        """
+        self.say(ass)
+
+
+    def find_the_player_on_the_right(self, player1, player2):
+        users = self.furhat.get_users()
+        
+        usr1 = json.loads(str(users[0]).replace("'", '"'))
+        usr2 = json.loads(str(users[1]).replace("'", '"'))
+
+        if usr1["location"]["x"] > usr2["location"]["x"]:
+            if usr1["id"] == str(player1):
+                player = player1
+            else:
+                player = player2
+
+        else:
+            if usr2["id"] == str(player1):
+                player = player1
+            else:
+                player = player2
+        
+
+        return player
         
 
 

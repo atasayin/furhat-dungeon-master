@@ -7,14 +7,13 @@ from CONSTANTS import *
 import math
 import quiz_mini_game as quiz
 from time import sleep, time
+
 from UI_Objects import button
 from furhat_remote_api import FurhatRemoteAPI
 
 
-
-
 class QuizScene(SceneBase):
-	def __init__(self):
+	def __init__(self,furhat):
 		SceneBase.__init__(self)
 		self.img = pygame.image.load("quiz_mini_game/millionaire.jpeg").convert_alpha()
 		self.winner = None
@@ -29,6 +28,7 @@ class QuizScene(SceneBase):
 		self.button2 = button.Button(image=None, pos=(WIDTH/2+200, HEIGHT-300), text_input="", font=pygame.font.SysFont(None, 50), base_color=(0, 0, 0), hovering_color=(255,255,0), scale=0.35)
 		self.button4 = button.Button(image=None, pos=(WIDTH/2+200, HEIGHT-120), text_input="", font=pygame.font.SysFont(None, 50), base_color=(0, 0, 0), hovering_color=(255,255,0), scale=0.35)
 
+		self.furhat = furhat
 		#Load audio file
 		# self.mixer = mixer.init()
 		# self.mixer.music.load('song.mp3')
@@ -45,14 +45,12 @@ class QuizScene(SceneBase):
 
 	def Update(self):
 		if self.result is None:
-			# -1 left
-			# +1 right
 			self.winner = self.game.play_game()
 			# sleep(1.5)
-			self.result = ("RPS", self.winner, None, None)
 			self.won = True
 			self.wontime = time()
-			self.furhat.say(text="Congrats!")
+			self.result = ("QUIZ", self.winner, None, None)
+			self.furhat.say("Congrats!")
 
 		# else:
 		# 	if time() - self.wontime < 10:

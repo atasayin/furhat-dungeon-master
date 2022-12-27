@@ -19,7 +19,7 @@ usr1 = json.loads(usr1)
 
 # print(usr1["id"])
 # furhat.attend(user="CLOSEST")
-furhat.attend(location="-0.4, -0.27, 0.2")
+# furhat.attend(location="-0.4, -0.27, 0.2")
 
 # users_dict = json.loads(users)
 
