@@ -56,6 +56,7 @@ class RPSMiniGame():
             return hls[1], hls[0]
 
     def compute_result_round(self, pleft_move, pright_move):
+        print(f"COMPUTING: {pleft_move}, {pright_move}")
         if pleft_move == pright_move:
             return RPSResults.TIE_RESULT
         elif pleft_move == Moves.PAPER_INDEX and pright_move == Moves.ROCK_INDEX:
@@ -71,6 +72,7 @@ class RPSMiniGame():
         with self.mp_hands.Hands(model_complexity=0,
                                  min_tracking_confidence=0.5,
                                  min_detection_confidence=0.5) as hands:
+            success = False
             while True:
                 ret, frame = self.vid.read()
 
@@ -84,7 +86,8 @@ class RPSMiniGame():
                 round_result = -1
 
                 if 0 < self.clock < 10:
-                    success = True
+                    # success = True
+                    pass
                 elif self.clock < 20:
                     print("3...")
                 elif self.clock == 20:
@@ -111,6 +114,7 @@ class RPSMiniGame():
                             pleft_landmarks)
                         self.pright_move = self.compute_hand_move(
                             pright_landmarks)
+                        success = True
                         
                         print(f"Left: {Moves(self.pleft_move)}, Right: {Moves(self.pright_move)}")
                     else:
