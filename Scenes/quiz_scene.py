@@ -99,6 +99,10 @@ class QuizScene(SceneBase):
             WIN.fill((255, 255, 255))
             WIN.blit(self.img, (0, 0))
             if self.game.user_choice is None and not self.game.intro:
+                win_text = "WIN COUNT:"
+                pwin_text = f"{self.game.win_count}"
+                pwin_text = self.font.render(pwin_text, True, (255, 255, 255))
+                win_text = self.font.render(win_text, True, (255, 255, 255))
                 WIN.blit(win_text, win_text.get_rect(center=((WIDTH // 8), HEIGHT // 5)))
                 WIN.blit(
                 pwin_text, pwin_text.get_rect(center=((WIDTH // 8) + 100, HEIGHT // 5)))
@@ -270,13 +274,11 @@ class QuizScene(SceneBase):
             self.button2.update(WIN)
             self.button3.update(WIN)
             self.button4.update(WIN)
-            win_text = "WIN COUNT:"
-            pwin_text = f"{self.game.win_count}"
+
             # quest_text = "Question Number:"
             # pquestion_text = f"{self.game.question_count}"
 
-            pwin_text = self.font.render(pwin_text, True, (255, 255, 255))
-            win_text = self.font.render(win_text, True, (255, 255, 255))
+           
             # pquestion_text = self.font.render(pquestion_text, True, (0, 0, 0))
             # quest_text = self.font.render(quest_text, True, (0, 0, 0))
 
