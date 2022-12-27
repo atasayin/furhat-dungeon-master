@@ -143,8 +143,6 @@ class QuizScene(SceneBase):
                     scale=0.35,
                 )
             else:
-                print("USER CHOICE IS NOT NONE")
-                print("self.game.user_choice ", self.game.user_choice)
                 if self.game.user_choice == "A":
                     self.button = button.Button(
                         image=None,
