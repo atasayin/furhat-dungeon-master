@@ -60,57 +60,62 @@ class QuizScene(SceneBase):
 		return self.result
 
 	def Render(self, WIN):
-		path = self.game.path
+		path = self.game.path 
 		self.img = pygame.image.load(path).convert_alpha()
 		self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
 		if self.result is None:
-			# if self.game.intro:
-			# 	self.mixer.music.play()
-			# 	print("music is resumed....")
-			# else:
-			# 	self.mixer.music.stop()
-			WIN.fill((255, 255, 255))
-			WIN.blit(self.img, (0, 0))
-			self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
-			self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-104), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
-			self.button2 = button.Button(image=None, pos=(WIDTH/2+228, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
-			self.button4 = button.Button(image=None, pos=(WIDTH/2+228, HEIGHT-104), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+				WIN.fill((255, 255, 255))
+				WIN.blit(self.img, (0, 0))
+				if self.game.user_choice is None:
+					self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+					self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-104), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+					self.button2 = button.Button(image=None, pos=(WIDTH/2+228, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+					self.button4 = button.Button(image=None, pos=(WIDTH/2+228, HEIGHT-104), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255, 255, 255), hovering_color=(255,255,0), scale=0.35)
+				else:
+					if self.game.user_choice == 'A':
+							self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+					elif self.game.user_choice == 'B':
+							self.button2 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+					elif self.game.user_choice == 'C':
+							self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+					elif self.game.user_choice == 'D':
+							self.button4 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+       			if self.game.is_correct is not None:
+						if self.game.user_choice == 'A':
+								self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+						elif self.game.user_choice == 'B':
+								self.button2 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+						elif self.game.user_choice == 'C':
+								self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+						elif self.game.user_choice == 'D':
+								self.button4 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+						
+				self.button.update(WIN)
+				self.button2.update(WIN)
+				self.button3.update(WIN)
+				self.button4.update(WIN)
+				win_text = 'WIN COUNT:'
+				pwin_text = f"{self.game.win_count}"
+				quest_text = 'Question Number:'
+				pquestion_text = f"{self.game.question_count}"
+				
+				pwin_text = self.font.render(pwin_text, True,
+											(0, 0, 0))
+				win_text = self.font.render(win_text, True,
+											(0, 0, 0))
+				pquestion_text = self.font.render(pquestion_text, True,
+											(0, 0, 0))
+				quest_text = self.font.render(quest_text, True,
+											(0, 0, 0))
 
-			self.button.update(WIN)
-			self.button2.update(WIN)
-			self.button3.update(WIN)
-			self.button4.update(WIN)
-			win_text = 'WIN COUNT:'
-			pwin_text = f"{self.game.win_count}"
-			quest_text = 'Question Number:'
-			pquestion_text = f"{self.game.question_count}"
-			
-			pwin_text = self.font.render(pwin_text, True,
-										  (0, 0, 0))
-			win_text = self.font.render(win_text, True,
-										  (0, 0, 0))
-			pquestion_text = self.font.render(pquestion_text, True,
-										   (0, 0, 0))
-			quest_text = self.font.render(quest_text, True,
-										   (0, 0, 0))
-
-			WIN.blit(win_text, win_text.get_rect(
-				center=((WIDTH//8), HEIGHT//5)))
-			WIN.blit(pwin_text, pwin_text.get_rect(
-				center=((WIDTH//8)+100, HEIGHT//5)))
-			WIN.blit(pquestion_text, pquestion_text.get_rect(
-				center=((WIDTH//8)+100, HEIGHT//4)))
-			WIN.blit(quest_text, quest_text.get_rect(
-				center=((WIDTH//8), HEIGHT//4)))
-
-			if self.game.user_choice == 'A':
-				self.button = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.A}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
-			elif self.game.user_choice == 'B':
-				self.button2 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.B}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
-			elif self.game.user_choice == 'C':
-				self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
-			elif self.game.user_choice == 'D':
-				self.button4 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
+				WIN.blit(win_text, win_text.get_rect(
+					center=((WIDTH//8), HEIGHT//5)))
+				WIN.blit(pwin_text, pwin_text.get_rect(
+					center=((WIDTH//8)+100, HEIGHT//5)))
+				WIN.blit(pquestion_text, pquestion_text.get_rect(
+					center=((WIDTH//8)+100, HEIGHT//4)))
+				WIN.blit(quest_text, quest_text.get_rect(
+					center=((WIDTH//8), HEIGHT//4)))
 		else:
 			WIN.fill((255, 255, 255))
 			WIN.blit(self.img, (0, 0))
