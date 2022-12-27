@@ -98,171 +98,170 @@ class QuizScene(SceneBase):
         if self.result is None:
             WIN.fill((255, 255, 255))
             WIN.blit(self.img, (0, 0))
-            if self.intro == False:
-                if self.game.user_choice is None
-                	self.button = button.Button(
-						image=None,
-						pos=(WIDTH / 4 + 5, HEIGHT - 245),
-						text_input=f"{self.game.A}",
-						font=pygame.font.SysFont(None, 50),
-						base_color=(255, 255, 255),
-						hovering_color=(255, 255, 0),
-						scale=0.35,
-					)
-                 	self.button3 = button.Button(
-						image=None,
-						pos=(WIDTH / 4 + 5, HEIGHT - 104),
-						text_input=f"{self.game.C}",
-						font=pygame.font.SysFont(None, 50),
-						base_color=(255, 255, 255),
-						hovering_color=(255, 255, 0),
-						scale=0.35,
-					)
-					self.button2 = button.Button(
-						image=None,
-						pos=(WIDTH / 2 + 228, HEIGHT - 245),
-						text_input=f"{self.game.B}",
-						font=pygame.font.SysFont(None, 50),
-						base_color=(255, 255, 255),
-						hovering_color=(255, 255, 0),
-						scale=0.35,
-					)
-					self.button4 = button.Button(
-						image=None,
-						pos=(WIDTH / 2 + 228, HEIGHT - 104),
-						text_input=f"{self.game.D}",
-						font=pygame.font.SysFont(None, 50),
-						base_color=(255, 255, 255),
-						hovering_color=(255, 255, 0),
-						scale=0.35,
-					)
-				else:
-					print("USER CHOICE IS NOT NONE")
-					print("self.game.user_choice ", self.game.user_choice)
-					if self.game.user_choice == "A":
-						self.button = button.Button(
-							image=None,
-							pos=(WIDTH / 4 + 5, HEIGHT - 245),
-							text_input=f"{self.game.A}",
-							font=pygame.font.SysFont(None, 50),
-							base_color=(255, 255, 0),
-							hovering_color=(255, 255, 0),
-							scale=0.35,
-						)
-					elif self.game.user_choice == "B":
-						self.button2 = button.Button(
-							image=None,
-							pos=(WIDTH / 2 + 228, HEIGHT - 245),
-							text_input=f"{self.game.B}",
-							font=pygame.font.SysFont(None, 50),
-							base_color=(255, 255, 0),
-							hovering_color=(255, 255, 0),
-							scale=0.35,
-						)
-					elif self.game.user_choice == "C":
-						self.button3 = button.Button(
-							image=None,
-							pos=(WIDTH / 4 + 5, HEIGHT - 104),
-							text_input=f"{self.game.C}",
-							font=pygame.font.SysFont(None, 50),
-							base_color=(255, 255, 0),
-							hovering_color=(255, 255, 0),
-							scale=0.35,
-						)
-					elif self.game.user_choice == "D":
-						self.button4 = button.Button(
-							image=None,
-							pos=(WIDTH / 2 + 228, HEIGHT - 104),
-							text_input=f"{self.game.D}",
-							font=pygame.font.SysFont(None, 50),
-							base_color=(255, 255, 0),
-							hovering_color=(255, 255, 0),
-							scale=0.35,
-						)
-				if self.game.is_true is not None:
-					if self.game.is_true:
-						if self.game.user_choice == "A":
-							self.button = button.Button(
-								image=None,
-								pos=(WIDTH / 4 + 5, HEIGHT - 245),
-								text_input=f"{self.game.A}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(34, 139, 34),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-						elif self.game.user_choice == "B":
-							self.button2 = button.Button(
-								image=None,
-								pos=(WIDTH / 2 + 228, HEIGHT - 245),
-								text_input=f"{self.game.B}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(34, 139, 34),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-						elif self.game.user_choice == "C":
-							self.button3 = button.Button(
-								image=None,
-								pos=(WIDTH / 4 + 5, HEIGHT - 104),
-								text_input=f"{self.game.C}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(34, 139, 34),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-						elif self.game.user_choice == "D":
-							self.button4 = button.Button(
-								image=None,
-								pos=(WIDTH / 2 + 228, HEIGHT - 104),
-								text_input=f"{self.game.D}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(34, 139, 34),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-					else:
-						if self.game.user_choice == "A":
-							self.button = button.Button(
-								image=None,
-								pos=(WIDTH / 4 + 5, HEIGHT - 245),
-								text_input=f"{self.game.A}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(255, 0, 0),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-						elif self.game.user_choice == "B":
-							self.button2 = button.Button(
-								image=None,
-								pos=(WIDTH / 2 + 228, HEIGHT - 245),
-								text_input=f"{self.game.B}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(255, 0, 0),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-						elif self.game.user_choice == "C":
-							self.button3 = button.Button(
-								image=None,
-								pos=(WIDTH / 4 + 5, HEIGHT - 104),
-								text_input=f"{self.game.C}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(255, 0, 0),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-						elif self.game.user_choice == "D":
-							self.button4 = button.Button(
-								image=None,
-								pos=(WIDTH / 2 + 228, HEIGHT - 104),
-								text_input=f"{self.game.D}",
-								font=pygame.font.SysFont(None, 50),
-								base_color=(255, 0, 0),
-								hovering_color=(255, 255, 0),
-								scale=0.35,
-							)
-					self.correct_button()
+            if self.game.user_choice is None and not self.game.intro:
+                self.button = button.Button(
+                    image=None,
+                    pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                    text_input=f"{self.game.A}",
+                    font=pygame.font.SysFont(None, 50),
+                    base_color=(255, 255, 255),
+                    hovering_color=(255, 255, 0),
+                    scale=0.35,
+                )
+                self.button3 = button.Button(
+                    image=None,
+                    pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                    text_input=f"{self.game.C}",
+                    font=pygame.font.SysFont(None, 50),
+                    base_color=(255, 255, 255),
+                    hovering_color=(255, 255, 0),
+                    scale=0.35,
+                )
+                self.button2 = button.Button(
+                    image=None,
+                    pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                    text_input=f"{self.game.B}",
+                    font=pygame.font.SysFont(None, 50),
+                    base_color=(255, 255, 255),
+                    hovering_color=(255, 255, 0),
+                    scale=0.35,
+                )
+                self.button4 = button.Button(
+                    image=None,
+                    pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                    text_input=f"{self.game.D}",
+                    font=pygame.font.SysFont(None, 50),
+                    base_color=(255, 255, 255),
+                    hovering_color=(255, 255, 0),
+                    scale=0.35,
+                )
+            else:
+                print("USER CHOICE IS NOT NONE")
+                print("self.game.user_choice ", self.game.user_choice)
+                if self.game.user_choice == "A":
+                    self.button = button.Button(
+                        image=None,
+                        pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                        text_input=f"{self.game.A}",
+                        font=pygame.font.SysFont(None, 50),
+                        base_color=(255, 255, 0),
+                        hovering_color=(255, 255, 0),
+                        scale=0.35,
+                    )
+                elif self.game.user_choice == "B":
+                    self.button2 = button.Button(
+                        image=None,
+                        pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                        text_input=f"{self.game.B}",
+                        font=pygame.font.SysFont(None, 50),
+                        base_color=(255, 255, 0),
+                        hovering_color=(255, 255, 0),
+                        scale=0.35,
+                    )
+                elif self.game.user_choice == "C":
+                    self.button3 = button.Button(
+                        image=None,
+                        pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                        text_input=f"{self.game.C}",
+                        font=pygame.font.SysFont(None, 50),
+                        base_color=(255, 255, 0),
+                        hovering_color=(255, 255, 0),
+                        scale=0.35,
+                    )
+                elif self.game.user_choice == "D":
+                    self.button4 = button.Button(
+                        image=None,
+                        pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                        text_input=f"{self.game.D}",
+                        font=pygame.font.SysFont(None, 50),
+                        base_color=(255, 255, 0),
+                        hovering_color=(255, 255, 0),
+                        scale=0.35,
+                    )
+                if self.game.is_true is not None:
+                    if self.game.is_true:
+                        if self.game.user_choice == "A":
+                            self.button = button.Button(
+                                image=None,
+                                pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                                text_input=f"{self.game.A}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(34, 139, 34),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                        elif self.game.user_choice == "B":
+                            self.button2 = button.Button(
+                                image=None,
+                                pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                                text_input=f"{self.game.B}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(34, 139, 34),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                        elif self.game.user_choice == "C":
+                            self.button3 = button.Button(
+                                image=None,
+                                pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                                text_input=f"{self.game.C}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(34, 139, 34),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                        elif self.game.user_choice == "D":
+                            self.button4 = button.Button(
+                                image=None,
+                                pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                                text_input=f"{self.game.D}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(34, 139, 34),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                    else:
+                        if self.game.user_choice == "A":
+                            self.button = button.Button(
+                                image=None,
+                                pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                                text_input=f"{self.game.A}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(255, 0, 0),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                        elif self.game.user_choice == "B":
+                            self.button2 = button.Button(
+                                image=None,
+                                pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                                text_input=f"{self.game.B}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(255, 0, 0),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                        elif self.game.user_choice == "C":
+                            self.button3 = button.Button(
+                                image=None,
+                                pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                                text_input=f"{self.game.C}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(255, 0, 0),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                        elif self.game.user_choice == "D":
+                            self.button4 = button.Button(
+                                image=None,
+                                pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                                text_input=f"{self.game.D}",
+                                font=pygame.font.SysFont(None, 50),
+                                base_color=(255, 0, 0),
+                                hovering_color=(255, 255, 0),
+                                scale=0.35,
+                            )
+                    self.correct_button()
 
             self.button.update(WIN)
             self.button2.update(WIN)

@@ -148,7 +148,7 @@ class QuizMiniGame:
                     answer, result = None, False
                 print("Answer AND RESULT IS ", answer, result)
 
-            sleep(4)
+            sleep(2)
             self.is_correct(answer)
 
         if self.correct and self.win_count >= 1:
