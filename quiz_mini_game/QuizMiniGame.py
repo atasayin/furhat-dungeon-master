@@ -14,10 +14,10 @@ class QuizMiniGame:
         self.intro = True
         self.solution = {1: "C", 2: "B", 3: "C", 4: "C", 5: "C"}
         self.answers = {
-            "A": ("A"),
-            "B": ("B", "BEE", "BE"),
-            "C": ("C", "SEE", "SAY", "SEA"),
-            "D": ("D", "DC"),
+            "A": ("A", "18"),
+            "B": ("B", "BEE", "BE", "20"),
+            "C": ("C", "SEE", "SAY", "SEA", "22"),
+            "D": ("D", "THE", "DC", "24"),
         }
         self.questions = {
             1: "How many undergraduate programs there are at Koç University?",
@@ -76,6 +76,7 @@ class QuizMiniGame:
             print("YASS")
             self.win_count = self.win_count + 1
         else:
+            self.is_true = False
             self.furhat.say(
                 text=f"NOOO, {answer} is the wrong choice the correct one was {key}",
                 blocking=True,
@@ -91,10 +92,10 @@ class QuizMiniGame:
         to_exculude = []
         while self.win_count < 1 and self.correct:
             print("Total Win : ", self.win_count)
-            number = random.randint(1, 2)
+            number = random.randint(1, 1)
             print("THE QUESTION NUMBER IS : ", number)
             while number in to_exculude:
-                number = random.randint(1, 2)
+                number = random.randint(1, 1)
             self.question_number = number
 
             to_exculude.append(number)
@@ -121,31 +122,38 @@ class QuizMiniGame:
                 self.furhat.listen_stop()
                 try:
                     answer, result = self.is_valid(response)
-                    print("user_choice", self.user_choice)
-
+                    if result:
+                        self.furhat.say(
+                            text=f"Your Answer is {answer} {self.button_choices.get(number).get(answer)} ",
+                            blocking=True,
+                        )
+                        self.furhat.say(text="ARE YOU SURE??", blocking=True)
+                        response = self.furhat.listen()
+                        message = response.message
+                        message = message.upper()
+                        print("SURE RESPONSE ", message)
+                        if message in ("YES", "YEAP", '"YEAH'):
+                            self.user_choice = answer
+                            print("user_choice", self.user_choice)
+                            sleep(3)
+                            print("GOT IT")
+                            break
+                    else:
+                        self.attempt_count = self.attempt_count - 1
+                        self.furhat.say(
+                            text="I couldn't understand your response", blocking=True
+                        )
+                        sleep(1)
                 except:
                     answer, result = None, False
                 print("Answer AND RESULT IS ", answer, result)
-                if result:
-                    self.furhat.say(
-                        text=f"Your Answer is {self.user_choice} {self.button_choices.get(number).get(self.user_choice)} ",
-                        blocking=True,
-                    )
-                    self.furhat.say(text="ARE YOU SURE??", blocking=True)
-                    self.user_choice = answer
-                    sleep(3)
-                    print("GOT IT")
-                    break
-                else:
-                    self.attempt_count = self.attempt_count - 1
-                    self.furhat.say(
-                        text="I couldn't understand your response", blocking=True
-                    )
+
+            sleep(4)
             self.is_correct(answer)
 
         if self.correct and self.win_count >= 1:
             self.furhat.say(text="YOU WON THE GAME")
-            result = 1
+            self.result = 1
         else:
-            result = 0
+            self.result = 0
         return result
