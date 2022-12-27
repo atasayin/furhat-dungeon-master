@@ -113,7 +113,6 @@ class QuizScene(SceneBase):
 				self.button3 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.C}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
 			elif self.game.user_choice == 'D':
 				self.button4 = button.Button(image=None, pos=(WIDTH/4+5, HEIGHT-245), text_input=f"{self.game.D}", font=pygame.font.SysFont(None, 50), base_color=(255,255,0), hovering_color=(255,255,0), scale=0.35)
-
 		else:
 			WIN.fill((255, 255, 255))
 			WIN.blit(self.img, (0, 0))

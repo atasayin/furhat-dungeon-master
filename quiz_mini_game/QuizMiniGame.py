@@ -91,6 +91,7 @@ class QuizMiniGame():
             self.B = self.button_choices.get(number).get('B')
             self.C = self.button_choices.get(number).get('C')
             self.D = self.button_choices.get(number).get('D')
+            
             self.question_count= self.question_count+1
             self.furhat.say(text=f'Question {self.question_count} is',blocking=True)
             self.furhat.say(text=self.questions.get(number),blocking=True)
