@@ -70,6 +70,8 @@ class QuizMiniGame:
     def is_correct(self, answer):
         key = self.solution.get(self.question_number)
         if key == answer:
+            self.is_true = True
+            sleep(3)
             self.furhat.say(text=f"{key} is correct!", blocking=True)
             print("YASS")
             self.win_count = self.win_count + 1
@@ -119,9 +121,6 @@ class QuizMiniGame:
                 self.furhat.listen_stop()
                 try:
                     answer, result = self.is_valid(response)
-                    self.user_choice = answer
-
-                    print("self.path", self.path)
                     print("user_choice", self.user_choice)
 
                 except:
@@ -133,11 +132,8 @@ class QuizMiniGame:
                         blocking=True,
                     )
                     self.furhat.say(text="ARE YOU SURE??", blocking=True)
-                    # self.path = f"quiz_mini_game/Answers/{number}-{answer}.png"
-                    self.furhat.say(text="AND THE CORRECT ANWER IS??", blocking=True)
-                    sleep(5)
-                    self.path = f"quiz_mini_game/Answers/{number}-{answer}-{ self.solution.get(number)}.png"
-                    print(self.path)
+                    self.user_choice = answer
+                    sleep(3)
                     print("GOT IT")
                     break
                 else:
