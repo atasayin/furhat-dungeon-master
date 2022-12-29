@@ -58,7 +58,7 @@ class ChessMiniGame():
                 answer = key[1:]
                 print(move)
                 print('NEEDED MOVE: '+ chess_piece[piece]+' MOVE TO ' +move)
-                self.furhat.say("You have 3 seconds to think, when I say I am listening, please say your answer")
+                self.furhat.say("You have 3 seconds to think, when I say I am listening, please state your answer")
                 sleep(3)
                 while attempt >0:
                     response = self.furhat.listen("I am listening")
@@ -67,7 +67,7 @@ class ChessMiniGame():
                     try:
                         piece,cord,row,result = self.is_Valid(response)
                     except:
-                        piece,cord,row,result = None,None,None,False 
+                        piece,cord,row,result = None,None,None,False
                     print("PIECE AND RESULT IS ",piece,cord,row,result)
                     if result:
                         print("GOT IT")
@@ -117,10 +117,8 @@ class ChessMiniGame():
         m_row = None
         check = False
         check2 = False
-        print(response.message)
-        message = response.message
-        message = message.upper()
-        print(message)
+        message = response.upper()
+        print("Message ",message)
         chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
         'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
             'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
