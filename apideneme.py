@@ -8,14 +8,15 @@ furhat = FurhatRemoteAPI("localhost")
 # furhat.say(text="Kafana sikacagim gunu bekle hahaha", blocking=True)
 # furhat.gesture(name="BigSmile")
 
+# furhat.set_led(red=200, green=50, blue=50)
+furhat.set_face(mask="adult", character="Omar")
 
-
-users = furhat.get_users()
-print(users)
-usr1 = str(users[0]).replace("'", '"')
-print(type(usr1))
-print(usr1)
-usr1 = json.loads(usr1)
+# users = furhat.get_users()
+# print(users)
+# usr1 = str(users[0]).replace("'", '"')
+# print(type(usr1))
+# print(usr1)
+# usr1 = json.loads(usr1)
 
 # print(usr1["id"])
 # furhat.attend(user="CLOSEST")
