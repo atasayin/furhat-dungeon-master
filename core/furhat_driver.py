@@ -4,6 +4,8 @@ import random
 
 
 positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]
+turn_questions = ["how would you like to proceed?", "what is your next move?", "so, what now?",
+                    "what will you do this time?"]
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
@@ -144,7 +146,7 @@ class FurhatDriver:
         return player
 
     def ask_turns(self):
-        choice = "eat her. eat her now."
+        choice = random.choice(turn_questions)
         self.say(choice)
         
         

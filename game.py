@@ -39,6 +39,10 @@ aggro_words = ["aggressive", "raid", "let's go", "conquer", "territory",
 powerup_words = ["power", "up", "powerup", "special", "ability",
 				"tribe"]
 
+quiz_words = ["quiz", "negotiation", "trivia", "question"]
+protest_words = ["protest", "emotion", "grotesque"]
+maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
+
 class Game:
 	def __init__(self) -> None:
 		self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -233,9 +237,6 @@ class Game:
 
 
 	def manage_turn(self):
-		# milestona acmak
-		# agresif pasif?
-		# powerup
 		selection = "passive"
 		self.furhat.ask_turns()
 		answer = self.furhat.ask_question().split()
@@ -247,20 +248,31 @@ class Game:
 				selection = "milestone"
 			elif word in powerup_words:
 				selection = "powerup"
+			elif word in quiz_words:
+				selection = "quiz"
+			elif word in maze_words:
+				selection = "maze"
+			elif word in protest_words:
+				selection = "protest"
 
 		print(selection)
+
 		if selection == "passive":
+			self.furhat.ask_question()
 			pass
 		elif selection == "aggro":
-			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 			pass
 		elif selection == "milestone":
 			pass
 		elif selection == "powerup":
 			pass
-
 		
-
-		pass
+		if selection == "maze":
+			pass
+		elif selection == "protest":
+			pass
+		elif selection == "quiz":
+			pass
+		
 
 Game()
