@@ -80,8 +80,6 @@ class QuizScene(SceneBase):
         if self.result is None:
             self.winner = self.game.play_game()
             # sleep(1.5)
-            self.won = True
-            self.wontime = time()
             self.result = ("QUIZ", self.winner, None, None)
             # self.furhat.say("Congrats!")
 
