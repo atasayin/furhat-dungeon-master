@@ -238,7 +238,7 @@ class Game:
 		# powerup
 		selection = "passive"
 		self.furhat.ask_turns()
-		answer = self.furhat.listen().split()
+		answer = self.furhat.ask_question().split()
 		print(answer)
 		for word in answer:
 			if word in aggro_words:

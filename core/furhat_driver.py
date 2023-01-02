@@ -39,7 +39,7 @@ class FurhatDriver:
     def say(self, text, blocking=True):
         self.furhat.say(text=text, blocking=blocking)
     
-    def listen(self, text = None, blocking=True):
+    def ask_question(self, text = None, blocking=True):
         if text:
             self.furhat.say(text=text,blocking=blocking)
         return str(self.furhat.listen().message).lower()
@@ -146,7 +146,7 @@ class FurhatDriver:
     def ask_turns(self):
         choice = "eat her. eat her now."
         self.say(choice)
-    
+        
         
 
 
