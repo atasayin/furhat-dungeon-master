@@ -142,6 +142,11 @@ class FurhatDriver:
         
 
         return player
+
+    def ask_turns(self):
+        choice = "eat her. eat her now."
+        self.say(choice)
+    
         
 
 

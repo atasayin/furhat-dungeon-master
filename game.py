@@ -8,7 +8,9 @@ from CONSTANTS import *
 import math
 from UI_Objects.button import Button
 from Scenes.rps_scene import RPSScene
+from Scenes.quiz_scene import QuizScene
 from furhat_remote_api import FurhatRemoteAPI
+from Scenes.maze_scene import MazeScene
 from time import sleep
 import time
 import random
@@ -27,7 +29,15 @@ FPS = 60
 font = pygame.font.SysFont(None, 100)
 clock = pygame.time.Clock()
 
+milestone_words = ["milestone", "stone", "mile", "buy", "bye",
+					"unlock", "lock", "purchase", "open", "rebellion", "point",
+					"rebel", "point", "points"]
 
+aggro_words = ["aggressive", "raid", "let's go", "conquer", "territory",
+				"rate", "red", "read", "attack"]
+# bolumleri ekle
+powerup_words = ["power", "up", "powerup", "special", "ability",
+				"tribe"]
 
 class Game:
 	def __init__(self) -> None:
@@ -35,6 +45,7 @@ class Game:
 		self.active_scene = None
 		self.hope = 50
 		self.discontent = 50
+		self.rebellion_points = 0
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
@@ -43,22 +54,6 @@ class Game:
 
 
 		# furhat.introduce_players((self.player1.id, self.player2.id))
-
-		# vol1, vol2 = self.furhat.get_volunteer_status(self.player1.id, self.player2.id)
-		# if vol1 is not None:
-		#     if vol1:
-		#         self.captain = self.player1
-		#         self.assistant = self.player2
-		#         self.player1.role = "Captain"
-		#         self.player2.role = "Assistant"
-		#     else:
-		#         self.assistant = self.player1
-		#         self.captain = self.player2
-		#         self.player2.role = "Captain"
-		#         self.player1.role = "Assistant"
-		
-
-		# self.furhat.define_the_roles(self.captain.id, self.assistant.id)
 	   
 		self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
 
@@ -125,13 +120,17 @@ class Game:
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
+			if type(self.active_scene) == FurhatPhotoScene:
+				self.manage_turn()
+
+
 			if update_result is None:
 				sleep(0.05)
 				# print(f"UPDATE YERI : {self.active_scene}")
 				update_result = self.active_scene.Update()
 			# self.active_scene.SwitchToScene(TitleScene())
 			# self.active_scene.Render(screen)
-
+			
 			if update_result is not None:
 				# resulta bakarak skorlari guncelleme
 
@@ -231,5 +230,37 @@ class Game:
 					self.player2.role = "Assistant"
 					self.furhat.define_the_roles(self.captain.id, self.assistant.id)
 		return return_to_furhat
+
+
+	def manage_turn(self):
+		# milestona acmak
+		# agresif pasif?
+		# powerup
+		selection = "passive"
+		self.furhat.ask_turns()
+		answer = self.furhat.listen().split()
+		print(answer)
+		for word in answer:
+			if word in aggro_words:
+				selection = "aggro"
+			elif word in milestone_words:
+				selection = "milestone"
+			elif word in powerup_words:
+				selection = "powerup"
+
+		print(selection)
+		if selection == "passive":
+			pass
+		elif selection == "aggro":
+			self.active_scene.SwitchToScene(QuizScene(self.furhat))
+			pass
+		elif selection == "milestone":
+			pass
+		elif selection == "powerup":
+			pass
+
+		
+
+		pass
 
 Game()
