@@ -11,6 +11,7 @@ class ChessMiniGame():
         self.win_count = 0
         self.attempt_count = -1
         self.life_count = 3
+        self.total_game_number = 0
         self.path = 'chess_mini_game/chess.jpg'	
         self.furhat = None
         
@@ -30,6 +31,7 @@ class ChessMiniGame():
             self.life_count =life
             to_exculude = []
             while life > 0 and win < 3:
+                self.total_game_number = self.total_game_number +1
                 attempt = 2
                 self.attempt_count = attempt
                 print("REMANING Life : ",life, "Total Win : ", win)
@@ -61,7 +63,7 @@ class ChessMiniGame():
                 self.furhat.say("You have 3 seconds to think, when I say I am listening, please state your answer")
                 sleep(3)
                 while attempt >0:
-                    response = self.furhat.listen("I am listening")
+                    response = self.furhat.ask_question("I am listening")
                     print(response)
                     self.furhat.listen_stop()
                     try:
@@ -79,7 +81,7 @@ class ChessMiniGame():
                 if piece in chess_piece.keys():
                     print("I UNDERSTAND")
                 else:
-                    self.furhat.say("I couldn't understand your response please enter it")
+                    self.furhat.say("I couldn't understand your response")
                     tried = 'AB6'
 
                 if tried == answer:
@@ -96,7 +98,7 @@ class ChessMiniGame():
                     self.life_count =life
             if life > 0 and win >= 3:
                     self.furhat.say("YOU WON THE GAME")
-                    self.is_win = 1 
+            self.is_win = win
 
     def evaluate_chose(self,choice):
         flag = True
@@ -114,12 +116,11 @@ class ChessMiniGame():
         flag = False
         m_piece = None
         m_coord = None
-        m_row = None
         check = False
         check2 = False
         message = response.upper()
         print("Message ",message)
-        chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
+        chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','KOREAN','QUINN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
         'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
             'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
         coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BEE','BE'),'D':('D','DC'),'E':('E'), 'F':('F','FS','S','EF','X'), 'G':('G','J','JEE'), }
@@ -168,4 +169,7 @@ class ChessMiniGame():
     def play_game(self):
             sleep(3)
             self.evaluate_chose(1)
-            return self.is_win
+            print(self.total_game_number, " self.total_game_number")
+            print(self.is_win," self.is_win")
+            win_ratio = float(self.is_win/self.total_game_number)
+            return win_ratio

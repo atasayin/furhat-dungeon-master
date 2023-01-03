@@ -18,6 +18,7 @@ class FurhatPhotoScene(SceneBase):
 		self.image_width = self.furhat_img.get_width()
 		self.game_hope = None
 		self.game_discontent = None
+		self.quiz_anwered = []
 		print("New Photo Scene")
 		self.font = pygame.font.SysFont(None, 50)
 		self.direction = "left"
@@ -36,7 +37,7 @@ class FurhatPhotoScene(SceneBase):
 		elif pressed_keys[pygame.K_o]:
 			self.SwitchToScene(OpeningScene(self.furhat))
 		elif pressed_keys[pygame.K_a]:
-			self.SwitchToScene(QuizScene(self.furhat))
+			self.SwitchToScene(QuizScene(self.furhat,self.quiz_anwered))
 		
 		self.game_discontent , self.game_hope = game_params["discontent"], game_params["hope"]
 
