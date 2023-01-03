@@ -28,7 +28,8 @@ class ChessScene(SceneBase):
 	def Update(self):
 		if self.result is None:
 			print("CHESS GAME STARTED")
-			self.result = self.game.play_game()
+			game_result = self.game.play_game()
+			self.result = ("CHESS", game_result, None, None)
 			# sleep(1.5)
 			#self.result = 0
 		return 0

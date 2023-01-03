@@ -15,15 +15,16 @@ from furhat_remote_api import FurhatRemoteAPI
 
 
 class QuizScene(SceneBase):
-    def __init__(self, furhat):
+    def __init__(self, furhat,already_answered):
         SceneBase.__init__(self)
         self.img = pygame.image.load("quiz_mini_game/millionaire.jpeg").convert_alpha()
+        self.already_answered = already_answered
         self.winner = None
         self.won = False
         self.wontime = 0
         self.result = None
         self.font = pygame.font.Font("freesansbold.ttf", 20)
-        self.game = quiz.QuizMiniGame()
+        self.game = quiz.QuizMiniGame(self.already_answered)
         self.furhat = FurhatRemoteAPI("localhost")
         self.button = button.Button(
             image=None,
@@ -80,6 +81,7 @@ class QuizScene(SceneBase):
         if self.result is None:
             self.winner = self.game.play_game()
             # sleep(1.5)
+            self.already_answered.append(self.game.already_answered)
             self.result = ("QUIZ", self.winner, None, None)
             # self.furhat.say("Congrats!")
 

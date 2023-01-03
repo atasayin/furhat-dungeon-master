@@ -9,8 +9,9 @@ from CONSTANTS import *
 from furhat_remote_api import FurhatRemoteAPI
 
 
-class QuizMiniGame:
-    def __init__(self):
+class QuizMiniGame():
+    def __init__(self,already_answered):
+        self.already_answered = already_answered
         self.intro = True
         self.solution = {1: "C", 2: "B", 3: "C", 4: "C", 5: "C"}
         self.answers = {
@@ -29,7 +30,7 @@ class QuizMiniGame:
         self.choices = {
             1: ("A is 18", "B is 20", "C is 22", "D is 24"),
             2: ("A is 1992", "B is 1993", "C is 1994", "D is 1995"),
-            3: ("A is 42", "B is 33 ", "C is 27", "D is 25"),
+            3: ("A is 42", "B is 33", "C is 27", "D is 25"),
             4: ("A is 22", "B is 20", "C is 21", "D is 46"),
             5: ("A is 22", "B is 20", "C is 21", "D is 45"),
         }
@@ -85,6 +86,7 @@ class QuizMiniGame:
             self.correct = False
 
     def play_game(self):
+        print(self.already_answered)
         sleep(3)
         self.intro = False
         path = "quiz_mini_game/Questions"
@@ -92,12 +94,14 @@ class QuizMiniGame:
         to_exculude = []
         while self.win_count < 1 and self.correct:
             print("Total Win : ", self.win_count)
-            number = random.randint(1, 1)
+            number = random.randint(1, 5)
             print("THE QUESTION NUMBER IS : ", number)
             while number in to_exculude:
-                number = random.randint(1, 1)
+                number = random.randint(1, 5)
+                while number in self.already_answered:
+                    number = random.randint(1, 5)
             self.question_number = number
-
+            self.already_answered.append(number)
             to_exculude.append(number)
             # img = PImage.open(path + '/'+str(number)+'.png')
             self.path = path + "/" + str(number) + ".png"

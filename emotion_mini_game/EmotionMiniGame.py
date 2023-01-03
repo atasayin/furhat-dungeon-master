@@ -11,6 +11,7 @@ class EmotionMiniGame:
         self.d_emotion = ""
         self.d_emotion_percantege = ""
         self.furhat = None
+        self.total_emotion_count = 3
 
     def capture_write(
         self, filename="image.jpeg", port=0, ramp_frames=30, x=1280, y=720
@@ -88,8 +89,8 @@ class EmotionMiniGame:
             attempt = 0
             while attempt < 3:
                 if not result:
-                    print("Attempt for this turn is ", attempt)
-                    self.furhat.say(f"Attempt for this turn is {attempt} ")
+                    print("Attempt for this turn is ", attempt+1)
+                    self.furhat.say(f"Attempt for this turn is {attempt+1} ")
                     print(
                         f"IN TURN {i} YOU NEED TO MATCH {emotion_list[i-1][0]} percentages "
                     )
@@ -125,4 +126,4 @@ class EmotionMiniGame:
                 else:
                     win_count = win_count + 1
                     break
-        return win_count
+        return float(win_count/self.total_emotion_count)
