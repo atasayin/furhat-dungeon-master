@@ -39,7 +39,7 @@ class FurhatPhotoScene(SceneBase):
 		elif pressed_keys[pygame.K_a]:
 			self.SwitchToScene(QuizScene(self.furhat,self.quiz_anwered))
 		
-		self.game_discontent , self.game_hope = game_params["discontent"], game_params["hope"]
+		self.game_discontent , self.game_hope, self.rebellion = game_params["discontent"], game_params["hope"], game_params["rebellion"]
 
 
 		
@@ -71,3 +71,7 @@ class FurhatPhotoScene(SceneBase):
 		discontent = self.font.render(f"Discontent: {self.game_discontent}", True, (0,0,0))
 		text_rect = discontent.get_rect(topleft=(100, 150))
 		WIN.blit(discontent, text_rect)
+
+		rebellion = self.font.render(f"Rebellion: {self.rebellion}", True, (0,0,0))
+		text_rect = rebellion.get_rect(topleft=(100, 200))
+		WIN.blit(rebellion, text_rect)

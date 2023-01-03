@@ -48,14 +48,20 @@ class MilestoneManager:
         return True
 
     def buy_milestone(self,name):
+        cost = 0
         for pasif, onetime in zip(self.locked_pasifs,self.locked_oneTimes):
             if pasif.name == name:
                 self.locked_pasifs.remove(pasif)
                 self.unlocked_pasifs.append(pasif)
+                cost = pasif.cost
             
             if onetime.name == name:
                 self.locked_oneTimes.remove(onetime)
                 self.unlocked_oneTimes.append(onetime)
+                cost = onetime.cost
+
+        return cost
+            
     
     def apply_one_time(self,name,game_params):
         for onetime in self.locked_oneTimes:

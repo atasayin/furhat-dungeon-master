@@ -29,6 +29,15 @@
 #             if deg > 40:
 #                 return
 
-import multiprocessing
+# import multiprocessing
 
-print("Number of cpu : ", multiprocessing.cpu_count())
+x,y,z = 0
+
+(x, y, z) += (1, 2, 3)
+
+print(x)
+print(y)
+print(z)
+
+
+# print("Number of cpu : ", multiprocessing.cpu_count())

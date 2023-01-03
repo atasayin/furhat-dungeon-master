@@ -6,10 +6,36 @@ furhat = FurhatRemoteAPI("localhost")
 
 # furhat.say(text="Imam hatipler kapatilsin", blocking=True)
 # furhat.say(text="Kafana sikacagim gunu bekle hahaha", blocking=True)
-# furhat.gesture(name="BigSmile")
+furhat.gesture(name="Wink")
+# print(furhat.get_gestures())
 
+# furhat.gesture(body={
+#     "frames": [
+#         {
+#             "time": [
+#                 4
+#             ],
+#             "params": {
+#                 "LOOK_LEFT_LEFT": 1.0,
+#                 "LOOK_RIGHT_RIGHT": 1.0
+#             }
+#         },
+#         {
+#             "time": [
+#                 8
+#             ],
+#             "params": {
+#                 "LOOK_LEFT_RIGHT": 1.0,
+#                 "LOOK_RIGHT_LEFT": 1.0,
+
+#             }
+#         }
+#     ],
+#     "class": "furhatos.gestures.Gesture"
+#     })
 # furhat.set_led(red=200, green=50, blue=50)
-furhat.set_face(mask="adult", character="Omar")
+# furhat.set_face(mask="adult", character="Omar")
+
 
 # users = furhat.get_users()
 # print(users)
