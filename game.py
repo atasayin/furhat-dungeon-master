@@ -314,7 +314,7 @@ class Game:
 		
 
 	def wrap_up_turn(self):
-		print("Wrapping up turn....")
+		# print("Wrapping up turn....")
 		if self.turn.turn_type == "regular":
 			hope, dis, reb = self.turn.get_changes()
 			self.hope += hope

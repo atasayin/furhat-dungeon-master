@@ -149,6 +149,9 @@ class FurhatDriver:
         choice = random.choice(turn_questions)
         self.say(choice)
         
+
+    def get_passive_selection(self):
+        self.say()
         
 
 
