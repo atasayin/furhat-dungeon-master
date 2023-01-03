@@ -16,6 +16,7 @@ import time
 import random
 from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
+from milestones import MilestoneManager
 
 
 furhat_last_spoke = time.time()
@@ -55,7 +56,7 @@ class Game:
 		self.captain, self.assistant = None, None
 		self.assign_user_ids()
 		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
-
+		self.milestone_manager = MilestoneManager()
 
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 	   
