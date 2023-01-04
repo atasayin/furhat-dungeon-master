@@ -11,8 +11,7 @@ class MazeScene(SceneBase):
         self.deg = 0
         self.result = None
         self.slide = 0
-        self.game, self.view = maze.MazeFactory(maze.TerrainTypes.COMP_MAZE) 
-        self.game.furhat = furhat 
+        self.game, self.view = maze.MazeFactory(maze.TerrainTypes.COMP_MAZE,furhat)         
         print("New Maze game")
 
     def ProcessInput(self, events, pressed_keys, game_params):

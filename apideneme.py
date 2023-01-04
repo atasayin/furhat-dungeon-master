@@ -4,12 +4,12 @@ import json
 
 furhat = FurhatRemoteAPI("localhost")
 
-# furhat.say(text="Imam hatipler kapatilsin", blocking=True)
-# furhat.say(text="Kafana sikacagim gunu bekle hahaha", blocking=True)
+
+furhat.say(text="nigga", blocking=True)
 # furhat.gesture(name="BigSmile")
 
 # furhat.set_led(red=200, green=50, blue=50)
-furhat.set_face(mask="adult", character="Omar")
+#furhat.set_face(mask="adult", character="Omar")
 
 # users = furhat.get_users()
 # print(users)

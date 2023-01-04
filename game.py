@@ -59,7 +59,8 @@ class Game:
 
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 	   
-		self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
+		#self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
+		self.run_game(WIDTH, HEIGHT, FPS, MazeScene(self.furhat))
 
 
 
