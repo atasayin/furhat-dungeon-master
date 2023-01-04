@@ -3,6 +3,7 @@ import pygame
 from core.furhat_driver import FurhatDriver
 from core.player import Player
 from core.territory import Territory
+from core.turn import Turn
 pygame.init()
 
 from CONSTANTS import *
@@ -17,6 +18,7 @@ import time
 import random
 from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
+from milestones import MilestoneManager
 
 
 furhat_last_spoke = time.time()
@@ -54,13 +56,14 @@ class Game:
 		self.active_scene = None
 		self.hope = 50
 		self.discontent = 50
-		self.rebellion_points = 0
+		self.rebellion_points = 1000
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
 		self.assign_user_ids()
 		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
-
+		self.milestone_manager = MilestoneManager()
+		self.turn = Turn()
 
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 	   
@@ -125,14 +128,14 @@ class Game:
 				else:
 					filtered_events.append(event)
 
-			game_params = {"discontent": self.discontent, "hope": self.hope, 
+			game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
 			if type(self.active_scene) == FurhatPhotoScene:
 				self.manage_turn()
 
-
+			print(f"Current parameters: {self.hope}, {self.discontent}, {self.rebellion_points}")
 			if update_result is None:
 				sleep(0.05)
 				# print(f"UPDATE YERI : {self.active_scene}")
@@ -145,7 +148,6 @@ class Game:
 
 				return_to_furhat = self.handle_results(update_result)
 
-
 				update_result = None
 				if return_to_furhat:
 					self.active_scene.next = FurhatPhotoScene(self.furhat)
@@ -154,6 +156,7 @@ class Game:
 
 				# self.active_scene = FurhatPhotoScene()
 				print(f" NEXT SCENE when switch to furhat: {self.active_scene.next}")
+			self.wrap_up_turn()
 			
 			if (self.active_scene != self.active_scene.next) or manual_change:
 				manual_change = False
@@ -238,6 +241,21 @@ class Game:
 					self.player1.role = "Captain"
 					self.player2.role = "Assistant"
 					self.furhat.define_the_roles(self.captain.id, self.assistant.id)
+		
+		elif update_result[0] == "CHESS":
+			if random.uniform(0,1) < update_result[1]:
+				self.turn.success = True
+
+			
+		elif update_result[0] == "QUIZ":
+			# 0, 1, 2 ---> number of correct answers
+			success = update_result[1]
+			self.turn.hope_change = (success - 1) * 10
+			self.turn.discontent_change = (1 - success) * 5
+			self.turn.rebellion_point_change = success * 20
+
+
+
 		return return_to_furhat
 
 
@@ -264,20 +282,60 @@ class Game:
 
 		if selection == "passive":
 			self.furhat.ask_question()
+			# change selection to specific passive type
 			pass
 		elif selection == "aggro":
+			# saldirdigi yeri turn'e kaydet
 			pass
 		elif selection == "milestone":
-			pass
+			# ask which milestone
+			self.turn.turn_type = "milestone"
+			self.turn.milestone_requested = "sallyjazz"
+			# check if already bought
+			if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
+				if self.milestone_manager.is_money_enough(self.turn.milestone_requested, self.rebellion_points):
+					cost = self.milestone_manager.buy_milestone(self.turn.milestone_requested)
+					self.turn.rebellion_point_change = -cost
+					self.furhat.say(f"You successfully bought the {self.turn.milestone_requested}!")
+					self.furhat.furhat.gesture(name="Wink")
+				else:
+					self.furhat.say("My G you are broke")
+			else:
+				self.furhat.say(f"You have already unlocked {self.turn.milestone_requested}!")
+
 		elif selection == "powerup":
 			pass
 		
 		if selection == "maze":
+			# gittigi yeri turn'e kaydet
 			pass
 		elif selection == "protest":
+			self.turn.turn_type = "regular"
+
 			pass
 		elif selection == "quiz":
-			pass
+			self.turn.turn_type = "regular"
+			self.active_scene.SwitchToScene(QuizScene(self.furhat, []))
 		
 
+	def wrap_up_turn(self):
+		print("Wrapping up turn....")
+		if self.turn.turn_type == "regular":
+			hope, dis, reb = self.turn.get_changes()
+			self.hope += hope
+			self.discontent += dis
+			self.rebellion_points += reb
+
+		elif self.turn.turn_type == "maze":
+			if self.turn.success:
+				pass
+		
+		elif self.turn.turn_type == "chess":
+			if self.turn.success:
+				# territory'i alip ekle
+				pass
+		elif self.turn.turn_type == "milestone":
+			self.rebellion_points += self.turn.rebellion_point_change
+
+		self.turn.reset_turn()
 Game()
