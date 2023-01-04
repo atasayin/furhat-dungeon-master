@@ -2,6 +2,7 @@ import threading
 import pygame
 from core.furhat_driver import FurhatDriver
 from core.player import Player
+from core.territory import Territory
 pygame.init()
 
 from CONSTANTS import *
@@ -42,6 +43,10 @@ powerup_words = ["power", "up", "powerup", "special", "ability",
 quiz_words = ["quiz", "negotiation", "trivia", "question"]
 protest_words = ["protest", "emotion", "grotesque"]
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
+
+territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
+				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENG',size=15),
+				  Territory(name='SNA',size=20),Territory(name='SCIENCE',size=12)]
 
 class Game:
 	def __init__(self) -> None:
