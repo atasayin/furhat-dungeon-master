@@ -11,3 +11,15 @@ class Territory:
             self.size = size
         self.passive_generation = self.size*1.5
 
+    def conquer(self):
+        self.owner = 'Player'
+
+    def generate_passif_income(self,t_list):
+        total_income = 0
+        for territory in t_list:
+            total_income += territory.passive_generation
+        return total_income
+
+    def losing_territory(self,t_list,my_territory,territory):
+        pass
+

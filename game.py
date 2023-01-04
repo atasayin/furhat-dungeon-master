@@ -46,9 +46,11 @@ quiz_words = ["quiz", "negotiation", "trivia", "question"]
 protest_words = ["protest", "emotion", "grotesque"]
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 
-territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
-				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENG',size=15),
+initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
+				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENGINEERING',size=15),
 				  Territory(name='SNA',size=20),Territory(name='SCIENCE',size=12)]
+territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD'),2:('OMER','ÖMER'),3:('ODEON','NERO'),
+				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SCIEN')}
 
 class Game:
 	def __init__(self) -> None:
@@ -60,10 +62,11 @@ class Game:
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
-		self.assign_user_ids()
-		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+		#self.assign_user_ids()
+		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
+		self.territory_list= []
 
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 	   
@@ -285,8 +288,29 @@ class Game:
 			# change selection to specific passive type
 			pass
 		elif selection == "aggro":
+			self.turn.turn_type = "chess"
+			attempt = 2
+			flag =False
+			while attempt > 0 and not flag:
+				attempt= attempt -1
+				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY YOU WANT TO ATTACK')
+				territory_selection =territory_selection.upper()
+				print("territory_selection is ", territory_selection)
+				try:
+					for index, value in territory_dict.items():
+						for val in value:
+							if val in territory_selection:
+								self.turn.attack_territory = index
+								self.turn.success = True
+								flag = True
+								break
+				except:
+					self.turn.success = False
+			if flag:
+				self.turn.success = True
+			else:
+				self.turn.success = False
 			# saldirdigi yeri turn'e kaydet
-			pass
 		elif selection == "milestone":
 			# ask which milestone
 			self.turn.turn_type = "milestone"
@@ -319,7 +343,6 @@ class Game:
 		
 
 	def wrap_up_turn(self):
-		print("Wrapping up turn....")
 		if self.turn.turn_type == "regular":
 			hope, dis, reb = self.turn.get_changes()
 			self.hope += hope
@@ -333,7 +356,12 @@ class Game:
 		elif self.turn.turn_type == "chess":
 			if self.turn.success:
 				# territory'i alip ekle
-				pass
+				territory = initial_territory_list[self.turn.attack_territory]
+				territory.conquer()
+				initial_territory_list[self.turn.attack_territory] = None
+				self.territory_list.append(territory)
+				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
+				self.rebellion_points += self.turn.rebellion_point_change
 		elif self.turn.turn_type == "milestone":
 			self.rebellion_points += self.turn.rebellion_point_change
 
