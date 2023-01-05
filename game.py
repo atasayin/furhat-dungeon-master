@@ -20,7 +20,6 @@ from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
 from milestones import MilestoneManager
 from tribes import TribeManager
-from powerups import PowerupManager
 
 
 furhat_last_spoke = time.time()
@@ -71,12 +70,11 @@ class Game:
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
 		self.territory_list= []
-		self.tribe_manager = TribeManager()
-		self.powerup_manager = PowerupManager()
 		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
 			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
 		# furhat.introduce_players((self.player1.id, self.player2.id))
+		self.tribe_manager = TribeManager(self.game_params)
 	   
 		self.run_game(TitleScene(self.furhat))
 
@@ -342,14 +340,13 @@ class Game:
 			# ! ash which power
 			#powerup_requested = self.furhat.ask_question(f"Lets Power up!")
 			powerup_requested = "comp"
-			power_up = self.powerup_manager.find_powerup(powerup_requested)
+			power_up = self.tribe_manager.find_unused_powerup_tribe(powerup_requested)
 
 			if power_up:
-				power_up.use()
-				self.powerup_manager.remove(powerup_requested)
+				power_up.use_powerup_tribe(power_up)
 			else:
 				# ! POWER UP YOK VEYA YANLIŞ ANLAMA??	
-				pass
+				self.furhat.say(f"You don't have the {powerup_requested} powerup")
 		
 		elif selection == "maze":
 			# gittigi yeri turn'e kaydet
@@ -383,7 +380,6 @@ class Game:
 		elif self.turn.turn_type == "maze":
 			if self.turn.success:
 				tribe = self.tribe_manager.conquer_tribe(self.turn.maze_destination)
-				self.powerup_manager.add(tribe.gain_powerup())
 				
 		elif self.turn.turn_type == "chess":
 			if self.turn.success:

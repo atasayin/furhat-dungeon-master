@@ -1,6 +1,6 @@
 from .powerup_base import PowerupBase
 
 class PowerupTerritory(PowerupBase):
-    def __init__(self, name, territorys) -> None:
-        super.__init__(self,name)
+    def __init__(self, territorys) -> None:
+        PowerupBase.__init__(self)
         self.territorys = territorys

@@ -1,5 +1,4 @@
 class PowerupBase:
-    def __init__(self, name) -> None:
-        self.name = name
+    def __init__(self) -> None:
         self.is_used = False
         self.use_feedback_text = ""
