@@ -14,6 +14,7 @@ from Scenes.quiz_scene import QuizScene
 from furhat_remote_api import FurhatRemoteAPI
 from Scenes.maze_scene import MazeScene
 from Scenes.chess_scene import ChessScene
+from Scenes.emotion_scene import EmotionScene
 from time import sleep
 import time
 import random
@@ -137,6 +138,7 @@ class Game:
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
+
 			if type(self.active_scene) == FurhatPhotoScene:
 				self.manage_turn()
 
@@ -260,6 +262,12 @@ class Game:
 			self.turn.hope_change = (success - 1) * 10
 			self.turn.discontent_change = (1 - success) * 5
 			self.turn.rebellion_point_change = success * 20
+		
+		elif update_result[0] == "EMOTION":
+			success = update_result[1]
+			self.turn.hope_change = (success - 0.5) * 10
+			self.turn.discontent_change = (0.5 - success) * 5
+			self.turn.rebellion_point_change = success * 20
 
 
 
@@ -297,7 +305,7 @@ class Game:
 			flag = False
 			while attempt > 0 and not flag:
 				attempt = attempt -1
-				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY YOU WANT TO ATTACK')
+				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY DO YOU WANT TO ATTACK?')
 				territory_selection = territory_selection.upper()
 				#  check if territory is already taken
 				print("territory_selection is ", territory_selection)
@@ -340,8 +348,8 @@ class Game:
 			pass
 		elif selection == "protest":
 			self.turn.turn_type = "regular"
+			self.active_scene.SwitchToScene(EmotionScene(self.furhat))
 
-			pass
 		elif selection == "quiz":
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(QuizScene(self.furhat, []))
@@ -375,5 +383,11 @@ class Game:
 		if self.turn.turn_type is not None:
 			print(f"Current passive income: {self.passive_rp_income}")
 			self.rebellion_points += self.passive_rp_income
+
+		self.sanity_check_for_hope_and_discontent()	
 		self.turn.reset_turn()
+
+	def sanity_check_for_hope_and_discontent(self):
+		self.hope = min(self.hope, 100)
+		self.discontent = max(self.discontent, 0)
 Game()
