@@ -12,31 +12,33 @@ furhat = FurhatRemoteAPI("localhost")
 # furhat.say(text="{Now I will} +  delay(2000) + pause yes", blocking=True)
 # print(furhat.get_gestures())
 
-furhat.say_stop()
+# furhat.say_stop()
 
-furhat.gesture(body={
-    "frames": [
-        {
-            "time": [
-                2
-            ],
-            "params": {
-                "BLINK_LEFT": 1.0
-            }
-        },
-        {
-            "time": [
-                3
-            ],
-            "params": {
-                "reset": True
-            }
-        }
-    ],
-    "class": "furhatos.gestures.Gesture"
-    })
+furhat.say(text="wahhhhh death", blocking=True)
+
 # furhat.gesture(body={
 #     "frames": [
+#         {
+#             "time": [
+#                 2
+#             ],
+#             "params": {
+#                 "BLINK_LEFT": 1.0
+#             }
+#         },
+#         {
+#             "time": [
+#                 3
+#             ],
+#             "params": {
+#                 "reset": True
+#             }
+#         }
+#     ],
+#     "class": "furhatos.gestures.Gesture"
+#     })
+# # furhat.gesture(body={
+# #     "frames": [
 #         {
 #             "time": [
 #                 4

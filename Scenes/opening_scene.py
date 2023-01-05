@@ -7,7 +7,7 @@ class OpeningScene(SceneBase):
     def __init__(self, furhat):
         SceneBase.__init__(self)
         self.next = self
-        self.font = pygame.font.Font("/Users/deniz/Desktop/Furh/furhat-dungeon-master/fonts/starjedi.ttf", 70)
+        self.font = pygame.font.Font("/Users/deniz/Desktop/Furh/furhat-dungeon-master/fonts/starjedi.ttf", 50)
         self.text = story
         self.rect_texts = wrapline(self.text, self.font, CONSTANTS.WIDTH)
         self.slide = 0
@@ -32,8 +32,7 @@ class OpeningScene(SceneBase):
         pass
 
     def Update(self):
-        # self.furhat.say(self.text)
-        pass
+        self.furhat.say(self.text)
 
     def Render(self, WIN):
         self.slide += 0.3
@@ -49,4 +48,4 @@ class OpeningScene(SceneBase):
             
             for i,text in enumerate(self.rect_texts):
                 text = self.font.render(text, True, (255 ,255 ,255))
-                WIN.blit(text, text.get_rect(topleft=(0, 0-self.slide + 70*i)))
+                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i)))

@@ -13,6 +13,7 @@ from Scenes.rps_scene import RPSScene
 from Scenes.quiz_scene import QuizScene
 from furhat_remote_api import FurhatRemoteAPI
 from Scenes.maze_scene import MazeScene
+from Scenes.chess_scene import ChessScene
 from time import sleep
 import time
 import random
@@ -37,12 +38,12 @@ milestone_words = ["milestone", "stone", "mile", "buy", "bye",
 					"rebel", "point", "points"]
 
 aggro_words = ["aggressive", "raid", "let's go", "conquer", "territory",
-				"rate", "red", "read", "attack"]
+				"rate", "red", "read", "attack", "chess"]
 # bolumleri ekle
 powerup_words = ["power", "up", "powerup", "special", "ability",
 				"tribe"]
 
-quiz_words = ["quiz", "negotiation", "trivia", "question"]
+quiz_words = ["quiz", "negotiation", "trivia", "question"] 
 protest_words = ["protest", "emotion", "grotesque"]
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 
@@ -66,6 +67,7 @@ class Game:
 		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
+		self.passive_rp_income = 20
 		self.territory_list= []
 
 		# furhat.introduce_players((self.player1.id, self.player2.id))
@@ -248,6 +250,8 @@ class Game:
 		elif update_result[0] == "CHESS":
 			if random.uniform(0,1) < update_result[1]:
 				self.turn.success = True
+			else: 
+				self.turn.success = False
 
 			
 		elif update_result[0] == "QUIZ":
@@ -290,26 +294,25 @@ class Game:
 		elif selection == "aggro":
 			self.turn.turn_type = "chess"
 			attempt = 2
-			flag =False
+			flag = False
 			while attempt > 0 and not flag:
-				attempt= attempt -1
+				attempt = attempt -1
 				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY YOU WANT TO ATTACK')
-				territory_selection =territory_selection.upper()
+				territory_selection = territory_selection.upper()
+				#  check if territory is already taken
 				print("territory_selection is ", territory_selection)
 				try:
 					for index, value in territory_dict.items():
-						for val in value:
-							if val in territory_selection:
-								self.turn.attack_territory = index
-								self.turn.success = True
-								flag = True
-								break
+						if not flag:
+							for val in value:
+								if val in territory_selection:
+									self.turn.attack_territory = index
+									flag = True
+									break
+					self.active_scene.SwitchToScene(ChessScene(self.furhat))
 				except:
 					self.turn.success = False
-			if flag:
-				self.turn.success = True
-			else:
-				self.turn.success = False
+				
 			# saldirdigi yeri turn'e kaydet
 		elif selection == "milestone":
 			# ask which milestone
@@ -324,9 +327,11 @@ class Game:
 					self.furhat.furhat.gesture(name="Wink")
 				else:
 					self.furhat.say("My G you are broke")
+					self.turn.turn_type = None
 			else:
 				self.furhat.say(f"You have already unlocked {self.turn.milestone_requested}!")
-
+				self.turn.turn_type = None
+				
 		elif selection == "powerup":
 			pass
 		
@@ -360,10 +365,15 @@ class Game:
 				territory.conquer()
 				initial_territory_list[self.turn.attack_territory] = None
 				self.territory_list.append(territory)
-				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
-				self.rebellion_points += self.turn.rebellion_point_change
+				print(f"TERRITORY PASSIVE {territory.passive_generation}")
+				self.passive_rp_income += territory.passive_generation
+
 		elif self.turn.turn_type == "milestone":
 			self.rebellion_points += self.turn.rebellion_point_change
 
+		# Milestone and Territory passive skills
+		if self.turn.turn_type is not None:
+			print(f"Current passive income: {self.passive_rp_income}")
+			self.rebellion_points += self.passive_rp_income
 		self.turn.reset_turn()
 Game()
