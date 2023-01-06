@@ -8,7 +8,7 @@ PIXEL_SIZE = 50
 
 class MazeView():
     def __init__(self,mazeGame, colors):
-        self.img = pygame.image.load("maze_mini_game/comp-terrain.png").convert_alpha()
+        self.img = pygame.image.load("maze_mini_game/tribes/comp-terrain.png").convert_alpha()
         self.game = mazeGame
         self.time_left = mazeGame.time_left
         self.colors = colors

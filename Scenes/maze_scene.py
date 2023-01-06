@@ -24,15 +24,11 @@ class MazeScene(SceneBase):
         if self.result is None:
             print("Maze run")
             self.result = self.game.play_game()
-        return 0
+        return self.result
 
     def Render(self, WIN):
-        # For the sake of brevity, the title scene is a blank red screen
         if self.result is None:
             self.view.draw_background(WIN)
             self.view.draw_board(WIN)    
             self.view.draw_timeleft(WIN)               
-        else:
-             # self.SwitchToScene(self.main)
-            self.result = 0
         

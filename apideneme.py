@@ -5,7 +5,9 @@ import json
 furhat = FurhatRemoteAPI("localhost")
 
 
-furhat.say(text="nigga", blocking=True)
+while True:
+    furhat.say(text="say it", blocking=True)
+    furhat.listen()
 # furhat.gesture(name="BigSmile")
 
 # furhat.set_led(red=200, green=50, blue=50)
