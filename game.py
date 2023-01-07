@@ -11,6 +11,8 @@ import math
 from UI_Objects.button import Button
 from Scenes.rps_scene import RPSScene
 from Scenes.quiz_scene import QuizScene
+from Scenes.chess_scene import ChessScene
+from Scenes.emotion_scene import EmotionScene
 from furhat_remote_api import FurhatRemoteAPI
 from Scenes.maze_scene import MazeScene
 from time import sleep
@@ -42,15 +44,15 @@ aggro_words = ["aggressive", "raid", "let's go", "conquer", "territory",
 powerup_words = ["power", "up", "powerup", "special", "ability",
 				"tribe"]
 
-quiz_words = ["quiz", "negotiation", "trivia", "question"]
-protest_words = ["protest", "emotion", "grotesque"]
+quiz_words = ["quiz", "negotiation","who is", "trivia", "question"]
+protest_words = ["protest", "emotion", "grotesque",'beretta',"princess"]
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENGINEERING',size=15),
 				  Territory(name='SNA',size=20),Territory(name='SCIENCE',size=12)]
-territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD'),2:('OMER','ÖMER'),3:('ODEON','NERO'),
-				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SCIEN')}
+territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','ÖMER'),3:('ODEON','NERO'),
+				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 class Game:
 	def __init__(self) -> None:
@@ -89,7 +91,9 @@ class Game:
 
 		pygame.display.set_caption("Dungeon Master")
 		print("running")
-
+		open('quiz_mini_game/AskedQuestions.txt', 'w').close()
+		open('chess_mini_game/AskedQuestions.txt', 'w').close()
+		open('emotion_mini_game/AskedQuestions.txt', 'w').close()
 		self.furhat.look_at_screen()
 
 		try:
@@ -301,11 +305,12 @@ class Game:
 						for val in value:
 							if val in territory_selection:
 								self.turn.attack_territory = index
-								self.turn.success = True
+								#self.turn.success = True
 								flag = True
 								break
 				except:
 					self.turn.success = False
+			self.active_scene.SwitchToScene(ChessScene(self.furhat))
 			if flag:
 				self.turn.success = True
 			else:
@@ -335,11 +340,12 @@ class Game:
 			pass
 		elif selection == "protest":
 			self.turn.turn_type = "regular"
+			self.active_scene.SwitchToScene(EmotionScene(self.furhat))
 
 			pass
 		elif selection == "quiz":
 			self.turn.turn_type = "regular"
-			self.active_scene.SwitchToScene(QuizScene(self.furhat, []))
+			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 		
 
 	def wrap_up_turn(self):
