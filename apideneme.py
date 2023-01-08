@@ -2,7 +2,8 @@ from furhat_remote_api import FurhatRemoteAPI
 from time import sleep
 import json
 
-furhat = FurhatRemoteAPI("localhost")
+furhat = FurhatRemoteAPI("172.23.120.144")
+
 
 # furhat.say(text="Imam hatipler kapatilsin", blocking=True)
 # furhat.say(text="Kafana sikacagim gunu bekle hahaha", blocking=True)
@@ -12,31 +13,33 @@ furhat = FurhatRemoteAPI("localhost")
 # furhat.say(text="{Now I will} +  delay(2000) + pause yes", blocking=True)
 # print(furhat.get_gestures())
 
-furhat.say_stop()
+# furhat.say_stop()
 
-furhat.gesture(body={
-    "frames": [
-        {
-            "time": [
-                2
-            ],
-            "params": {
-                "BLINK_LEFT": 1.0
-            }
-        },
-        {
-            "time": [
-                3
-            ],
-            "params": {
-                "reset": True
-            }
-        }
-    ],
-    "class": "furhatos.gestures.Gesture"
-    })
+furhat.say(text="wahhhhh death", blocking=True)
+
 # furhat.gesture(body={
 #     "frames": [
+#         {
+#             "time": [
+#                 2
+#             ],
+#             "params": {
+#                 "BLINK_LEFT": 1.0
+#             }
+#         },
+#         {
+#             "time": [
+#                 3
+#             ],
+#             "params": {
+#                 "reset": True
+#             }
+#         }
+#     ],
+#     "class": "furhatos.gestures.Gesture"
+#     })
+# # furhat.gesture(body={
+# #     "frames": [
 #         {
 #             "time": [
 #                 4
@@ -60,7 +63,7 @@ furhat.gesture(body={
 #     "class": "furhatos.gestures.Gesture"
 #     })
 # furhat.set_led(red=200, green=50, blue=50)
-# furhat.set_face(mask="adult", character="Omar")
+#furhat.set_face(mask="adult", character="Omar")
 
 
 # users = furhat.get_users()
@@ -71,7 +74,7 @@ furhat.gesture(body={
 # usr1 = json.loads(usr1)
 
 # print(usr1["id"])
-# furhat.attend(user="CLOSEST")
+furhat.attend(user="OTHER")
 # furhat.attend(location="-0.4, -0.27, 0.2")
 
 # users_dict = json.loads(users)

@@ -1,13 +1,29 @@
-# import pygame
-# import math
-# from CONSTANTS import *
+import mediapipe as mp
+import cv2 as cv
 
-# class Deneme():
-#     def __init__(self, win, clock, font) -> None:
-#         self.win = win
-#         self.clock = clock
-#         self.font = font
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_hands = mp.solutions.hands
+vid = cv.VideoCapture(0)
+clock = 0
+
+with mp_hands.Hands(model_complexity=0,
+                        min_tracking_confidence=0.5,
+                        min_detection_confidence=0.5) as hands:
+while True:
+    ret, frame = vid.read()
+
+    if not ret or frame is None:
+        break
+
+    frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+    frame = cv.flip(frame, 1)
+    results = hands.process(frame)
+    frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
+    round_result = -1
+
     
+
 #     def dothework(self):
 #         while run:
 
@@ -31,13 +47,6 @@
 
 # import multiprocessing
 
-x,y,z = 0
-
-(x, y, z) += (1, 2, 3)
-
-print(x)
-print(y)
-print(z)
 
 
 # print("Number of cpu : ", multiprocessing.cpu_count())

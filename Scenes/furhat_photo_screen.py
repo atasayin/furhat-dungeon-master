@@ -18,6 +18,7 @@ class FurhatPhotoScene(SceneBase):
 		self.image_width = self.furhat_img.get_width()
 		self.game_hope = None
 		self.game_discontent = None
+		self.rebellion = None
 		self.quiz_anwered = []
 		print("New Photo Scene")
 		self.font = pygame.font.SysFont(None, 50)
