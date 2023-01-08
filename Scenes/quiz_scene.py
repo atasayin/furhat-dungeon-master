@@ -15,16 +15,15 @@ from furhat_remote_api import FurhatRemoteAPI
 
 
 class QuizScene(SceneBase):
-    def __init__(self, furhat,already_answered):
+    def __init__(self, furhat):
         SceneBase.__init__(self)
         self.img = pygame.image.load("quiz_mini_game/millionaire.jpeg").convert_alpha()
-        self.already_answered = already_answered
         self.winner = None
         self.won = False
         self.wontime = 0
         self.result = None
         self.font = pygame.font.Font("freesansbold.ttf", 20)
-        self.game = quiz.QuizMiniGame(self.already_answered)
+        self.game = quiz.QuizMiniGame()
         self.furhat = FurhatRemoteAPI("localhost")
         self.button = button.Button(
             image=None,
@@ -81,7 +80,6 @@ class QuizScene(SceneBase):
         if self.result is None:
             self.winner = self.game.play_game()
             # sleep(1.5)
-            self.already_answered.append(self.game.already_answered)
             self.result = ("QUIZ", self.winner, None, None)
             # self.furhat.say("Congrats!")
 
@@ -108,7 +106,7 @@ class QuizScene(SceneBase):
                 pwin_text, pwin_text.get_rect(center=((WIDTH // 8) + 100, HEIGHT // 5)))
                 self.button = button.Button(
                     image=None,
-                    pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                    pos=(WIDTH / 4 + 15, HEIGHT - 260),
                     text_input=f"{self.game.A}",
                     font=pygame.font.SysFont(None, 50),
                     base_color=(255, 255, 255),
@@ -117,7 +115,7 @@ class QuizScene(SceneBase):
                 )
                 self.button3 = button.Button(
                     image=None,
-                    pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                    pos=(WIDTH / 4 + 15, HEIGHT - 120),
                     text_input=f"{self.game.C}",
                     font=pygame.font.SysFont(None, 50),
                     base_color=(255, 255, 255),
@@ -126,7 +124,7 @@ class QuizScene(SceneBase):
                 )
                 self.button2 = button.Button(
                     image=None,
-                    pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                    pos=(WIDTH / 2 + 290, HEIGHT - 260),
                     text_input=f"{self.game.B}",
                     font=pygame.font.SysFont(None, 50),
                     base_color=(255, 255, 255),
@@ -135,7 +133,7 @@ class QuizScene(SceneBase):
                 )
                 self.button4 = button.Button(
                     image=None,
-                    pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                    pos=(WIDTH / 2 + 290, HEIGHT - 120),
                     text_input=f"{self.game.D}",
                     font=pygame.font.SysFont(None, 50),
                     base_color=(255, 255, 255),
@@ -146,7 +144,7 @@ class QuizScene(SceneBase):
                 if self.game.user_choice == "A":
                     self.button = button.Button(
                         image=None,
-                        pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                        pos=(WIDTH / 4 + 15, HEIGHT - 260),
                         text_input=f"{self.game.A}",
                         font=pygame.font.SysFont(None, 50),
                         base_color=(255, 255, 0),
@@ -156,7 +154,7 @@ class QuizScene(SceneBase):
                 elif self.game.user_choice == "B":
                     self.button2 = button.Button(
                         image=None,
-                        pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                        pos=(WIDTH / 2 + 290, HEIGHT - 260),
                         text_input=f"{self.game.B}",
                         font=pygame.font.SysFont(None, 50),
                         base_color=(255, 255, 0),
@@ -166,7 +164,7 @@ class QuizScene(SceneBase):
                 elif self.game.user_choice == "C":
                     self.button3 = button.Button(
                         image=None,
-                        pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                        pos=(WIDTH / 4 + 15, HEIGHT - 120),
                         text_input=f"{self.game.C}",
                         font=pygame.font.SysFont(None, 50),
                         base_color=(255, 255, 0),
@@ -176,7 +174,7 @@ class QuizScene(SceneBase):
                 elif self.game.user_choice == "D":
                     self.button4 = button.Button(
                         image=None,
-                        pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                        pos=(WIDTH / 2 + 290, HEIGHT - 120),
                         text_input=f"{self.game.D}",
                         font=pygame.font.SysFont(None, 50),
                         base_color=(255, 255, 0),
@@ -188,7 +186,7 @@ class QuizScene(SceneBase):
                         if self.game.user_choice == "A":
                             self.button = button.Button(
                                 image=None,
-                                pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                                pos=(WIDTH / 4 + 15, HEIGHT - 260),
                                 text_input=f"{self.game.A}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(34, 139, 34),
@@ -198,7 +196,7 @@ class QuizScene(SceneBase):
                         elif self.game.user_choice == "B":
                             self.button2 = button.Button(
                                 image=None,
-                                pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                                pos=(WIDTH / 2 + 290, HEIGHT - 260),
                                 text_input=f"{self.game.B}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(34, 139, 34),
@@ -208,7 +206,7 @@ class QuizScene(SceneBase):
                         elif self.game.user_choice == "C":
                             self.button3 = button.Button(
                                 image=None,
-                                pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                                pos=(WIDTH / 4 + 15, HEIGHT - 120),
                                 text_input=f"{self.game.C}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(34, 139, 34),
@@ -218,7 +216,7 @@ class QuizScene(SceneBase):
                         elif self.game.user_choice == "D":
                             self.button4 = button.Button(
                                 image=None,
-                                pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                                pos=(WIDTH / 2 + 290, HEIGHT - 120),
                                 text_input=f"{self.game.D}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(34, 139, 34),
@@ -229,7 +227,7 @@ class QuizScene(SceneBase):
                         if self.game.user_choice == "A":
                             self.button = button.Button(
                                 image=None,
-                                pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                                pos=(WIDTH / 4 + 15, HEIGHT - 260),
                                 text_input=f"{self.game.A}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(255, 0, 0),
@@ -239,7 +237,7 @@ class QuizScene(SceneBase):
                         elif self.game.user_choice == "B":
                             self.button2 = button.Button(
                                 image=None,
-                                pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                                pos=(WIDTH / 2 + 290, HEIGHT - 260),
                                 text_input=f"{self.game.B}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(255, 0, 0),
@@ -249,7 +247,7 @@ class QuizScene(SceneBase):
                         elif self.game.user_choice == "C":
                             self.button3 = button.Button(
                                 image=None,
-                                pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                                pos=(WIDTH / 4 + 15, HEIGHT - 120),
                                 text_input=f"{self.game.C}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(255, 0, 0),
@@ -259,7 +257,7 @@ class QuizScene(SceneBase):
                         elif self.game.user_choice == "D":
                             self.button4 = button.Button(
                                 image=None,
-                                pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                                pos=(WIDTH / 2 + 290, HEIGHT - 120),
                                 text_input=f"{self.game.D}",
                                 font=pygame.font.SysFont(None, 50),
                                 base_color=(255, 0, 0),
@@ -297,7 +295,7 @@ class QuizScene(SceneBase):
         if correct_button == "A":
             self.button = button.Button(
                 image=None,
-                pos=(WIDTH / 4 + 5, HEIGHT - 245),
+                pos=(WIDTH / 4 + 15, HEIGHT - 260),
                 text_input=f"{self.game.A}",
                 font=pygame.font.SysFont(None, 50),
                 base_color=(0, 255, 0),
@@ -307,7 +305,7 @@ class QuizScene(SceneBase):
         elif correct_button == "B":
             self.button2 = button.Button(
                 image=None,
-                pos=(WIDTH / 2 + 228, HEIGHT - 245),
+                pos=(WIDTH / 2 + 290, HEIGHT - 260),
                 text_input=f"{self.game.B}",
                 font=pygame.font.SysFont(None, 50),
                 base_color=(0, 255, 0),
@@ -317,7 +315,7 @@ class QuizScene(SceneBase):
         elif correct_button == "C":
             self.button3 = button.Button(
                 image=None,
-                pos=(WIDTH / 4 + 5, HEIGHT - 104),
+                pos=(WIDTH / 4 + 15, HEIGHT - 120),
                 text_input=f"{self.game.C}",
                 font=pygame.font.SysFont(None, 50),
                 base_color=(0, 255, 0),
@@ -327,7 +325,7 @@ class QuizScene(SceneBase):
         elif correct_button == "D":
             self.button2 = button.Button(
                 image=None,
-                pos=(WIDTH / 2 + 228, HEIGHT - 104),
+                pos=(WIDTH / 2 + 290, HEIGHT - 160),
                 text_input=f"{self.game.D}",
                 font=pygame.font.SysFont(None, 50),
                 base_color=(0, 255, 0),

@@ -30,9 +30,8 @@ class ChessScene(SceneBase):
 			print("CHESS GAME STARTED")
 			game_result = self.game.play_game()
 			self.result = ("CHESS", game_result, None, None)
-			# sleep(1.5)
-			#self.result = 0
-		return 0
+      
+		return self.result
 
 	def Render(self, WIN):
 		# For the sake of brevity, the title scene is a blank red screen

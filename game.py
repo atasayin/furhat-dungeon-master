@@ -11,8 +11,12 @@ import math
 from UI_Objects.button import Button
 from Scenes.rps_scene import RPSScene
 from Scenes.quiz_scene import QuizScene
+from Scenes.chess_scene import ChessScene
+from Scenes.emotion_scene import EmotionScene
 from furhat_remote_api import FurhatRemoteAPI
 from Scenes.maze_scene import MazeScene
+from Scenes.chess_scene import ChessScene
+from Scenes.emotion_scene import EmotionScene
 from time import sleep
 import time
 import random
@@ -38,20 +42,22 @@ milestone_words = ["milestone", "stone", "mile", "buy", "bye",
 					"rebel", "point", "points"]
 
 aggro_words = ["aggressive", "raid", "let's go", "conquer", "territory",
-				"rate", "red", "read", "attack"]
+				"rate", "red", "read", "attack", "chess"]
 # bolumleri ekle
 powerup_words = ["power", "up", "powerup", "special", "ability",
 				"tribe"]
 
-quiz_words = ["quiz", "negotiation", "trivia", "question"]
-protest_words = ["protest", "emotion", "grotesque"]
+
+quiz_words = ["quiz", "negotiation","who is", "trivia", "question"]
+protest_words = ["protest", "emotion", "grotesque",'beretta',"princess"]
+
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENGINEERING',size=15),
 				  Territory(name='SNA',size=20),Territory(name='SCIENCE',size=12)]
-territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD'),2:('OMER','ÖMER'),3:('ODEON','NERO'),
-				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SCIEN')}
+territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','ÖMER'),3:('ODEON','NERO'),
+				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 class Game:
 	def __init__(self) -> None:
@@ -67,8 +73,10 @@ class Game:
 		self.hope_gain = 1
 		#self.assign_user_ids()
 		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
+		self.passive_rp_income = 20
 		self.territory_list= []
 		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
@@ -95,7 +103,9 @@ class Game:
 
 		pygame.display.set_caption("Dungeon Master")
 		print("running")
-
+		open('quiz_mini_game/AskedQuestions.txt', 'w').close()
+		open('chess_mini_game/AskedQuestions.txt', 'w').close()
+		open('emotion_mini_game/AskedQuestions.txt', 'w').close()
 		self.furhat.look_at_screen()
 
 		try:
@@ -142,6 +152,7 @@ class Game:
 			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
+
 			if type(self.active_scene) == FurhatPhotoScene:
 				self.manage_turn()
 
@@ -255,6 +266,8 @@ class Game:
 		elif update_result[0] == "CHESS":
 			if random.uniform(0,1) < update_result[1]:
 				self.turn.success = True
+			else: 
+				self.turn.success = False
 
 			
 		elif update_result[0] == "QUIZ":
@@ -263,12 +276,17 @@ class Game:
 			self.turn.hope_change = (success - 1) * 10
 			self.turn.discontent_change = (1 - success) * 5
 			self.turn.rebellion_point_change = success * 20
-		
+	
 		elif update_result[0] == "MAZE":
 			self.turn.success = update_result[1]
+      
+		elif update_result[0] == "EMOTION":
+			success = update_result[1]
+			self.turn.hope_change = (success - 0.5) * 10
+			self.turn.discontent_change = (0.5 - success) * 5
+			self.turn.rebellion_point_change = success * 20
 
 		return return_to_furhat
-
 
 	def manage_turn(self):
 		selection = "passive"
@@ -298,26 +316,29 @@ class Game:
 		elif selection == "aggro":
 			self.turn.turn_type = "chess"
 			attempt = 2
-			flag =False
+			flag = False
 			while attempt > 0 and not flag:
-				attempt= attempt -1
-				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY YOU WANT TO ATTACK')
-				territory_selection =territory_selection.upper()
+				attempt = attempt -1
+				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY DO YOU WANT TO ATTACK?')
+				territory_selection = territory_selection.upper()
+				#  check if territory is already taken
 				print("territory_selection is ", territory_selection)
 				try:
 					for index, value in territory_dict.items():
 						for val in value:
 							if val in territory_selection:
 								self.turn.attack_territory = index
-								self.turn.success = True
+								#self.turn.success = True
 								flag = True
 								break
 				except:
 					self.turn.success = False
+			self.active_scene.SwitchToScene(ChessScene(self.furhat))
 			if flag:
 				self.turn.success = True
 			else:
 				self.turn.success = False
+
 			# saldirdigi yeri turn'e kaydet
 		elif selection == "milestone":
 			# ask which milestone
@@ -332,9 +353,11 @@ class Game:
 					self.furhat.furhat.gesture(name="Wink")
 				else:
 					self.furhat.say("My G you are broke")
+					self.turn.turn_type = None
 			else:
 				self.furhat.say(f"You have already unlocked {self.turn.milestone_requested}!")
-
+				self.turn.turn_type = None
+				
 		elif selection == "powerup":
 			self.turn.turn_type = "powerup"
 			# ! ash which power
@@ -365,10 +388,11 @@ class Game:
 			
 		elif selection == "protest":
 			self.turn.turn_type = "regular"
+			self.active_scene.SwitchToScene(EmotionScene(self.furhat))
 
 		elif selection == "quiz":
 			self.turn.turn_type = "regular"
-			self.active_scene.SwitchToScene(QuizScene(self.furhat, []))
+			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 		
 	def wrap_up_turn(self):
 		if self.turn.turn_type == "regular":
@@ -388,10 +412,21 @@ class Game:
 				territory.conquer()
 				initial_territory_list[self.turn.attack_territory] = None
 				self.territory_list.append(territory)
-				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
-				self.rebellion_points += self.turn.rebellion_point_change
+				print(f"TERRITORY PASSIVE {territory.passive_generation}")
+				self.passive_rp_income += territory.passive_generation
+
 		elif self.turn.turn_type == "milestone":
 			self.rebellion_points += self.turn.rebellion_point_change
 
+		# Milestone and Territory passive skills
+		if self.turn.turn_type is not None:
+			print(f"Current passive income: {self.passive_rp_income}")
+			self.rebellion_points += self.passive_rp_income
+
+		self.sanity_check_for_hope_and_discontent()	
 		self.turn.reset_turn()
+
+	def sanity_check_for_hope_and_discontent(self):
+		self.hope = min(self.hope, 100)
+		self.discontent = max(self.discontent, 0)
 Game()

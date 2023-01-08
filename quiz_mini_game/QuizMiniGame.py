@@ -9,16 +9,16 @@ from CONSTANTS import *
 from furhat_remote_api import FurhatRemoteAPI
 
 
+
 class QuizMiniGame():
-    def __init__(self,already_answered):
-        self.already_answered = already_answered
+    def __init__(self):
         self.intro = True
         self.solution = {1: "C", 2: "B", 3: "C", 4: "C", 5: "C"}
         self.answers = {
             "A": ("A", "18","1992",'42'),
             "B": ("B", "BEE", "BE", "20","1993",'33'),
             "C": ("C", "SEE", "SAY", "SEA", "22","1994",'27'),
-            "D": ("D", "THE", "DC", "24","1995",'25'),
+            "D": ("D", "DC", "24","1995",'25'),
         }
         self.questions = {
             1: "How many undergraduate programs there are at Koç University?",
@@ -39,7 +39,7 @@ class QuizMiniGame():
             2: {"A": 1992, "B": 1993, "C": 1994, "D": 1995},
             3: {"A": 42, "B": 33, "C": 27, "D": 25},
             4: {"A": 18, "B": 20, "C": 22, "D": 24},
-            5: {"A": 18, "B": 20, "C": 22, "D": 24},
+            5: {"A": 22, "B": 20, "C": 21, "D": 45},
         }
         self.furhat = FurhatRemoteAPI("localhost")
         self.win_count = 0
@@ -54,6 +54,8 @@ class QuizMiniGame():
         self.C = None
         self.D = None
         self.is_true = None
+        self.to_exclude = []
+
 
     def is_valid(self, response):
         message = response.message
@@ -72,7 +74,7 @@ class QuizMiniGame():
         key = self.solution.get(self.question_number)
         if key == answer:
             self.is_true = True
-            sleep(3)
+            sleep(1)
             self.furhat.say(text=f"{key} is correct!", blocking=True)
             print("YASS")
             self.win_count = self.win_count + 1
@@ -86,23 +88,20 @@ class QuizMiniGame():
             self.correct = False
 
     def play_game(self):
-        print(self.already_answered)
         sleep(3)
         self.intro = False
         path = "quiz_mini_game/Questions"
-
-        to_exculude = []
+        for line in open('quiz_mini_game/AskedQuestions.txt', "r").readlines():
+            self.to_exclude.append(int(line))
+        print( "Exclude", self.to_exclude)  # Prints out the
         while self.win_count < 1 and self.correct:
             print("Total Win : ", self.win_count)
             number = random.randint(1, 5)
             print("THE QUESTION NUMBER IS : ", number)
-            while number in to_exculude:
+            while number in self.to_exclude:
                 number = random.randint(1, 5)
-                while number in self.already_answered:
-                    number = random.randint(1, 5)
             self.question_number = number
-            self.already_answered.append(number)
-            to_exculude.append(number)
+            self.to_exclude.append(number)
             # img = PImage.open(path + '/'+str(number)+'.png')
             self.path = path + "/" + str(number) + ".png"
             # self.SceneBase.img = pygame.image.load(path + '/'+str(number)+'.png').convert_alpha()
@@ -154,6 +153,10 @@ class QuizMiniGame():
 
             sleep(2)
             self.is_correct(answer)
+            for num in self.to_exclude:
+                file = open("quiz_mini_game/AskedQuestions.txt", "a")  # Opens a file for writing and puts it in the file variable
+                file.write(f"{num}\n")  # Writes the entire list + the appended element into new file
+                file.close()  # Closes the file
 
         if self.correct and self.win_count >= 1:
             self.furhat.say(text="YOU WON THE GAME")
