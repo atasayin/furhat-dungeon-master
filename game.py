@@ -84,6 +84,7 @@ class Game:
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
 	   
+
 		self.run_game(TitleScene(self.furhat))
 
 

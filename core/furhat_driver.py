@@ -41,12 +41,20 @@ class FurhatDriver:
 
     def say(self, text, blocking=True):
         self.furhat.say(text=text, blocking=blocking)
+
+    def say_one_of_them(self, texts, blocking=True):
+        text = random.choice(texts)
+        self.say(text, blocking=blocking)
     
     def ask_question(self, text = None, blocking=True):
         if text:
             self.furhat.say(text=text,blocking=blocking)
         return str(self.furhat.listen().message).lower()
     
+    def ask_one_of_them(self, texts, blocking=True):
+        text = random.choice(texts)
+        return self.ask_question(text,blocking=blocking)
+
     def listen_stop(self):
         self.furhat.listen_stop()
 

@@ -11,8 +11,7 @@ class MazeScene(SceneBase):
         self.deg = 0
         self.result = None
         self.slide = 0
-        self.game, self.view = maze.MazeFactory(maze.TerrainTypes.COMP_MAZE) 
-        self.game.furhat = furhat 
+        self.game, self.view = maze.MazeFactory(maze.TerrainTypes.COMP_MAZE,furhat)         
         print("New Maze game")
 
     def ProcessInput(self, events, pressed_keys, game_params):
@@ -25,15 +24,11 @@ class MazeScene(SceneBase):
         if self.result is None:
             print("Maze run")
             self.result = self.game.play_game()
-        return 0
+        return self.result
 
     def Render(self, WIN):
-        # For the sake of brevity, the title scene is a blank red screen
         if self.result is None:
             self.view.draw_background(WIN)
             self.view.draw_board(WIN)    
             self.view.draw_timeleft(WIN)               
-        else:
-             # self.SwitchToScene(self.main)
-            self.result = 0
         
