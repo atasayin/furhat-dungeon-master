@@ -51,7 +51,7 @@ powerup_words = ["power", "up", "powerup", "special", "ability",
 quiz_words = ["quiz", "negotiation","who is", "trivia", "question"]
 protest_words = ["protest", "emotion", "grotesque",'beretta',"princess"]
 
-maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
+maze_words = ["maze", "labyrinth", "lab", "tribe", "approach", "mace"]
 
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENGINEERING',size=15),
@@ -63,31 +63,25 @@ class Game:
 	def __init__(self) -> None:
 		self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.active_scene = None
-		self.hope = 50
-		self.discontent = 50
-		self.rebellion_points = 1000
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
-		self.discontent_gain = 1
-		self.hope_gain = 1
 		#self.assign_user_ids()
 		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
-		self.passive_rp_income = 20
-		self.territory_list= []
-		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
+		self.game_params = \
+			{"hope": 50, "discontent": 50, "rebellion": 1000,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
-			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
+			"discontent_gain": 1, "hope_gain":1,
+			"passive_rp_income": 20,
+			"territory_list": []}
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
 	   
 
-		self.run_game(TitleScene(self.furhat))
-
-
+		self.run_game(FurhatPhotoScene(self.furhat))
 
 	def render_method(self, scene, event, fps):
 		clock = pygame.time.Clock()
@@ -99,9 +93,7 @@ class Game:
 			if event.is_set():
 				break
 
-
 	def run_game(self,starting_scene):
-
 		pygame.display.set_caption("Dungeon Master")
 		print("running")
 		open('quiz_mini_game/AskedQuestions.txt', 'w').close()
@@ -148,16 +140,12 @@ class Game:
 				else:
 					filtered_events.append(event)
 
-			game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
-			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
-			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
-
-			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
+			self.active_scene.ProcessInput(filtered_events, pressed_keys, self.game_params)
 
 			if type(self.active_scene) == FurhatPhotoScene:
 				self.manage_turn()
 
-			print(f"Current parameters: {self.hope}, {self.discontent}, {self.rebellion_points}")
+			#print(f"Current parameters: {self.game_params}")
 			if update_result is None:
 				sleep(0.05)
 				# print(f"UPDATE YERI : {self.active_scene}")
@@ -191,6 +179,7 @@ class Game:
 				render_thread.start()
 
 			self.active_scene = self.active_scene.next
+			print(self.game_params)
 
 	def assign_user_ids(self):
 		ids = None
@@ -199,19 +188,19 @@ class Game:
 			if ids is None:
 				txts = ["Where are you?", "Are you coming?", "I do not see you"]
 				ind = random.randint(0,2)
-				self.furhat.furhat.say(text=txts[ind]) 
+				self.furhat.say(txts[ind]) 
 				time.sleep(5)
 			else:
 				self.player1.id, self.player2.id = ids
-				self.furhat.furhat.say(text="Welcome players.")
+				self.furhat.say("Welcome players.")
 
 
 	def handle_results(self, update_result):
-
 		return_to_furhat = True
 		print(update_result)
 		if update_result[0] == "VOLUNTEER":
 			vol1, vol2 = update_result[1:3]
+
 			if vol1 is not None:
 				if vol1 and not vol2:
 					self.captain = self.player1
@@ -269,7 +258,6 @@ class Game:
 				self.turn.success = True
 			else: 
 				self.turn.success = False
-
 			
 		elif update_result[0] == "QUIZ":
 			# 0, 1, 2 ---> number of correct answers
@@ -313,13 +301,12 @@ class Game:
 		if selection == "passive":
 			self.furhat.ask_question()
 			# change selection to specific passive type
-			pass
 		elif selection == "aggro":
 			self.turn.turn_type = "chess"
 			attempt = 2
 			flag = False
 			while attempt > 0 and not flag:
-				attempt = attempt -1
+				attempt = attempt - 1
 				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY DO YOU WANT TO ATTACK?')
 				territory_selection = territory_selection.upper()
 				#  check if territory is already taken
@@ -347,7 +334,7 @@ class Game:
 			self.turn.milestone_requested = "sallyjazz"
 			# check if already bought
 			if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
-				if self.milestone_manager.is_money_enough(self.turn.milestone_requested, self.rebellion_points):
+				if self.milestone_manager.is_money_enough(self.turn.milestone_requested, self.game_params["rebellion"]):
 					cost = self.milestone_manager.buy_milestone(self.turn.milestone_requested)
 					self.turn.rebellion_point_change = -cost
 					self.furhat.say(f"You successfully bought the {self.turn.milestone_requested}!")
@@ -363,20 +350,21 @@ class Game:
 			self.turn.turn_type = "powerup"
 			# ! ash which power
 			#powerup_requested = self.furhat.ask_question(f"Lets Power up!")
-			powerup_requested = "comp"
-			power_up = self.tribe_manager.find_unused_powerup_tribe(powerup_requested)
+			powerup_requested = "computer"
+			self.turn.powerup_requested = self.tribe_manager.find_unused_powerup_tribe(powerup_requested)
 
-			if power_up:
-				power_up.use_powerup_tribe(power_up)
+			if self.turn.powerup_requested:
+				self.furhat.say(f"You used {powerup_requested} powerup")
 			else:
 				# ! POWER UP YOK VEYA YANLIŞ ANLAMA??	
+				self.turn.turn_type = "regular"
 				self.furhat.say(f"You don't have the {powerup_requested} powerup")
 		
 		elif selection == "maze":
 			# gittigi yeri turn'e kaydet
 			# ! ash which tribe
 			#maze_destination = self.furhat.ask_question(f"Which tribe do you want to go?")
-			maze_destination = "comp"
+			maze_destination = "computer"
 			if not self.tribe_manager.is_already_conquered(maze_destination):
 				self.turn.turn_type = "maze"
 				self.turn.maze_destination = maze_destination
@@ -385,7 +373,7 @@ class Game:
 			else:
 				self.turn.turn_type = None
 				self.turn.maze_destination = None 
-				self.furhat.say(f"You have already conquered {self.turn.maze_destination} tribe!")
+				self.furhat.say(f"You have already conquered {maze_destination} tribe!")
 			
 		elif selection == "protest":
 			self.turn.turn_type = "regular"
@@ -396,38 +384,46 @@ class Game:
 			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 		
 	def wrap_up_turn(self):
+		print(f"wrap trurn type: {self.turn.turn_type}")
 		if self.turn.turn_type == "regular":
 			hope, dis, reb = self.turn.get_changes()
-			self.hope += hope
-			self.discontent += dis
-			self.rebellion_points += reb
-
+			self.game_params["hope"] += hope
+			self.game_params["discontent"] += dis
+			self.game_params["rebellion"] += reb
+			
 		elif self.turn.turn_type == "maze":
 			if self.turn.success:
-				tribe = self.tribe_manager.conquer_tribe(self.turn.maze_destination)
-				
+				tribe = self.tribe_manager.conquer_tribe("computer")
+				self.furhat.say(f"{tribe.name} tribe is now on your side, you can use their powers!")
+			else:
+				self.furhat.say(f"Losers")
+
 		elif self.turn.turn_type == "chess":
 			if self.turn.success:
 				# territory'i alip ekle
 				territory = initial_territory_list[self.turn.attack_territory]
 				territory.conquer()
 				initial_territory_list[self.turn.attack_territory] = None
-				self.territory_list.append(territory)
+				self.game_params["territory_list"].append(territory)
 				print(f"TERRITORY PASSIVE {territory.passive_generation}")
-				self.passive_rp_income += territory.passive_generation
+				self.game_params["passive_rp_income"] += territory.passive_generation
 
 		elif self.turn.turn_type == "milestone":
-			self.rebellion_points += self.turn.rebellion_point_change
+			self.game_params["rebellion"] += self.turn.rebellion_point_change
+
+		elif self.turn.turn_type == "powerup":
+			self.tribe_manager.use_powerup_tribe(self.turn.powerup_requested.name)
 
 		# Milestone and Territory passive skills
 		if self.turn.turn_type is not None:
-			print(f"Current passive income: {self.passive_rp_income}")
-			self.rebellion_points += self.passive_rp_income
+			passive_income = self.game_params["passive_rp_income"]
+			print(f"Current passive income: {passive_income}")
+			self.game_params["rebellion"] += self.game_params["passive_rp_income"]
 
 		self.sanity_check_for_hope_and_discontent()	
 		self.turn.reset_turn()
 
 	def sanity_check_for_hope_and_discontent(self):
-		self.hope = min(self.hope, 100)
-		self.discontent = max(self.discontent, 0)
+		self.game_params["hope"] = min(self.game_params["hope"], 100)
+		self.game_params["discontent"] = max(self.game_params["discontent"], 0)
 Game()

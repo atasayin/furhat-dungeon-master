@@ -2,6 +2,7 @@ from .scene_base import SceneBase
 from .volunteer_scene import VolunteerScene
 from .furhat_photo_screen import FurhatPhotoScene
 from .opening_scene import OpeningScene
+from .maze_scene import MazeScene
 import pygame
 from UI_Objects.button import Button
 from CONSTANTS import *
@@ -25,6 +26,7 @@ class TitleScene(SceneBase):
 				if self.PLAY_BUTTON.checkForInput(mousepos):
 					# self.SwitchToScene(VolunteerScene(self.furhat))
 					self.SwitchToScene(FurhatPhotoScene(self.furhat))
+					#self.SwitchToScene(MazeScene(self.furhat))
 					#self.SwitchToScene(OpeningScene(self.furhat))
 
 	
