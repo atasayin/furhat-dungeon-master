@@ -305,6 +305,8 @@ class Game:
 				selection = "maze"
 			elif word in protest_words:
 				selection = "protest"
+			elif word == "cool":
+				selection = "cool"
 
 		print(selection)
 
@@ -336,6 +338,9 @@ class Game:
 			else:
 				self.furhat.say(f"You have already unlocked {self.turn.milestone_requested}!")
 				self.turn.turn_type = None
+
+		elif selection == "cool":
+			self.furhat.shaka()
 				
 		elif selection == "powerup":
 			self.turn.turn_type = "powerup"
