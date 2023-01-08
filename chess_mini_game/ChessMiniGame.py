@@ -23,7 +23,7 @@ class ChessMiniGame():
             'B': 'BISHOP','P':'PAWN'}
             print(type(solution))
             path =  "chess_mini_game/ChessOneMove"
-            win  = 0
+            win  = 2
             self.win_count = win
             life = 3
             self.life_count =life
@@ -121,8 +121,8 @@ class ChessMiniGame():
         check2 = False
         message = response.upper()
         print("Message ",message)
-        chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','KOREAN','QUINN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
-        'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','NINTH','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
+        chess_piece = {'Q': ('QUEEN','Queen','Green','SCREEN','CLEAN','KOREAN','QUINN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
+        'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','MIGTH','MIGHT','NINTH','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
             'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
         coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BEE','BE'),'D':('D','DC'),'E':('E'), 'F':('F','FS','S','EF','X'), 'G':('G','J','JEE'), }
         row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4','FOR'),'5':('5'),'6':('6','SEX'), '7':('7','11'), '8':('8') }
@@ -137,7 +137,8 @@ class ChessMiniGame():
                     message = message.replace('MODE','')    
                     message = message.replace('MODES','')   
                     message = message.replace('MOODS','')  
-                    message = message.replace('MOOD','')                  
+                    message = message.replace('MOOD','')
+                    message = message.replace('MOSA', '')
         if check:
             print("first check")
             for piece in chess_piece.get(m_piece):
@@ -148,9 +149,7 @@ class ChessMiniGame():
                 if check2:
                     break
                 for cor_value in cor_val:
-                    print("cor_value",cor_value)
                     if cor_value in message :
-                        print("IN IF")
                         check2 = True
                         m_coord = coord_key
                         break

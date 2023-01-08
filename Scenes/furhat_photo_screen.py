@@ -23,6 +23,7 @@ class FurhatPhotoScene(SceneBase):
 		self.font = pygame.font.SysFont(None, 50)
 		self.direction = "left"
 		self.furhat = furhat
+		self.rebellion = None
 
 	
 	def ProcessInput(self, events, pressed_keys, game_params):
