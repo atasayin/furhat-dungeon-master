@@ -11,9 +11,9 @@ class OpeningScene(SceneBase):
         self.text = story
         self.rect_texts = wrapline(self.text, self.font, CONSTANTS.WIDTH)
         self.slide = 0
-        self.school_photo = pygame.image.load("/Users/deniz/Desktop/Furh/furhat-dungeon-master/images/field_sitting.png").convert()
+        self.school_photo = pygame.image.load("/Users/Ata/Desktop/COMP491/furhat-dungeon-master/images/field_sitting.png").convert()
         self.furhat = furhat
-        self.vahdet =  pygame.image.load("/Users/deniz/Desktop/Furh/furhat-dungeon-master/images/vahdet.png").convert()
+        self.vahdet =  pygame.image.load("/Users/Ata/Desktop/COMP491/furhat-dungeon-master/images/vahdet.png").convert()
 
     def get_words(self):
         counter = 0

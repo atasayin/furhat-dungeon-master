@@ -31,13 +31,6 @@
 
 # import multiprocessing
 
-x,y,z = 0
-
-(x, y, z) += (1, 2, 3)
-
-print(x)
-print(y)
-print(z)
 
 
 # print("Number of cpu : ", multiprocessing.cpu_count())

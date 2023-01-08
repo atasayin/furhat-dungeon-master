@@ -23,6 +23,7 @@ import random
 from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
 from milestones import MilestoneManager
+from tribes import TribeManager
 
 
 furhat_last_spoke = time.time()
@@ -68,16 +69,22 @@ class Game:
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
-		self.assign_user_ids()
-		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+		self.discontent_gain = 1
+		self.hope_gain = 1
+		#self.assign_user_ids()
+		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
 		self.passive_rp_income = 20
 		self.territory_list= []
-
+		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
+			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
+			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
 		# furhat.introduce_players((self.player1.id, self.player2.id))
+		self.tribe_manager = TribeManager(self.game_params)
 	   
-		self.run_game(WIDTH, HEIGHT, FPS, TitleScene(self.furhat))
+		self.run_game(TitleScene(self.furhat))
 
 
 
@@ -92,7 +99,7 @@ class Game:
 				break
 
 
-	def run_game(self, width, height, fps, starting_scene):
+	def run_game(self,starting_scene):
 
 		pygame.display.set_caption("Dungeon Master")
 		print("running")
@@ -141,7 +148,8 @@ class Game:
 					filtered_events.append(event)
 
 			game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
-			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
+			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
+			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
 
@@ -268,17 +276,17 @@ class Game:
 			self.turn.hope_change = (success - 1) * 10
 			self.turn.discontent_change = (1 - success) * 5
 			self.turn.rebellion_point_change = success * 20
-		
+	
+		elif update_result[0] == "MAZE":
+			self.turn.success = update_result[1]
+      
 		elif update_result[0] == "EMOTION":
 			success = update_result[1]
 			self.turn.hope_change = (success - 0.5) * 10
 			self.turn.discontent_change = (0.5 - success) * 5
 			self.turn.rebellion_point_change = success * 20
 
-
-
 		return return_to_furhat
-
 
 	def manage_turn(self):
 		selection = "passive"
@@ -351,11 +359,33 @@ class Game:
 				self.turn.turn_type = None
 				
 		elif selection == "powerup":
-			pass
+			self.turn.turn_type = "powerup"
+			# ! ash which power
+			#powerup_requested = self.furhat.ask_question(f"Lets Power up!")
+			powerup_requested = "comp"
+			power_up = self.tribe_manager.find_unused_powerup_tribe(powerup_requested)
+
+			if power_up:
+				power_up.use_powerup_tribe(power_up)
+			else:
+				# ! POWER UP YOK VEYA YANLIŞ ANLAMA??	
+				self.furhat.say(f"You don't have the {powerup_requested} powerup")
 		
-		if selection == "maze":
+		elif selection == "maze":
 			# gittigi yeri turn'e kaydet
-			pass
+			# ! ash which tribe
+			#maze_destination = self.furhat.ask_question(f"Which tribe do you want to go?")
+			maze_destination = "comp"
+			if not self.tribe_manager.is_already_conquered(maze_destination):
+				self.turn.turn_type = "maze"
+				self.turn.maze_destination = maze_destination
+				self.active_scene.SwitchToScene(MazeScene(self.furhat))
+				#self.active_scene.SwitchToScene(MazeScene(self.furhat,self.turn.maze_destination))
+			else:
+				self.turn.turn_type = None
+				self.turn.maze_destination = None 
+				self.furhat.say(f"You have already conquered {self.turn.maze_destination} tribe!")
+			
 		elif selection == "protest":
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(EmotionScene(self.furhat))
@@ -364,7 +394,6 @@ class Game:
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 		
-
 	def wrap_up_turn(self):
 		if self.turn.turn_type == "regular":
 			hope, dis, reb = self.turn.get_changes()
@@ -374,8 +403,8 @@ class Game:
 
 		elif self.turn.turn_type == "maze":
 			if self.turn.success:
-				pass
-		
+				tribe = self.tribe_manager.conquer_tribe(self.turn.maze_destination)
+				
 		elif self.turn.turn_type == "chess":
 			if self.turn.success:
 				# territory'i alip ekle
