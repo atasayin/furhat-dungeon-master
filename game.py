@@ -64,8 +64,8 @@ class Game:
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
-		#self.assign_user_ids()
-		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+		self.assign_user_ids()
+		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
 		self.passive_rp_income = 20

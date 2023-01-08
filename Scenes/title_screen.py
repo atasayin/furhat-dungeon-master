@@ -23,8 +23,8 @@ class TitleScene(SceneBase):
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				print("MOUSE CLICK: ", end="")
 				if self.PLAY_BUTTON.checkForInput(mousepos):
-					# self.SwitchToScene(VolunteerScene(self.furhat))
-					self.SwitchToScene(FurhatPhotoScene(self.furhat))
+					self.SwitchToScene(VolunteerScene(self.furhat))
+					# self.SwitchToScene(FurhatPhotoScene(self.furhat))
 					# self.SwitchToScene(OpeningScene(self.furhat))
 
 	
