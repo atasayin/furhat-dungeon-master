@@ -56,7 +56,7 @@ maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENGINEERING',size=15),
 				  Territory(name='SNA',size=20),Territory(name='SCIENCE',size=12)]
-territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','ÖMER'),3:('ODEON','NERO'),
+territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','ÖMER'),3:('ODEON','A DOWN','NERO'),
 				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 class Game:
@@ -76,11 +76,12 @@ class Game:
 
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
-		self.passive_rp_income = 20
-		self.territory_list= []
-		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
+
+		self.territory_list= {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:None,9:None}
+    self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
 			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
+    self.passive_rp_income = 20
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
 	   
@@ -164,7 +165,6 @@ class Game:
 				update_result = self.active_scene.Update()
 			# self.active_scene.SwitchToScene(TitleScene())
 			# self.active_scene.Render(screen)
-			
 			if update_result is not None:
 				# resulta bakarak skorlari guncelleme
 
@@ -315,30 +315,10 @@ class Game:
 			# change selection to specific passive type
 			pass
 		elif selection == "aggro":
-			self.turn.turn_type = "chess"
-			attempt = 2
-			flag = False
-			while attempt > 0 and not flag:
-				attempt = attempt -1
-				territory_selection = self.furhat.ask_question(text='WHICH TERRITORY DO YOU WANT TO ATTACK?')
-				territory_selection = territory_selection.upper()
-				#  check if territory is already taken
-				print("territory_selection is ", territory_selection)
-				try:
-					for index, value in territory_dict.items():
-						for val in value:
-							if val in territory_selection:
-								self.turn.attack_territory = index
-								#self.turn.success = True
-								flag = True
-								break
-				except:
-					self.turn.success = False
-			self.active_scene.SwitchToScene(ChessScene(self.furhat))
-			if flag:
-				self.turn.success = True
-			else:
-				self.turn.success = False
+
+			print("TERRITORY LIST1 : ", self.territory_list)
+			self.chess_turn()
+			print("TERRITORY LIST2 : ", self.territory_list)
 
 			# saldirdigi yeri turn'e kaydet
 		elif selection == "milestone":
@@ -407,14 +387,19 @@ class Game:
 				tribe = self.tribe_manager.conquer_tribe(self.turn.maze_destination)
 				
 		elif self.turn.turn_type == "chess":
+			print("IN WRAP UP TURN IS SUCESS ",self.turn.success )
 			if self.turn.success:
 				# territory'i alip ekle
 				territory = initial_territory_list[self.turn.attack_territory]
 				territory.conquer()
+				print("CONQUERED TERRITORY IS ", initial_territory_list[self.turn.attack_territory].name)
 				initial_territory_list[self.turn.attack_territory] = None
-				self.territory_list.append(territory)
-				print(f"TERRITORY PASSIVE {territory.passive_generation}")
-				self.passive_rp_income += territory.passive_generation
+				self.territory_list[self.turn.attack_territory] = territory
+				print("NEW TERITTORY LIST IS ",self.territory_list )
+				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
+				self.rebellion_points += self.turn.rebellion_point_change
+        self.passive_rp_income += territory.passive_generation
+        print(f"TERRITORY PASSIVE {territory.passive_generation}")
 
 		elif self.turn.turn_type == "milestone":
 			self.rebellion_points += self.turn.rebellion_point_change
@@ -427,7 +412,62 @@ class Game:
 		self.sanity_check_for_hope_and_discontent()	
 		self.turn.reset_turn()
 
+
+	def chess_turn(self):
+			self.turn.turn_type = "chess"
+			attempt = 3
+			flag = 0
+			while attempt > 0 and not flag == 1:
+				print("FLAG ", flag)
+				attempt = attempt - 1
+				print("attempt ", attempt)
+				if flag == 0:
+					territory_selection = self.furhat.ask_question(text='WHICH TERRITORY YOU WANT TO ATTACK')
+				elif flag == 2:
+					territory_selection = self.furhat.ask_question(text=f'{territory_selection} is already yours please pick another territory to attack')
+
+				territory_selection = territory_selection.upper()
+				print("territory_selection is ", territory_selection)
+				try:
+					for index, value in territory_dict.items():
+						for val in value:
+							if val in territory_selection:
+								print("IN IF ",self.territory_list)
+								print("IN I 3 ",  self.territory_list[index])
+								if self.territory_list[index] is not None:
+									flag = 2
+									break
+								elif self.territory_list[index] is None:
+									self.turn.attack_territory = index
+									flag = 1
+									break
+
+				except:
+					self.turn.success = False
+
+			territory_lose_prob = random.uniform(0, 1)
+			if territory_lose_prob > 0.8:
+				range_of_territory = len(self.territory_list)
+				number =random.randint(0,range_of_territory)
+				print("LOST TERITTORY IS  ",number,self.territory_list.get(number))
+				try:
+					while self.territory_list.get(number) is None:
+						number = random.randint(0, range_of_territory)
+					lost_ter = self.territory_list.get(number)
+					self.furhat.say(f"WHILE you go to {initial_territory_list[self.turn.attack_territory].name} to conquer it, your {lost_ter.name} was lost ")
+					self.furhat.say(f"BUT DO NOT LOSE HOPE, YOU CAN STILL TRY TO CONQUER  {initial_territory_list[self.turn.attack_territory].name} ")
+					self.territory_list = lost_ter.losing_territory(self.territory_list,number)
+					print("SELF TERITTORY LIST 3 AFTER LOST ", self.territory_list)
+				except:
+					print("YOU DO NOT HAVE TERRITORY TO LOSE")
+			if flag == 1:
+				self.active_scene.SwitchToScene(ChessScene(self.furhat))
+			if flag == 0 or flag == 2:
+				self.turn.success = False
+
+
 	def sanity_check_for_hope_and_discontent(self):
 		self.hope = min(self.hope, 100)
 		self.discontent = max(self.discontent, 0)
+
 Game()

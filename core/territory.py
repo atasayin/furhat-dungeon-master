@@ -16,10 +16,15 @@ class Territory:
 
     def generate_passif_income(self,t_list):
         total_income = 0
-        for territory in t_list:
-            total_income += territory.passive_generation
+        for territory in t_list.values():
+            if territory is not None:
+                total_income += territory.passive_generation
         return total_income
 
-    def losing_territory(self,t_list,my_territory,territory):
-        pass
+    def losing_territory(self, t_list,losing_index):
+        t_list[losing_index] = None
+        return t_list
+
+
+
 
