@@ -78,14 +78,12 @@ class Game:
 		self.turn = Turn()
 
 		self.territory_list= {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:None,9:None}
-    self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
+		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
 			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
-    self.passive_rp_income = 20
+		self.passive_rp_income = 20
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
-	   
-
 		self.run_game(TitleScene(self.furhat))
 
 
@@ -398,8 +396,8 @@ class Game:
 				print("NEW TERITTORY LIST IS ",self.territory_list )
 				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
 				self.rebellion_points += self.turn.rebellion_point_change
-        self.passive_rp_income += territory.passive_generation
-        print(f"TERRITORY PASSIVE {territory.passive_generation}")
+				self.passive_rp_income += territory.passive_generation
+				print(f"TERRITORY PASSIVE {territory.passive_generation}")
 
 		elif self.turn.turn_type == "milestone":
 			self.rebellion_points += self.turn.rebellion_point_change
