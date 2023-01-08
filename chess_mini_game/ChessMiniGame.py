@@ -1,9 +1,6 @@
 
-from os import getcwd
 import random
 from time import sleep
-from CONSTANTS import HEIGHT, WIDTH
-
 
 class ChessMiniGame():
     def __init__(self):
@@ -11,8 +8,10 @@ class ChessMiniGame():
         self.win_count = 0
         self.attempt_count = -1
         self.life_count = 3
+        self.total_game_number = 0
         self.path = 'chess_mini_game/chess.jpg'	
         self.furhat = None
+        self.to_exclude = []
         
 
     def OneMoveChess(self):
@@ -28,18 +27,22 @@ class ChessMiniGame():
             self.win_count = win
             life = 3
             self.life_count =life
-            to_exculude = []
+            for line in open('chess_mini_game/AskedQuestions.txt', "r").readlines():
+                self.to_exclude.append(int(line))
+            print("Exclude", self.to_exclude)  # Prints out the
+
             while life > 0 and win < 3:
+                self.total_game_number = self.total_game_number +1
                 attempt = 2
                 self.attempt_count = attempt
                 print("REMANING Life : ",life, "Total Win : ", win)
                 number =random.randint(1,15)
-                while number in to_exculude :
+                while number in self.to_exclude :
                     number =random.randint(1,15)
 
                 key = solution[number]
                 
-                to_exculude.append(number)
+                self.to_exclude.append(number)
                 #img = PImage.open(path + '/'+str(number)+'.png')
                 self.path = path + '/'+str(number)+'.png'
 
@@ -61,7 +64,7 @@ class ChessMiniGame():
                 self.furhat.say("You have 3 seconds to think, when I say I am listening, please state your answer")
                 sleep(3)
                 while attempt >0:
-                    response = self.furhat.listen("I am listening")
+                    response = self.furhat.ask_question("I am listening")
                     print(response)
                     self.furhat.listen_stop()
                     try:
@@ -79,7 +82,7 @@ class ChessMiniGame():
                 if piece in chess_piece.keys():
                     print("I UNDERSTAND")
                 else:
-                    self.furhat.say("I couldn't understand your response please enter it")
+                    self.furhat.say("I couldn't understand your response")
                     tried = 'AB6'
 
                 if tried == answer:
@@ -96,7 +99,7 @@ class ChessMiniGame():
                     self.life_count =life
             if life > 0 and win >= 3:
                     self.furhat.say("YOU WON THE GAME")
-                    self.is_win = 1 
+            self.is_win = win
 
     def evaluate_chose(self,choice):
         flag = True
@@ -114,13 +117,12 @@ class ChessMiniGame():
         flag = False
         m_piece = None
         m_coord = None
-        m_row = None
         check = False
         check2 = False
         message = response.upper()
         print("Message ",message)
-        chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
-        'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
+        chess_piece = {'Q': ('QUEEN','Queen','Green','CLEAN','KOREAN','QUINN','green','GREEN','queen'),'R': ('ROOK','Bruckner','REPORT','REAL QUICK','RIBBED','CROUP NOSE','ROUTE','Rick','BROOKE','Cook','COOK','GROUP','rook','Rook','GREEK','ROQUEMORE'),
+        'N': ('NIGHT','KNIGHT','KNIGHTS','KNIGHTS','NINTH','LIKE','9TH','Knigth','knigth' ,'igth','IGTH','nigth'),
             'B': ('BISHOP','ISHOP','ishop','Bishop','bishop')}
         coordinate = {'H':('H','8','AGE'),'C':('C','SEE','SAY','SEA'),'A':('A'), 'B':('B','BEE','BE'),'D':('D','DC'),'E':('E'), 'F':('F','FS','S','EF','X'), 'G':('G','J','JEE'), }
         row = {'1':('1','WOMAN'), '2':('2'),'3':('3'),'4':('4','FOR'),'5':('5'),'6':('6','SEX'), '7':('7','11'), '8':('8') }
@@ -168,4 +170,12 @@ class ChessMiniGame():
     def play_game(self):
             sleep(3)
             self.evaluate_chose(1)
-            return self.is_win
+            print(self.total_game_number, " self.total_game_number")
+            print(self.is_win," self.is_win")
+            for num in self.to_exclude:
+                file = open("chess_mini_game/AskedQuestions.txt",
+                            "a")  # Opens a file for writing and puts it in the file variable
+                file.write(f"{num}\n")  # Writes the entire list + the appended element into new file
+                file.close()  # Closes the file
+            win_ratio = float(self.is_win/self.total_game_number)
+            return win_ratio

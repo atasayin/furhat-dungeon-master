@@ -8,7 +8,8 @@ turn_questions = ["how would you like to proceed?", "what is your next move?", "
                     "what will you do this time?"]
 class FurhatDriver:
     def __init__(self) -> None:
-        self.furhat = FurhatRemoteAPI("localhost")
+        self.furhat = FurhatRemoteAPI("172.23.120.144")
+        # self.furhat = FurhatRemoteAPI("localhost")
         self.test_furhat()
 
     
@@ -157,6 +158,9 @@ class FurhatDriver:
         choice = random.choice(turn_questions)
         self.say(choice)
         
+
+    def get_passive_selection(self):
+        self.say()
         
 
 
