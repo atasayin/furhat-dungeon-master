@@ -5,7 +5,7 @@ from Scenes.rps_scene import RPSScene
 from Scenes.maze_scene import MazeScene
 from Scenes.emotion_scene import EmotionScene
 from Scenes.chess_scene import ChessScene
-from Scenes.opening_scene import OpeningScene
+# from Scenes.opening_scene import OpeningScene
 from Scenes.quiz_scene import QuizScene
 from CONSTANTS import WIDTH, HEIGHT
 import math
@@ -15,6 +15,7 @@ class FurhatPhotoScene(SceneBase):
 		SceneBase.__init__(self)
 		self.slide = 0
 		self.furhat_img = pygame.image.load("furhat.jpeg").convert_alpha()
+		self.furhat_img = pygame.transform.scale(self.furhat_img, (1200*1.25, int(811*1.25)))
 		self.image_width = self.furhat_img.get_width()
 		self.game_hope = None
 		self.game_discontent = None
@@ -104,11 +105,11 @@ class FurhatPhotoScene(SceneBase):
 		text_rect = territory.get_rect(topleft=(100, 250))
 		WIN.blit(territory, text_rect)
 
-		territory = self.font.render("Territories to Conqure: ", True, (0, 0, 0))
+		territory = self.font.render("Territories to Conquer: ", True, (0, 0, 0))
 		text_rect = territory.get_rect(topleft=(100, 650))
 		WIN.blit(territory, text_rect)
 
-		territory = self.font.render("Your MileStones Are: ", True, (0, 0, 0))
+		territory = self.font.render("Your Milestones Are: ", True, (0, 0, 0))
 		text_rect = territory.get_rect(topleft=(750, 100))
 		WIN.blit(territory, text_rect)
 
@@ -146,7 +147,7 @@ class FurhatPhotoScene(SceneBase):
 		item_count_mile = 1
 		for mile in self.milestone_name_list:
 			mile = self.font.render(f"{mile}", True, (0, 0, 0))
-			text_rect = mile.get_rect(topleft=(750, 100+17*item_count))
+			text_rect = mile.get_rect(topleft=(750, 100+30*item_count_mile))
 			WIN.blit(mile, text_rect)
 			item_count_mile +=1
 

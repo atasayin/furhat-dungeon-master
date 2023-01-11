@@ -24,8 +24,8 @@ class TitleScene(SceneBase):
 				print("MOUSE CLICK: ", end="")
 				if self.PLAY_BUTTON.checkForInput(mousepos):
 					# self.SwitchToScene(VolunteerScene(self.furhat))
-					self.SwitchToScene(FurhatPhotoScene(self.furhat))
-					#self.SwitchToScene(OpeningScene(self.furhat))
+					# self.SwitchToScene(FurhatPhotoScene(self.furhat))
+					self.SwitchToScene(OpeningScene(self.furhat))
 
 	
 	def Update(self):
