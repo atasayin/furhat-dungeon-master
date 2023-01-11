@@ -42,22 +42,22 @@ milestone_words = ["milestone", "stone", "mile", "buy", "bye",
 					"rebel", "point", "points"]
 
 aggro_words = ["aggressive", "raid", "let's go", "conquer", "territory",
-				"rate", "red", "read", "attack", "chess"]
+				"rate", "red", "read", "attack", "chess",'chaz','test','tezz']
 # bolumleri ekle
 powerup_words = ["power", "up", "powerup", "special", "ability",
 				"tribe"]
 
-
-quiz_words = ["quiz", "negotiation","who is", "trivia", "question"]
+quiz_words = ["quiz","chris", "negotiation","who is", "trivia", "question"]
 protest_words = ["protest", "emotion", "grotesque",'beretta',"princess"]
 
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 
+milestone_list = ['Lower Exile', 'Open GYM', 'Remove Dresscode','Salicaz', 'Student Clubs']
+
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
-				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='ENGINEERING',size=15),
-				  Territory(name='SNA',size=20),Territory(name='SCIENCE',size=12)]
+				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='Engineering',size=15),Territory(name='Science',size=12)]
 territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','ÖMER'),3:('ODEON','A DOWN','NERO'),
-				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SNA','SNAA'),9:('SCIENCE','SIGNS','SIGN','SCIEN')}
+				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 class Game:
 	def __init__(self) -> None:
@@ -77,13 +77,14 @@ class Game:
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
 
-		self.territory_list= {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:None,9:None}
+		self.territory_list= {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:Territory(name='Science',size=12)}
 		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
 			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
 		self.passive_rp_income = 20
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
+		self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 		self.run_game(TitleScene(self.furhat))
 
 
@@ -149,7 +150,8 @@ class Game:
 
 			game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
-			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
+			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain,"territory_list": self.territory_list,
+			"milestone_list": self.milestone_list, "initial_territory": initial_territory_list, 'initial_milestone':milestone_list}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
 
@@ -169,6 +171,7 @@ class Game:
 				return_to_furhat = self.handle_results(update_result)
 
 				update_result = None
+				self.wrap_up_turn()
 				if return_to_furhat:
 					self.active_scene.next = FurhatPhotoScene(self.furhat)
 
@@ -176,7 +179,7 @@ class Game:
 
 				# self.active_scene = FurhatPhotoScene()
 				print(f" NEXT SCENE when switch to furhat: {self.active_scene.next}")
-			self.wrap_up_turn()
+
 			
 			if (self.active_scene != self.active_scene.next) or manual_change:
 				manual_change = False
@@ -332,6 +335,7 @@ class Game:
 					self.turn.rebellion_point_change = -cost
 					self.furhat.say(f"You successfully bought the {self.turn.milestone_requested}!")
 					self.furhat.furhat.gesture(name="Wink")
+					self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 				else:
 					self.furhat.say("My G you are broke")
 					self.turn.turn_type = None
@@ -377,6 +381,10 @@ class Game:
 		elif selection == "quiz":
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(QuizScene(self.furhat))
+
+		print(" UNLOCKED: ", self.milestone_manager.unlocked_oneTimes)
+		print(" UNLOCKED: ", self.milestone_manager.unlocked_pasifs)
+
 		
 	def wrap_up_turn(self):
 		if self.turn.turn_type == "regular":
