@@ -2,7 +2,7 @@ from .onetime_milestone import OneTimeMilestone
 
 class RemoveDressCode(OneTimeMilestone):
     def __init__(self):
-        OneTimeMilestone.__init__(self,name="remove dress code",cost=3)
+        OneTimeMilestone.__init__(self,name="remove dress code",cost=50)
 
     def apply_ability(self, game_params):
          if not self.is_used:
