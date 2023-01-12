@@ -1,7 +1,7 @@
 from furhat_remote_api import FurhatRemoteAPI
 import json
 import random
-import serial 
+#import serial 
 
 
 positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]

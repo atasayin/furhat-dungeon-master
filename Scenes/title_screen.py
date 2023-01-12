@@ -24,7 +24,8 @@ class TitleScene(SceneBase):
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				print("MOUSE CLICK: ", end="")
 				if self.PLAY_BUTTON.checkForInput(mousepos):
-					self.SwitchToScene(OpeningScene(self.furhat))
+					#self.SwitchToScene(OpeningScene(self.furhat))
+					self.SwitchToScene(FurhatPhotoScene(self.furhat))
 
 	def Update(self):
 		self.PLAY_BUTTON = Button(image=None, pos=(WIDTH/2, HEIGHT-200), text_input="Start Game", font=font, base_color=(240, 0, 0), hovering_color=(100,100,100), scale=0.35)

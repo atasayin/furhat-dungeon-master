@@ -29,18 +29,18 @@ def MazeFactory(type, furhat):
     elif type == "mava":
         grid = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         start_point = 1, 1
-        end_point = 2, 5 #1,2
+        end_point = 1, 7 
         maze = Maze(grid,start_point,end_point)
         time_left = 60 * 2
         game = MazeMiniGame(maze,time_left,furhat)
@@ -61,7 +61,7 @@ def MazeFactory(type, furhat):
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         start_point = 1, 1
-        end_point = 2, 5 #1,2
+        end_point = 1, 3 
         maze = Maze(grid,start_point,end_point)
         time_left = 60 * 2
         game = MazeMiniGame(maze,time_left,furhat)
@@ -82,7 +82,7 @@ def MazeFactory(type, furhat):
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         start_point = 1, 1
-        end_point = 2, 5 #1,2
+        end_point = 8, 8 #1,2
         maze = Maze(grid,start_point,end_point)
         time_left = 60 * 2
         game = MazeMiniGame(maze,time_left,furhat)
@@ -92,18 +92,18 @@ def MazeFactory(type, furhat):
     elif type == "medicine":
         grid = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+            [1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
+            [1, 0, 1, 0, 1, 0, 0, 1, 0, 1],
             [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
             [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         start_point = 1, 1
-        end_point = 2, 5 #1,2
+        end_point = 1, 8 
         maze = Maze(grid,start_point,end_point)
         time_left = 60 * 2
         game = MazeMiniGame(maze,time_left,furhat)

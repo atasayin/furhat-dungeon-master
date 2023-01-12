@@ -22,11 +22,11 @@
 #     results = hands.process(frame)
 #     frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
 #     round_result = -1
-import os 
+# import os 
 
-cwd = os.getcwd()
-im = os.path.join(cwd, "images")
-print(os.path.join(im, "furhat.png"))
+# cwd = os.getcwd()
+# im = os.path.join(cwd, "images")
+# print(os.path.join(im, "furhat.png"))
     
 
 #     def dothework(self):
@@ -55,3 +55,11 @@ print(os.path.join(im, "furhat.png"))
 
 
 # print("Number of cpu : ", multiprocessing.cpu_count())
+game_params = {"hope": 50}
+
+effects = {'hope': 1.25}
+
+for param,effect in effects.items():
+        print(game_params[param])
+        game_params[param] *= effect
+        print(game_params[param])
