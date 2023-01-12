@@ -56,13 +56,15 @@ maze_words = ["maze", "labyrinth", "lab", "tribe", "approach", "mace"]
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='Social Science',size=6),Territory(name='CASE',size=5),Territory(name='Engineering',size=15),Territory(name='Science',size=12)]
 territory_dict = {0:('DORMS','SARMS','DORMITORY','DORMITORIES','BARB','ALARMS','DARMS','DORM'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','OMAR','AMAR','WALMART','ÖMER'),3:('ODEON','CALL DOWN', 'DOWN','A DOWN','NERO'),
-				  4:('LIBRARY','LIB'),5:('SOS','SAUCE','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','PACE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
+				  4:('LIBRARY','LIB'),5:('SOS','SAUCE','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','PACE','BUSINESS', 'CHASE'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 milestone_types_dict = {"sallyjazz": ["sally", "jazz"], "open gym": ["gym", "jim", "sports", "field"],
 									"remove dress code": ["dress", "code", "remove"], "student clubs": ["club", "student"],
 									"lower exile": ["exile", "low", "lower", "lover", "conditions"]}
+
 class Game:
 	def __init__(self) -> None:
+		self.quit_attempt = False
 		self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.active_scene = None
 		self.furhat = FurhatDriver()
@@ -136,18 +138,19 @@ class Game:
 			# Event filtering 
 			filtered_events = []
 			for event in pygame.event.get():
-				quit_attempt = False
+				print(self.quit_attempt)
+				# self.quit_attempt = False
 				if event.type == pygame.QUIT:
-					quit_attempt = True
+					self.quit_attempt = True
 				elif event.type == pygame.KEYDOWN:
 					alt_pressed = pressed_keys[pygame.K_LALT] or \
 								pressed_keys[pygame.K_RALT]
 					if event.key == pygame.K_ESCAPE:
-						quit_attempt = True
+						self.quit_attempt = True
 					elif event.key == pygame.K_F4 and alt_pressed:
-						quit_attempt = True
+						self.quit_attempt = True
 				
-				if quit_attempt:
+				if self.quit_attempt:
 					change_scene_event.set()
 					self.active_scene.Terminate()
 					pygame.quit()
@@ -295,6 +298,8 @@ class Game:
 		return return_to_furhat
 
 	def manage_turn(self):
+		if self.quit_attempt:
+			return
 		selection = ""
 		self.furhat.ask_turns()
 		answer = self.furhat.ask_question().split()
@@ -314,6 +319,8 @@ class Game:
 				selection = "protest"
 			elif word == "cool":
 				selection = "cool"
+			elif word == "exit" or word == "exits":
+				selection = "exit"
 
 		print(f"Move Selection: {selection}")
 
@@ -339,7 +346,7 @@ class Game:
 			self.turn.turn_type = "milestone"
 			selected_milestone = self.furhat.ask_question("Which milestone do you want to unlock?").split()
 			# ['Lower Exile', 'Open GYM', 'Remove Dresscode','Salicaz', 'Student Clubs']
-			self.turn.milestone_requested = "sallyjazz"
+			# self.turn.milestone_requested = "sallyjazz"
 
 			for word in selected_milestone:
 				for key, value in milestone_types_dict.items():
@@ -367,6 +374,11 @@ class Game:
 
 		elif selection == "cool":
 			self.furhat.shaka()
+		
+		elif selection == "exit":
+			self.furhat.say("Bye!")
+			self.furhat.get_gesture("Wink")
+			self.quit_attempt = True
 				
 		elif selection == "powerup":
 			self.turn.turn_type = "powerup"
@@ -509,7 +521,7 @@ class Game:
 
 			territory_lose_prob = random.uniform(0, 1)
 			if territory_lose_prob > 0.7:
-				self.furhat.say("IT SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
+				self.furhat.say("it SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
 				range_of_territory = len(self.territory_list)
 				number =random.randint(0,range_of_territory)
 				print("LOST TERITTORY IS  ",number,self.territory_list.get(number))
