@@ -71,11 +71,16 @@ class QuizMiniGame():
         print(message)
         answer = None
         result = False
+        flag = False
         for choice, value in self.answers.items():
-            for val in value:
-                if val in message:
-                    answer = choice
-                    result = True
+            if flag != True:
+                for val in value:
+                    if flag != True:
+                        if val in message:
+                            answer = choice
+                            result = True
+                            flag =  True
+                            break
         return answer, result
 
     def is_correct(self, answer):
@@ -104,10 +109,10 @@ class QuizMiniGame():
         print( "Exclude", self.to_exclude)  # Prints out the
         while self.question_count <= 0:
             print("Total Win : ", self.win_count)
-            number = random.randint(1, 5)
+            number = random.randint(1, 7)
             print("THE QUESTION NUMBER IS : ", number)
             while number in self.to_exclude:
-                number = random.randint(1, 5)
+                number = random.randint(1, 7)
             self.question_number = number
             self.to_exclude.append(number)
             # img = PImage.open(path + '/'+str(number)+'.png')

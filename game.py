@@ -21,6 +21,7 @@ from Scenes.emotion_scene import EmotionScene
 from time import sleep
 import time
 import random
+from Scenes.win_scene import WinScene
 from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
 from milestones import MilestoneManager
@@ -77,8 +78,8 @@ class Game:
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
-		self.assign_user_ids()
-		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+		#self.assign_user_ids()
+		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
@@ -97,7 +98,7 @@ class Game:
 		self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 		self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
 		self.game_params = \
-			{"hope": 50, "discontent": 50, "rebellion": 1000,
+			{"hope": 50, "discontent": 98, "rebellion": 1000,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant,
 			"discontent_gain": 1, "hope_gain":1,
 			"passive_rp_income": 20,
@@ -292,6 +293,7 @@ class Game:
 		elif update_result[0] == "QUIZ":
 			# 0, 1, 2 ---> number of correct answers
 			success = update_result[1]
+			print("QUIZ UPDATE ",success )
 			self.turn.hope_change = success * 10
 			self.turn.discontent_change = (1 - success) * 5
 			self.turn.rebellion_point_change = success * 20
@@ -308,8 +310,10 @@ class Game:
 		return return_to_furhat
 
 	def manage_turn(self):
+		self.have_we_lost()
 		if self.quit_attempt:
-			return
+			return 0
+
 		selection = ""
 		self.furhat.ask_turns()
 		answer = self.furhat.ask_question().split()
@@ -441,6 +445,7 @@ class Game:
 	def wrap_up_turn(self):
 		print(f"wrap trurn type: {self.turn.turn_type}")
 		if self.turn.turn_type == "regular":
+			print("TURN CHANGES ",self.turn.get_changes() )
 			hope, dis, reb = self.turn.get_changes()
 			self.game_params["hope"] += hope
 			self.game_params["discontent"] += dis
@@ -564,14 +569,25 @@ class Game:
 		self.game_params["hope"] = min(self.game_params["hope"], 100)
 		self.game_params["discontent"] = max(self.game_params["discontent"], 0)
 
+	def have_we_lost(self):
+		if self.game_params["discontent"] >= 100:
+			print("YOU LOST THE GAME ")
+			self.furhat.say("TYRANT RULES THE SCHOOL NOW")
+			self.furhat.get_gesture("ExpressSad")
+			self.quit_attempt = True
+			self.change_scene_event.set()
+			self.active_scene.Terminate()
+			pygame.quit()
+
 	def is_win(self):
 
 		locked_milestone_list =self.milestone_manager.locked_oneTimes  + self.milestone_manager.locked_pasifs
 		if len(locked_milestone_list) == 0:
+			sleep(2)
 			print("YOU WON THE GAME ")
-
 			self.furhat.say("YOU WON THE GAME AND SAVED THE SCHOOL")
+			self.furhat.get_gesture("BigSmile")
 			self.quit_attempt = True
-		return 0
+			#self.active_scene.SwitchToScene(WinScene(self.furhat))
 
 Game()
