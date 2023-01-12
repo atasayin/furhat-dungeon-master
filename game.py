@@ -25,6 +25,7 @@ from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
 from milestones import MilestoneManager
 from tribes import TribeManager
+ 
 
 
 furhat_last_spoke = time.time()
@@ -163,7 +164,7 @@ class Game:
 				self.manage_turn()
 
 
-			print(f"Current parameters: {self.game_params}")
+			# print(f"Current parameters: {self.game_params}")
 
 			if update_result is None:
 				sleep(0.05)
