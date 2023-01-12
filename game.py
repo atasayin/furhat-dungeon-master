@@ -368,7 +368,7 @@ class Game:
 			if not self.tribe_manager.is_already_conquered(maze_destination):
 				self.turn.turn_type = "maze"
 				self.turn.maze_destination = maze_destination
-				self.active_scene.SwitchToScene(MazeScene(self.furhat))
+				self.active_scene.SwitchToScene(MazeScene(maze_destination,self.furhat))
 				#self.active_scene.SwitchToScene(MazeScene(self.furhat,self.turn.maze_destination))
 			else:
 				self.turn.turn_type = None

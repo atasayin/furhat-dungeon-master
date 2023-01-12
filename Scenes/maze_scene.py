@@ -6,12 +6,12 @@ from time import sleep
 import maze_mini_game as maze
 
 class MazeScene(SceneBase):
-    def __init__(self, furhat=None):
+    def __init__(self,tribe,furhat=None):
         SceneBase.__init__(self)
         self.deg = 0
         self.result = None
         self.slide = 0
-        self.game, self.view = maze.MazeFactory(maze.TerrainTypes.COMP_MAZE,furhat)         
+        self.game, self.view = maze.MazeFactory(tribe,furhat)         
         print("New Maze game")
 
     def ProcessInput(self, events, pressed_keys, game_params):
