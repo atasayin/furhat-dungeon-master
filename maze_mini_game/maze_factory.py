@@ -36,15 +36,15 @@ def MazeFactory(type, furhat):
             [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
         start_point = 1, 1
-        end_point = 1, 7 
+        end_point = 7, 1 
         maze = Maze(grid,start_point,end_point)
         time_left = 60 * 2
         game = MazeMiniGame(maze,time_left,furhat)
-        colors = TerrainColors((253, 1, 0),(247, 105, 21),(238, 222, 4),(160, 214, 54), (47, 162, 54),(51, 62, 212))
+        colors = TerrainColors((253, 1, 0),(247, 105, 21),(238, 222, 4),(160, 214, 54), (0, 0, 0),(255, 255, 255))
         view = MazeView(game,colors,"maze_mini_game/tribes/mava-tribe.png")
 
     elif type == "mech":
@@ -68,7 +68,7 @@ def MazeFactory(type, furhat):
         colors = TerrainColors((58,58,58),(131,131,131),(174,174,174),(201,201,201), (229,229,229),(255, 255, 255))
         view = MazeView(game,colors,"maze_mini_game/tribes/mech-tribe.png")
 
-    elif type == "elec":
+    elif type == "electronic":
         grid = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
@@ -108,6 +108,6 @@ def MazeFactory(type, furhat):
         time_left = 60 * 2
         game = MazeMiniGame(maze,time_left,furhat)
         colors = TerrainColors((0, 100, 200),(128, 128, 0),(255, 200, 0),(255, 0, 0), (0, 0, 0),(148, 0, 211))
-        view = MazeView(game,colors,"maze_mini_game/tribes/elec-tribe.png")
+        view = MazeView(game,colors,"maze_mini_game/tribes/medicine-tribe.png")
 
     return game, view

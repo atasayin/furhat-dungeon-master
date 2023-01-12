@@ -11,11 +11,11 @@ class TribeManager:
         self.add_tribes()
 
     def add_tribes(self):
-        self.locked_tribes.append(Tribe("computer", powerups.PowerupGameParams({"discontent_gain":0.75})))
-        self.locked_tribes.append(Tribe("mava", powerups.PowerupGameParams({"hope":1.25})))
-        self.locked_tribes.append(Tribe("mech", powerups.PowerupGameParams({"hope":1.25})))
-        self.locked_tribes.append(Tribe("elec", powerups.PowerupGameParams({"hope":1.25})))
-        self.locked_tribes.append(Tribe("medicine", powerups.PowerupGameParams({"hope":1.25})))
+        self.locked_tribes.append(Tribe("computer", powerups.PowerupGameParams({"type": "mult","passive_rp_income":1.25})))
+        self.locked_tribes.append(Tribe("mava", powerups.PowerupGameParams({"type": "mult","discontent_gain":0.75})))
+        self.locked_tribes.append(Tribe("mech", powerups.PowerupGameParams({"type": "sum","territory_defense_boos":1})))
+        self.locked_tribes.append(Tribe("electronic", powerups.PowerupGameParams({"type": "mult","territory_attack_boos":1})))
+        self.locked_tribes.append(Tribe("medicine", powerups.PowerupGameParams({"type": "mult","hope_gain":1.25})))
 
     def find_unlocked_tribe(self,name):
         for tribe in self.unlocked_tribes:
@@ -55,3 +55,4 @@ class TribeManager:
         tribe.powerup.use(game_params)
         self.unused_powerup_tribes.remove(tribe)
         self.used_powerup_tribes.append(tribe)
+        return tribe.powerup.use_feedback_text
