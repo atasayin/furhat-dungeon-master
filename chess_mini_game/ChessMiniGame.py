@@ -139,6 +139,7 @@ class ChessMiniGame():
                     message = message.replace('MOODS','')  
                     message = message.replace('MOOD','')
                     message = message.replace('MOSA', '')
+                    message = message.replace('LOVE', '')
         if check:
             print("first check")
             for piece in chess_piece.get(m_piece):

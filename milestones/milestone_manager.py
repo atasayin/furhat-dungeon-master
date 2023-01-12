@@ -16,23 +16,38 @@ class MilestoneManager:
         self.locked_oneTimes.append(one_times.RemoveDressCode())
         
         self.locked_pasifs.append(pasifs.Salicaz())
-        self.locked_pasifs.append(pasifs.OpenSportFields())
+        #self.locked_pasifs.append(pasifs.OpenSportFields())
         self.locked_pasifs.append(pasifs.StudentClubs())
 
     def find_unlocked_milestone(self,name):
-        for pasif, onetime in zip(self.unlocked_pasifs,self.unlocked_oneTimes):
+        # for pasif, onetime in zip(self.unlocked_pasifs,self.unlocked_oneTimes):
+        #     if pasif.name == name:
+        #         return pasif
+        #
+        #     if onetime.name == name:
+        #         return onetime
+        # return None
+        for pasif in self.unlocked_pasifs:
             if pasif.name == name:
                 return pasif
-
+        for onetime in self.unlocked_oneTimes:
             if onetime.name == name:
                 return onetime
         return None
 
     def find_locked_milestone(self,name):
-        for pasif, onetime in zip(self.locked_pasifs,self.locked_oneTimes):
+        #for pasif, onetime in zip(self.locked_pasifs,self.locked_oneTimes):
+        #     print(pasif,onetime)
+        #     if pasif.name == name:
+        #         return pasif
+        #
+        #     if onetime.name == name:
+        #         return onetime
+        # return None
+        for pasif in self.locked_pasifs:
             if pasif.name == name:
                 return pasif
-
+        for onetime in self.locked_oneTimes:
             if onetime.name == name:
                 return onetime
         return None
@@ -49,18 +64,19 @@ class MilestoneManager:
 
     def buy_milestone(self,name):
         cost = 0
-        for pasif, onetime in zip(self.locked_pasifs,self.locked_oneTimes):
+        for pasif in self.locked_pasifs:
             if pasif.name == name:
                 self.locked_pasifs.remove(pasif)
                 self.unlocked_pasifs.append(pasif)
-                cost = pasif.cost
+                return pasif.cost
             
+        for onetime in self.locked_oneTimes:
             if onetime.name == name:
                 self.locked_oneTimes.remove(onetime)
                 self.unlocked_oneTimes.append(onetime)
-                cost = onetime.cost
+                return onetime.cost
 
-        return cost
+        return None
             
     
     def apply_one_time(self,name,game_params):

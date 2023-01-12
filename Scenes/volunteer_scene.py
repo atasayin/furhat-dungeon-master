@@ -6,13 +6,18 @@ from UI_Objects.button import Button
 from CONSTANTS import *
 import math
 from time import sleep
-
+import os
+cwd = os.getcwd()
+img_folder = os.path.join(cwd, "images")
+photo_path = os.path.join(img_folder, "okul.png")
 
 class VolunteerScene(SceneBase):
 	def __init__(self, furhat):
 		SceneBase.__init__(self)
 		self.result = None
 		self.furhat = furhat
+		self.photo = pygame.image.load(photo_path).convert()
+		self.photo = pygame.transform.scale(self.photo, (WIDTH, HEIGHT))
 	def ProcessInput(self, events, pressed_keys, game_params):
 		self.player1 , self.player2 = game_params["player1"], game_params["player2"]
 	
@@ -39,10 +44,10 @@ class VolunteerScene(SceneBase):
 	def Render(self, WIN):
 
 		WIN.fill((255, 255, 255))
-		mousepos = pygame.mouse.get_pos()
+		WIN.blit(self.photo, (0,0))
 		
 
-		text = font.render("Who will be our captain?", True, (0,0,0))
-		text_rect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
+		text = font.render("Who will be our captain?", True, (255,255,255))
+		text_rect = text.get_rect(center=(WIDTH/2, HEIGHT-200))
 		WIN.blit(text, text_rect)
 

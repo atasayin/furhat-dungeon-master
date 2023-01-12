@@ -6,13 +6,18 @@ from CONSTANTS import *
 import math
 import rps_mini_game as rps
 from time import sleep, time
+import os
 
+cwd = os.getcwd()
+img_folder = os.path.join(cwd, "images")
+font_folder = os.path.join(cwd, "fonts")
 
 
 class RPSScene(SceneBase):
 	def __init__(self, furhat):
 		SceneBase.__init__(self)
-		self.img = pygame.image.load("rps_mini_game/rock.jpeg").convert_alpha()
+		self.img = pygame.image.load(os.path.join(img_folder, "rps_photo.png")).convert_alpha()
+		self.img = pygame.transform.scale(self.img, (WIDTH, HEIGHT))
 		self.winner = None
 		self.won = False
 		self.wontime = 0
@@ -55,49 +60,21 @@ class RPSScene(SceneBase):
 		return self.result
 
 	def Render(self, WIN):
-		if self.result is None:
-			WIN.fill((255, 255, 255))
-			WIN.blit(self.img, (0, 0))
+		WIN.fill((255, 255, 255))
+		WIN.blit(self.img, (0, 0))
 
-			pleft_score_text = f"{-self.game.pleft_score}"
-			pright_score_text = f"{self.game.pright_score}"
-			pleft_text = self.font.render(pleft_score_text, True,
-										  (0, 0, 0))
-			pright_text = self.font.render(pright_score_text, True,
-										   (0, 0, 0))
-			vs_text = self.font.render("vs", True,
-									   (0, 0, 0))
+		pleft_score_text = f"{-self.game.pleft_score}"
+		pright_score_text = f"{self.game.pright_score}"
+		pleft_text = self.font.render(pleft_score_text, True,
+										(0, 0, 0))
+		pright_text = self.font.render(pright_score_text, True,
+										(0, 0, 0))
+		vs_text = self.font.render("vs", True,
+									(0, 0, 0))
 
-			WIN.blit(pleft_text, pleft_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(vs_text, pleft_text.get_rect(
-				center=(WIDTH//2 - 60, HEIGHT//2)))
-			WIN.blit(pright_text, pright_text.get_rect(
-				center=(3*WIDTH//4, HEIGHT//2)))
-		else:
-			WIN.fill((255, 255, 255))
-			WIN.blit(self.img, (0, 0))
-
-			pleft_score_text = f"{-self.game.pleft_score}"
-			pright_score_text = f"{self.game.pright_score}"
-			pleft_text = self.font.render(pleft_score_text, True,
-										  (0, 0, 0))
-			pright_text = self.font.render(pright_score_text, True,
-										   (0, 0, 0))
-			vs_text = self.font.render("vs", True,
-									   (0, 0, 0))
-			if self.winner == 1:
-				winner_text = self.font.render("Right Player Wins!", True,
-										   (0, 0, 0))
-			else:
-				winner_text = self.font.render("Left Player Wins!", True,
-										   (0, 0, 0))
-
-			WIN.blit(pleft_text, pleft_text.get_rect(
-				center=(WIDTH//4, HEIGHT//2)))
-			WIN.blit(vs_text, pleft_text.get_rect(
-				center=(WIDTH//2 - 60, HEIGHT//2)))
-			WIN.blit(pright_text, pright_text.get_rect(
-				center=(3*WIDTH//4, HEIGHT//2)))
-			WIN.blit(winner_text, winner_text.get_rect(
-				center=(WIDTH/2, HEIGHT/2 - 60)))
+		WIN.blit(pleft_text, pleft_text.get_rect(
+			center=(WIDTH//4, 200)))
+		WIN.blit(vs_text, pleft_text.get_rect(
+			center=(WIDTH//2 - 60, 200)))
+		WIN.blit(pright_text, pright_text.get_rect(
+			center=(3*WIDTH//4, 200)))

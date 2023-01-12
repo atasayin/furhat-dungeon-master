@@ -25,6 +25,7 @@ from Scenes.title_screen import TitleScene
 from Scenes.furhat_photo_screen import FurhatPhotoScene
 from milestones import MilestoneManager
 from tribes import TribeManager
+ 
 
 
 furhat_last_spoke = time.time()
@@ -56,7 +57,7 @@ maze_words = ["maze", "labyrinth", "lab", "tribe", "approach", "mace", "may"]
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='Social Science',size=6),Territory(name='CASE',size=5),Territory(name='Engineering',size=15),Territory(name='Science',size=12)]
 territory_dict = {0:('DORMS','SARMS','DORMITORY','DORMITORIES','BARB','ALARMS','DARMS','DORM'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','OMAR','AMAR','WALMART','ÖMER'),3:('ODEON','CALL DOWN', 'DOWN','A DOWN','NERO'),
-				  4:('LIBRARY','LIB'),5:('SOS','SAUCE','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','PACE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
+				  4:('LIBRARY','LIB'),5:('SOS','SAUCE','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','PACE','BUSINESS', 'CHASE'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 milestone_types_dict = {"sallyjazz": ["sally", "jazz"], "open gym": ["gym", "jim", "sports", "field"],
 									"remove dress code": ["dress", "code", "remove"], "student clubs": ["club", "student"],
@@ -68,16 +69,16 @@ tribe_types_dict = {"computer": ["computer", "comp"],
 									"electronic": ["electronic", "elec", "electrial"],
 									"medicine": ["medicine", "med"]}
 
-
 class Game:
 	def __init__(self) -> None:
+		self.quit_attempt = False
 		self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.active_scene = None
 		self.furhat = FurhatDriver()
 		self.player1, self.player2 = Player(), Player()
 		self.captain, self.assistant = None, None
-		#self.assign_user_ids()
-		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+		self.assign_user_ids()
+		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
@@ -146,24 +147,24 @@ class Game:
 			# Event filtering 
 			filtered_events = []
 			for event in pygame.event.get():
-				quit_attempt = False
+				print(self.quit_attempt)
+				# self.quit_attempt = False
 				if event.type == pygame.QUIT:
-					quit_attempt = True
+					self.quit_attempt = True
 				elif event.type == pygame.KEYDOWN:
 					alt_pressed = pressed_keys[pygame.K_LALT] or \
 								pressed_keys[pygame.K_RALT]
 					if event.key == pygame.K_ESCAPE:
-						quit_attempt = True
+						self.quit_attempt = True
 					elif event.key == pygame.K_F4 and alt_pressed:
-						quit_attempt = True
+						self.quit_attempt = True
 				
-				if quit_attempt:
+				if self.quit_attempt:
 					change_scene_event.set()
 					self.active_scene.Terminate()
 					pygame.quit()
 				else:
 					filtered_events.append(event)
-          
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, self.game_params)
 
@@ -172,6 +173,7 @@ class Game:
 
 
 			#print(f"Current parameters: {self.game_params}")
+
 
 			if update_result is None:
 				sleep(0.05)
@@ -207,7 +209,8 @@ class Game:
 				render_thread.start()
 
 			self.active_scene = self.active_scene.next
-			print(self.game_params)
+
+			#print(self.game_params)
 
 	def assign_user_ids(self):
 		ids = None
@@ -289,22 +292,24 @@ class Game:
 		elif update_result[0] == "QUIZ":
 			# 0, 1, 2 ---> number of correct answers
 			success = update_result[1]
-			self.turn.hope_change = (success - 1) * 10
+			self.turn.hope_change = success * 10
 			self.turn.discontent_change = (1 - success) * 5
 			self.turn.rebellion_point_change = success * 20
-	
+			print("QUIZ CHANGES ", self.turn.hope_change,self.turn.discontent_change,self.turn.rebellion_point_change)
 		elif update_result[0] == "MAZE":
 			self.turn.success = update_result[1]
       
 		elif update_result[0] == "EMOTION":
 			success = update_result[1]
-			self.turn.hope_change = (success - 0.5) * 10
-			self.turn.discontent_change = (0.5 - success) * 5
+			self.turn.hope_change = (success) * 10
+			self.turn.discontent_change = (2 - success) * 5
 			self.turn.rebellion_point_change = success * 20
 
 		return return_to_furhat
 
 	def manage_turn(self):
+		if self.quit_attempt:
+			return
 		selection = ""
 		self.furhat.ask_turns()
 		answer = self.furhat.ask_question().split()
@@ -322,8 +327,10 @@ class Game:
 				selection = "maze"
 			elif word in protest_words:
 				selection = "protest"
-			elif word == "cool":
+			elif word == "cool" or word == "cools":
 				selection = "cool"
+			elif word == "exit" or word == "exits":
+				selection = "exit"
 
 		print(f"Move Selection: {selection}")
 
@@ -349,17 +356,28 @@ class Game:
 			self.turn.turn_type = "milestone"
 			selected_milestone = self.furhat.ask_question("Which milestone do you want to unlock?").split()
 			# ['Lower Exile', 'Open GYM', 'Remove Dresscode','Salicaz', 'Student Clubs']
-			self.turn.milestone_requested = "sallyjazz"
+			# self.turn.milestone_requested = "sallyjazz"
 
 			for word in selected_milestone:
 				for key, value in milestone_types_dict.items():
 					if word in value:
 						self.turn.milestone_requested = key
 
+			if self.turn.milestone_requested is None:
+				return 0
+
 			print(f"{bcolors.HEADER} Selected milestone {selected_milestone}, {self.turn.milestone_requested} {bcolors.ENDC}")
 			
 			# check if already bought
-			if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
+			unlocked_milestone_list = self.milestone_manager.unlocked_pasifs + self.milestone_manager.unlocked_oneTimes
+			unlocked_milestone_list_name = []
+			for mile in unlocked_milestone_list:
+				unlocked_milestone_list_name.append(mile.name)
+
+			print("UNLOCKED MILESTONE LIST ", unlocked_milestone_list_name)
+			print("MILE STONE REQUESTED ", self.turn.milestone_requested)
+			if self.turn.milestone_requested not in unlocked_milestone_list_name:
+			#if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
 				if self.milestone_manager.is_money_enough(self.turn.milestone_requested, self.game_params["rebellion"]):
 					cost = self.milestone_manager.buy_milestone(self.turn.milestone_requested)
 					self.turn.rebellion_point_change = -cost
@@ -367,6 +385,10 @@ class Game:
 					self.furhat.furhat.gesture(name="Wink")
 					self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 					self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
+					self.game_params['milestone_list'] = self.milestone_list
+					self.game_params['initial_milestone'] = self.milestone_list_initial_list
+					self.is_win()
+
 				else:
 					self.furhat.say("My G you are broke")
 					self.turn.turn_type = None
@@ -377,6 +399,11 @@ class Game:
 
 		elif selection == "cool":
 			self.furhat.shaka()
+		
+		elif selection == "exit":
+			self.furhat.say("Bye!")
+			self.furhat.get_gesture("Wink")
+			self.quit_attempt = True
 				
 		elif selection == "maze":
 			maze_destination = self.furhat.ask_question(f"Which tribe do you want to go?").split()
@@ -408,8 +435,7 @@ class Game:
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 
-		print(" UNLOCKED: ", self.milestone_manager.unlocked_oneTimes)
-		print(" UNLOCKED: ", self.milestone_manager.unlocked_pasifs)
+
 
 		
 	def wrap_up_turn(self):
@@ -438,21 +464,22 @@ class Game:
 				print("CONQUERED TERRITORY IS ", initial_territory_list[self.turn.attack_territory].name)
 				initial_territory_list[self.turn.attack_territory] = None
 
-				self.game_params["territory_list"].append(territory)
+
 				print(f"TERRITORY PASSIVE {territory.passive_generation}")
 				self.game_params["passive_rp_income"] += territory.passive_generation
-
 				self.territory_list[self.turn.attack_territory] = territory
+				self.game_params["territory_list"] = self.territory_list
 				print("NEW TERITTORY LIST IS ",self.territory_list )
 				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
-				self.game_params["rebellion"]  += self.turn.rebellion_point_change
-				self.passive_rp_income += territory.passive_generation
+
+				self.game_params["rebellion"] = self.game_params["rebellion"] + self.turn.rebellion_point_change
+				self.game_params["passive_rp_income"] = self.game_params["passive_rp_income"] + territory.passive_generation
 				print(f"TERRITORY PASSIVE {territory.passive_generation}")
 
 			hope, dis, reb = self.turn.get_changes()
-			self.game_params["hope"] += hope
-			self.game_params["discontent"] += dis
-			self.game_params["rebellion"]  += reb
+			self.game_params["hope"] = self.game_params["hope"] + hope
+			self.game_params["discontent"] = self.game_params["discontent"] + dis
+			self.game_params["rebellion"] = self.game_params["rebellion"] + reb
 
 		elif self.turn.turn_type == "milestone":
 			self.game_params["rebellion"] += self.turn.rebellion_point_change
@@ -499,7 +526,7 @@ class Game:
 										"ALSO KEEP IN MIND THAT WHILE YOU GO ON A QUEST TO CONQUER YOUR MIGHT GET ATTACKED")
 									break
 								elif self.territory_list[index] is not None:
-									flag = 2
+									flag = 2	
 									break
 
 				except:
@@ -512,7 +539,7 @@ class Game:
 				self.game_params["territory_defense_boos"] -= 1
 
 			if territory_lose_prob > 0.7:
-				self.furhat.say("IT SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
+				self.furhat.say("it SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
 				range_of_territory = len(self.territory_list)
 				number =random.randint(0,range_of_territory)
 				print("LOST TERITTORY IS  ",number,self.territory_list.get(number))
@@ -523,6 +550,7 @@ class Game:
 					self.furhat.say(f"WHILE you go to {initial_territory_list[self.turn.attack_territory].name} to conquer it, your {lost_ter.name} was lost ")
 					self.furhat.say(f"BUT DO NOT LOSE HOPE, YOU CAN STILL TRY TO CONQUER  {initial_territory_list[self.turn.attack_territory].name} ")
 					self.territory_list = lost_ter.losing_territory(self.territory_list,number)
+					self.game_params["territory_list"] = self.territory_list
 					print("SELF TERITTORY LIST 3 AFTER LOST ", self.territory_list)
 				except:
 					print("YOU DO NOT HAVE TERRITORY TO LOSE")
@@ -535,5 +563,15 @@ class Game:
 	def sanity_check_for_hope_and_discontent(self):
 		self.game_params["hope"] = min(self.game_params["hope"], 100)
 		self.game_params["discontent"] = max(self.game_params["discontent"], 0)
+
+	def is_win(self):
+
+		locked_milestone_list =self.milestone_manager.locked_oneTimes  + self.milestone_manager.locked_pasifs
+		if len(locked_milestone_list) == 0:
+			print("YOU WON THE GAME ")
+
+			self.furhat.say("YOU WON THE GAME AND SAVED THE SCHOOL")
+			self.quit_attempt = True
+		return 0
 
 Game()
