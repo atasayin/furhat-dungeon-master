@@ -75,7 +75,7 @@ class FurhatDriver:
         answer = str(self.furhat.listen().message).lower()
         print(answer)
         volunteer1, volunteer2 = False, False
-        if answer in positive:
+        if answer in positive or "yes" in answer:
             volunteer1 = True
             self.say("Alright then. We have our first volunteer.")
         else:
@@ -90,7 +90,7 @@ class FurhatDriver:
 
         answer = str(self.furhat.listen().message).lower()
 
-        if answer in positive:
+        if answer in positive or "yes" in answer:
             print("Volunteer 2")
             volunteer2 = True
             if volunteer1:
