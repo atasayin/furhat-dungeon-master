@@ -85,7 +85,7 @@ class EmotionMiniGame:
             (("Surprise 70%"), "surprise", 70)
         )
         win_count = 0
-        for i in range(1, 3):
+        for i in range(1, 2):
             print(f"NOW YOU ARE IN TURN {i} ")
             self.furhat.say(
                 f"NOW YOU ARE IN TURN {i} AND YOUR Total Attempt count is 3 "
@@ -100,20 +100,23 @@ class EmotionMiniGame:
                 number = random.randint(0, len(emotion_list)-1)
             self.to_exclude.append(number)
             print("TO EXCLUDE ", self.to_exclude)
-            while attempt < 3:
+            emotion = emotion_list[number]
+            self.n_emotion = emotion[1]
+            self.n_percantage = emotion[1 + 1]
+            print("self.n_percantage ", self.n_percantage)
+            while attempt < 2:
                 if not result:
                     print("Attempt for this turn is ", attempt+1)
                     self.furhat.say(f"Attempt for this turn is {attempt+1} ")
                     print(
-                        f"IN TURN {i} YOU NEED TO MATCH {emotion_list[number][0]} percentages "
+                        f"IN TURN {i} YOU NEED TO MATCH {self.n_emotion} {self.n_percantage} percent "
                     )
                     self.furhat.say(
-                        f"IN TURN {i} YOU NEED TO MATCH {emotion_list[number][0]} "
+                        f"IN TURN {i} YOU NEED TO MATCH {self.n_emotion} "
                     )
                     self.furhat.say(f"GET READY You Have 3 Seconds ")
 
-                    if attempt >= 1:
-                        self.n_emotion
+                    if attempt > 1:
                         self.furhat.look_at_other_player()
                         self.furhat.say(f"HMM You seem to need help. Let me show you have I express {self.n_emotion}")
                         self.furhat.say(f"Watch it very carefully")
@@ -134,10 +137,6 @@ class EmotionMiniGame:
                     if capture:
                         turn = i
                         turn = turn - 1
-                        emotion = emotion_list[number]
-                        self.n_emotion = emotion[1]
-                        self.n_percantage = emotion[1 + 1]
-                        print("self.n_percantage ", self.n_percantage)
                         try:
                             obj = DeepFace.analyze(
                                 img_path="image.jpeg", actions=["emotion"]
@@ -163,4 +162,4 @@ class EmotionMiniGame:
             file.write(f"{num}\n")  # Writes the entire list + the appended element into new file
             file.close()  # Closes the file
 
-        return float(win_count/self.total_emotion_count)
+        return win_count
