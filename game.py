@@ -73,23 +73,28 @@ class Game:
 
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
-		self.game_params = \
-			{"hope": 50, "discontent": 50, "rebellion": 1000,
-			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
-			"discontent_gain": 1, "hope_gain":1,
-			"passive_rp_income": 20,
-			"territory_list": {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:Territory(name='Science',size=12)}}
+
+		# game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
+		# "player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant,
+		# "discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain,"territory_list": self.territory_list,
+		# "milestone_list": self.milestone_list, "initial_territory": initial_territory_list, 'initial_milestone': self.milestone_list_initial_list}
+
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 
 		self.territory_list= {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:Territory(name='Science',size=12)}
-		self.game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
-			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
-			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain}
+		self.game_params = {"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
 		self.passive_rp_income = 20
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
 		self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 		self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
+		self.game_params = \
+			{"hope": 50, "discontent": 50, "rebellion": 1000,
+			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant,
+			"discontent_gain": 1, "hope_gain":1,
+			"passive_rp_income": 20,
+			"territory_list": {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:Territory(name='Science',size=12)},
+			"milestone_list": self.milestone_list,"initial_territory": initial_territory_list,'initial_milestone': self.milestone_list_initial_list}
 		self.run_game(TitleScene(self.furhat))
 
 	def render_method(self, scene, event, fps):
@@ -149,12 +154,8 @@ class Game:
 				else:
 					filtered_events.append(event)
           
-			#game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
-			#"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
-			#"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain,"territory_list": self.territory_list,
-			#"milestone_list": self.milestone_list, "initial_territory": initial_territory_list, 'initial_milestone': self.milestone_list_initial_list}
 
-			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
+			self.active_scene.ProcessInput(filtered_events, pressed_keys, self.game_params)
 
 			if type(self.active_scene) == FurhatPhotoScene:
 				self.manage_turn()
