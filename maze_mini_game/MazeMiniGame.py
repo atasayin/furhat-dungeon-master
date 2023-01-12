@@ -26,43 +26,50 @@ class MazeMiniGame():
     
     def introduction(self):
         self.furhat.say(f"You are trying to go to the computer tribe. Tell me your moves for each turn, like 5 down. So that you can progress in the maze")
-
-    def play_game(self):       
-        dotimer.do_intime(self.play_flow, self.end_flow, self.time_left)
-
-    def play_flow(self):
+      
+    def play_game(self):
+        return self.win()
         while True:
             if not self.maze.isWin: 
                 response = self.furhat.ask_one_of_them(furhat_turn_start_texts)
                 success, num, direction = self.parse_answer(response)
                             
                 if success:
-                    for _ in range(num):
-                        if direction == "left":
-                            if not self.maze.moveLeft():
-                                self.furhat.say('Thats the farthest point you can go')
-                                break
-                        elif direction == "right":
-                            if not self.maze.moveRight():
-                                self.furhat.say('Thats the farthest point you can go')
-                                break
-                        elif direction == "up":
-                            if not self.maze.moveUp():
-                                self.furhat.say('Thats the farthest point you can go')
-                                break       
-                        elif direction == "down":
-                            if not self.maze.moveDown():
-                                self.furhat.say('Thats the farthest point you can go')
-                                break
+                    if not self.maze.isWin:
+                        for _ in range(num):
+                            if direction == "left":
+                                if not self.maze.moveLeft():
+                                    self.furhat.say('Thats the farthest point you can go')
+                                    break
+                            elif direction == "right":
+                                if not self.maze.moveRight():
+                                    self.furhat.say('Thats the farthest point you can go')
+                                    break
+                            elif direction == "up":
+                                if not self.maze.moveUp():
+                                    self.furhat.say('Thats the farthest point you can go')
+                                    break       
+                            elif direction == "down":
+                                if not self.maze.moveDown():
+                                    self.furhat.say('Thats the farthest point you can go')
+                                    break
+                    else:
+                        return self.win()
                 else:
                     print("Wrong input")
                     continue
             else:
-                print("You have won")
-                return 'MAZE',1, None, None
+                return self.win()
 
-    def end_flow(self):
-        print("Sorry times out")
+ 
+    def win(self):
+        print("You have won")
+        self.furhat.say("Wow, you have won!")
+        return'MAZE',True, None, None
+
+    def lose(self):
+        self.furhat.say("Wow, you are bad at this!")
+        return'MAZE',False, None, None
     
     def parse_answer(self,response):
         words = response.split()
@@ -73,15 +80,16 @@ class MazeMiniGame():
                 if possibility in words:
                     direction = dv
                     success = True
+                    break
 
         if not direction:
             return False, None, None
 
         for number, possibilities in numbers.items():
-            for possibility in possibilities:
-                print(possibility)
+            for possibility in possibilities:                
                 if possibility in words:
                     num = number
+                    break
 
         return success, int(num), direction
         
