@@ -1,8 +1,8 @@
-# import cv2
-# from deepface import DeepFace
-# import time
-# import warnings
-# import random
+import cv2
+from deepface import DeepFace
+import time
+import warnings
+import random
 
 class EmotionMiniGame:
     def __init__(self):
@@ -14,65 +14,65 @@ class EmotionMiniGame:
         self.total_emotion_count = 2
         self.to_exclude = []
 
-    # def capture_write(
-    #     self, filename="image.jpeg", port=0, ramp_frames=30, x=1280, y=720
-    # ):
-    #     camera = cv2.VideoCapture(port)
+    def capture_write(
+        self, filename="image.jpeg", port=0, ramp_frames=30, x=1280, y=720
+    ):
+        camera = cv2.VideoCapture(port)
 
-    #     # Set Resolution
-    #     camera.set(3, x)
-    #     camera.set(4, y)
+        # Set Resolution
+        camera.set(3, x)
+        camera.set(4, y)
 
-    #     # Adjust camera lighting
-    #     for i in range(ramp_frames):
-    #         temp = camera.read()
-    #     retval, im = camera.read()
-    #     cv2.imwrite(filename, im)
-    #     del camera
-    #     return True
+        # Adjust camera lighting
+        for i in range(ramp_frames):
+            temp = camera.read()
+        retval, im = camera.read()
+        cv2.imwrite(filename, im)
+        del camera
+        return True
 
-    # def check_emotion(self, obj, emotion_list, attempt,number):
-    #     emotion = emotion_list[number]
-    #     result = False
-    #     print("EMOTION IS: ", emotion[1])
-    #     # define percantage range to be considered as matching print emotion statmnet should be changed look at keyboard waiting things
-    #     emotion_status = int(obj.get("emotion").get(emotion[1]))
-    #     print("EMOTION STATUS IS ", emotion_status)
-    #     result = obj.get("emotion")
-    #     max = 0.1
-    #     d_emotion = None
-    #     for emotion, value in obj.get("emotion").items():
-    #         if value > max:
-    #             max = value
-    #             d_emotion = emotion
-    #     print("result STATUS IS ", result)
-    #     print("max STATUS IS ", max)
-    #     print("d_emotion STATUS IS ", d_emotion)
-    #     print("emotion[2] is", emotion[2])
-    #     print("emotion[1] is", emotion[1])
-    #     print("emotion_status is", emotion_status)
-    #     if 20 + int(self.n_percantage) >= emotion_status >= int(self.n_percantage) - 20:
-    #         print(f" YOU MATCHED {emotion_list[number][1]} WITH {emotion_status} percent")
-    #         self.furhat.say(
-    #             f" YOU MATCHED {emotion_list[number][1]} WITH {emotion_status} percent"
-    #         )
-    #         result = True
-    #         self.d_emotion = d_emotion
-    #         self.d_emotion_percantege = str(float("{:.2f}".format(max)))
-    #     else:
-    #         print(f" YOU DID NOT MATCHED YOUR EMOTIONS WERE : {obj}")
-    #         self.furhat.say(
-    #             f" YOU DID NOT MATCHED YOUR EMOTIONS , YOUR MOST DOMINANT EMOTION WAS : {d_emotion}"
-    #         )
-    #         attempt = attempt + 1
-    #         self.d_emotion = d_emotion
-    #         self.d_emotion_percantege = str(float("{:.2f}".format(max)))
-    #         result = False
+    def check_emotion(self, obj, emotion_list, attempt,number):
+        emotion = emotion_list[number]
+        result = False
+        print("EMOTION IS: ", emotion[1])
+        # define percantage range to be considered as matching print emotion statmnet should be changed look at keyboard waiting things
+        emotion_status = int(obj.get("emotion").get(emotion[1]))
+        print("EMOTION STATUS IS ", emotion_status)
+        result = obj.get("emotion")
+        max = 0.1
+        d_emotion = None
+        for emotion, value in obj.get("emotion").items():
+            if value > max:
+                max = value
+                d_emotion = emotion
+        print("result STATUS IS ", result)
+        print("max STATUS IS ", max)
+        print("d_emotion STATUS IS ", d_emotion)
+        print("emotion[2] is", emotion[2])
+        print("emotion[1] is", emotion[1])
+        print("emotion_status is", emotion_status)
+        if 20 + int(self.n_percantage) >= emotion_status >= int(self.n_percantage) - 20:
+            print(f" YOU MATCHED {emotion_list[number][1]} WITH {emotion_status} percent")
+            self.furhat.say(
+                f" YOU MATCHED {emotion_list[number][1]} WITH {emotion_status} percent"
+            )
+            result = True
+            self.d_emotion = d_emotion
+            self.d_emotion_percantege = str(float("{:.2f}".format(max)))
+        else:
+            print(f" YOU DID NOT MATCHED YOUR EMOTIONS WERE : {obj}")
+            self.furhat.say(
+                f" YOU DID NOT MATCHED YOUR EMOTIONS , YOUR MOST DOMINANT EMOTION WAS : {d_emotion}"
+            )
+            attempt = attempt + 1
+            self.d_emotion = d_emotion
+            self.d_emotion_percantege = str(float("{:.2f}".format(max)))
+            result = False
 
-    #     return attempt, result
+        return attempt, result
 
-    # def play_game(self):
-    #     warnings.filterwarnings("ignore")
+    def play_game(self):
+        warnings.filterwarnings("ignore")
 
 
         emotion_list = (
@@ -117,7 +117,7 @@ class EmotionMiniGame:
                     )
                     self.furhat.say(f"GET READY You Have 3 Seconds ")
 
-                    if attempt > 1:
+                    if attempt >= 1:
                         self.furhat.look_at_other_player()
                         self.furhat.say(f"HMM You seem to need help. Let me show you have I express {self.n_emotion}")
                         self.furhat.say(f"Watch it very carefully")
@@ -153,16 +153,14 @@ class EmotionMiniGame:
                             )
                             attempt = attempt + 1
                             result = False
-
-
-    #             else:
-    #                 win_count = win_count + 1
-    #                 break
-    #     for num in self.to_exclude:
-    #         file = open("emotion_mini_game/AskedQuestions.txt",
-    #                     "a")  # Opens a file for writing and puts it in the file variable
-    #         file.write(f"{num}\n")  # Writes the entire list + the appended element into new file
-    #         file.close()  # Closes the file
+                else:
+                    win_count = win_count + 1
+                    break
+        for num in self.to_exclude:
+            file = open("emotion_mini_game/AskedQuestions.txt",
+                        "a")  # Opens a file for writing and puts it in the file variable
+            file.write(f"{num}\n")  # Writes the entire list + the appended element into new file
+            file.close()  # Closes the file
 
 
         return win_count
