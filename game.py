@@ -156,7 +156,6 @@ class Game:
 					pygame.quit()
 				else:
 					filtered_events.append(event)
-          
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, self.game_params)
 
@@ -200,7 +199,8 @@ class Game:
 				render_thread.start()
 
 			self.active_scene = self.active_scene.next
-			print(self.game_params)
+
+			#print(self.game_params)
 
 	def assign_user_ids(self):
 		ids = None
@@ -353,10 +353,21 @@ class Game:
 					if word in value:
 						self.turn.milestone_requested = key
 
+			if self.turn.milestone_requested is None:
+				return 0
+
 			print(f"{bcolors.HEADER} Selected milestone {selected_milestone}, {self.turn.milestone_requested} {bcolors.ENDC}")
 			
 			# check if already bought
-			if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
+			unlocked_milestone_list = self.milestone_manager.unlocked_pasifs + self.milestone_manager.unlocked_oneTimes
+			unlocked_milestone_list_name = []
+			for mile in unlocked_milestone_list:
+				unlocked_milestone_list_name.append(mile.name)
+
+			print("UNLOCKED MILESTONE LIST ", unlocked_milestone_list_name)
+			print("MILE STONE REQUESTED ", self.turn.milestone_requested)
+			if self.turn.milestone_requested not in unlocked_milestone_list_name:
+			#if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
 				if self.milestone_manager.is_money_enough(self.turn.milestone_requested, self.game_params["rebellion"]):
 					cost = self.milestone_manager.buy_milestone(self.turn.milestone_requested)
 					self.turn.rebellion_point_change = -cost
@@ -366,6 +377,8 @@ class Game:
 					self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
 					self.game_params['milestone_list'] = self.milestone_list
 					self.game_params['initial_milestone'] = self.milestone_list_initial_list
+					self.is_win()
+
 				else:
 					self.furhat.say("My G you are broke")
 					self.turn.turn_type = None
@@ -419,6 +432,8 @@ class Game:
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 
+
+
 		
 	def wrap_up_turn(self):
 		print(f"wrap trurn type: {self.turn.turn_type}")
@@ -459,8 +474,6 @@ class Game:
 			self.game_params["hope"] = self.game_params["hope"] + hope
 			self.game_params["discontent"] = self.game_params["discontent"] + dis
 			self.game_params["rebellion"] = self.game_params["rebellion"] + reb
-
-
 
 		elif self.turn.turn_type == "milestone":
 			self.game_params["rebellion"] += self.turn.rebellion_point_change
@@ -517,8 +530,6 @@ class Game:
 				except:
 					self.turn.success = False
 
-
-
 			territory_lose_prob = random.uniform(0, 1)
 			if territory_lose_prob > 0.7:
 				self.furhat.say("it SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
@@ -545,5 +556,15 @@ class Game:
 	def sanity_check_for_hope_and_discontent(self):
 		self.game_params["hope"] = min(self.game_params["hope"], 100)
 		self.game_params["discontent"] = max(self.game_params["discontent"], 0)
+
+	def is_win(self):
+
+		locked_milestone_list =self.milestone_manager.locked_oneTimes  + self.milestone_manager.locked_pasifs
+		if len(locked_milestone_list) == 0:
+			print("YOU WON THE GAME ")
+
+			self.furhat.say("YOU WON THE GAME AND SAVED THE SCHOOL")
+			self.quit_attempt = True
+		return 0
 
 Game()
