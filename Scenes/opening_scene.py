@@ -54,7 +54,7 @@ class OpeningScene(SceneBase):
         self.SwitchToScene(VolunteerScene(self.furhat))
 
     def Render(self, WIN):
-        self.slide += 0.25
+        self.slide += 0.27
         if self.slide > 200 and self.slide < 350:
             WIN.fill((240,240,240))
             WIN.blit(self.vahdet, (40,0+(self.slide/30)))
@@ -73,10 +73,10 @@ class OpeningScene(SceneBase):
                 WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i)))
             for i,text in enumerate(self.story2_rects):
                 text = self.font.render(text, True, (255 ,255 ,255))
-                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i + 600)))
+                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i + 500)))
             for i,text in enumerate(self.story3_rects):
                 text = self.font.render(text, True, (255 ,255 ,255))
-                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i + 1100)))
+                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i + 1000)))
             for i,text in enumerate(self.story4_rects):
                 text = self.font.render(text, True, (255 ,255 ,255))
-                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i + 1600)))
+                WIN.blit(text, text.get_rect(topleft=(5, 0-self.slide + 50*i + 1500)))
