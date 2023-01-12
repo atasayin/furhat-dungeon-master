@@ -318,7 +318,7 @@ class Game:
 				selection = "maze"
 			elif word in protest_words:
 				selection = "protest"
-			elif word == "cool":
+			elif word == "cool" or word == "cools":
 				selection = "cool"
 			elif word == "exit" or word == "exits":
 				selection = "exit"
