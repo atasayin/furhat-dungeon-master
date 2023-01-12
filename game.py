@@ -52,7 +52,7 @@ powerup_words = ["power", "up", "powerup", "special", "ability",
 quiz_words = ["quiz","chris", "negotiation","who is", "trivia", "question"]
 protest_words = ["protest", "emotion", "grotesque",'beretta',"princess",'carretas']
 
-maze_words = ["maze", "labyrinth", "lab", "tribe", "approach", "mace"]
+maze_words = ["maze", "labyrinth", "lab", "tribe", "approach", "mace", "may"]
 
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
 				  Territory(name='Library',size=8),Territory(name='Social Science',size=6),Territory(name='CASE',size=5),Territory(name='Engineering',size=15),Territory(name='Science',size=12)]
@@ -62,6 +62,12 @@ territory_dict = {0:('DORMS','SARMS','DORMITORY','DORMITORIES','BARB','ALARMS','
 milestone_types_dict = {"sallyjazz": ["sally", "jazz"], "open gym": ["gym", "jim", "sports", "field"],
 									"remove dress code": ["dress", "code", "remove"], "student clubs": ["club", "student"],
 									"lower exile": ["exile", "low", "lower", "lover", "conditions"]}
+
+tribe_types_dict = {"computer": ["computer", "comp"], 
+									"mava": ["mobile", "mava","mother", "Martha","mama"],
+									"mech": ["mech", "mechinal", "make", "made"], 
+									"electronic": ["electronic", "elec", "electrial"],
+									"medicine": ["medicine", "med"]}
 
 class Game:
 	def __init__(self) -> None:
@@ -85,10 +91,9 @@ class Game:
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 
 		self.territory_list= {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:Territory(name='Science',size=12)}
-		self.game_params = {"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant}
 		self.passive_rp_income = 20
 		# furhat.introduce_players((self.player1.id, self.player2.id))
-		self.tribe_manager = TribeManager(self.game_params)
+		self.tribe_manager = TribeManager()
 		self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 		self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
 		self.game_params = \
@@ -97,7 +102,10 @@ class Game:
 			"discontent_gain": 1, "hope_gain":1,
 			"passive_rp_income": 20,
 			"territory_list": {0:None,1:None,2:None,3:None,4: Territory(name='Library',size=8),5:None,6:None,7:None,8:Territory(name='Science',size=12)},
-			"milestone_list": self.milestone_list,"initial_territory": initial_territory_list,'initial_milestone': self.milestone_list_initial_list}
+			"milestone_list": self.milestone_list,"initial_territory": initial_territory_list,'initial_milestone': self.milestone_list_initial_list,
+			"territory_defense_boos" : 0,
+			"territory_attack_boos" : 0,
+			}
 		self.run_game(TitleScene(self.furhat))
 
 	def render_method(self, scene, event, fps):
@@ -164,7 +172,8 @@ class Game:
 				self.manage_turn()
 
 
-			# print(f"Current parameters: {self.game_params}")
+			#print(f"Current parameters: {self.game_params}")
+
 
 			if update_result is None:
 				sleep(0.05)
@@ -185,7 +194,7 @@ class Game:
 				# self.active_scene = FurhatPhotoScene()
 				print(f"{bcolors.UNDERLINE}NEXT SCENE when switching back to furhat: {self.active_scene.next} {bcolors.ENDC}")
 
-			if self.turn.turn_type == "milestone" or self.turn.turn_type == "powerup" :
+			if self.turn.turn_type == "milestone" or self.turn.turn_type == "powerup":
 				self.wrap_up_turn()
 
 
@@ -396,35 +405,28 @@ class Game:
 			self.furhat.get_gesture("Wink")
 			self.quit_attempt = True
 				
-		elif selection == "powerup":
-			self.turn.turn_type = "powerup"
-			# ! ash which power
-			#powerup_requested = self.furhat.ask_question(f"Lets Power up!")
-			powerup_requested = "computer"
-			self.turn.powerup_requested = self.tribe_manager.find_unused_powerup_tribe(powerup_requested)
-
-			if self.turn.powerup_requested:
-				self.furhat.say(f"You used {powerup_requested} powerup")
-			else:
-				# ! POWER UP YOK VEYA YANLIŞ ANLAMA??	
-				self.turn.turn_type = "regular"
-				self.furhat.say(f"You don't have the {powerup_requested} powerup")
-		
 		elif selection == "maze":
-			# gittigi yeri turn'e kaydet
-			# ! ash which tribe
-			#maze_destination = self.furhat.ask_question(f"Which tribe do you want to go?")
-			maze_destination = "computer"
-			if not self.tribe_manager.is_already_conquered(maze_destination):
-				self.turn.turn_type = "maze"
-				self.turn.maze_destination = maze_destination
-				self.active_scene.SwitchToScene(MazeScene(maze_destination,self.furhat))
-				#self.active_scene.SwitchToScene(MazeScene(self.furhat,self.turn.maze_destination))
-			else:
-				self.turn.turn_type = None
-				self.turn.maze_destination = None 
-				self.furhat.say(f"You have already conquered {maze_destination} tribe!")
+			maze_destination = self.furhat.ask_question(f"Which tribe do you want to go?").split()
+			success = False
 			
+			for word in maze_destination:
+				for key, value in tribe_types_dict.items():
+					if word in value:
+						self.turn.maze_destination = key
+						success = True
+						break
+
+			if success:
+				if not self.tribe_manager.is_already_conquered(self.turn.maze_destination):
+					self.turn.turn_type = "maze"
+					self.active_scene.SwitchToScene(MazeScene(self.turn.maze_destination,self.furhat))
+				else:
+					self.turn.turn_type = None
+					self.turn.maze_destination = None 
+					self.furhat.say(f"You have been ally with {maze_destination} tribe already!")
+			else:
+				self.furhat.say(f"I couldn't follow, sorry")
+
 		elif selection == "protest":
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(EmotionScene(self.furhat))
@@ -446,13 +448,15 @@ class Game:
 			
 		elif self.turn.turn_type == "maze":
 			if self.turn.success:
-				tribe = self.tribe_manager.conquer_tribe("computer")
-				self.furhat.say(f"{tribe.name} tribe is now on your side, you can use their powers!")
+				tribe = self.tribe_manager.conquer_tribe(self.turn.maze_destination)
+				self.furhat.say(f"{tribe.name} tribe is now on your side, they give you immense power!")
+				text_feedback = self.tribe_manager.use_powerup_tribe(tribe.name,self.game_params)
+				self.furhat.say(text_feedback)
 			else:
 				self.furhat.say(f"Losers")
 
 		elif self.turn.turn_type == "chess":
-			print("IN WRAP UP TURN SUCCESS ",self.turn.success )
+			print("IN WRAP UP TURN SUCCESS ",self.turn.success)
 			if self.turn.success:
 				# territory'i alip ekle
 				territory = initial_territory_list[self.turn.attack_territory]
@@ -467,6 +471,7 @@ class Game:
 				self.game_params["territory_list"] = self.territory_list
 				print("NEW TERITTORY LIST IS ",self.territory_list )
 				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
+
 				self.game_params["rebellion"] = self.game_params["rebellion"] + self.turn.rebellion_point_change
 				self.game_params["passive_rp_income"] = self.game_params["passive_rp_income"] + territory.passive_generation
 				print(f"TERRITORY PASSIVE {territory.passive_generation}")
@@ -478,11 +483,7 @@ class Game:
 
 		elif self.turn.turn_type == "milestone":
 			self.game_params["rebellion"] += self.turn.rebellion_point_change
-
-		elif self.turn.turn_type == "powerup":
-			self.tribe_manager.use_powerup_tribe(self.turn.powerup_requested.name)
-
-		# Milestone and Territory passive skills
+					# Milestone and Territory passive skills
 		if self.turn.turn_type is not None:
 			passive_income = self.game_params["passive_rp_income"]
 			print(f"Current passive income: {passive_income}")
@@ -532,6 +533,11 @@ class Game:
 					self.turn.success = False
 
 			territory_lose_prob = random.uniform(0, 1)
+			if self.game_params["territory_defense_boos"] != 0:
+				self.furhat.say("MECH TRIBE has defend you!!")
+				territory_lose_prob -= 0.7
+				self.game_params["territory_defense_boos"] -= 1
+
 			if territory_lose_prob > 0.7:
 				self.furhat.say("it SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
 				range_of_territory = len(self.territory_list)

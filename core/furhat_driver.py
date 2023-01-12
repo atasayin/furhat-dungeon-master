@@ -6,9 +6,6 @@ import os
 from pydub import AudioSegment
 from pydub.playback import play
 
-
-
-
 cwd = os.getcwd()
 img_folder = os.path.join(cwd, "images")
 wav_path = os.path.join(img_folder, "riff.wav")
@@ -33,11 +30,9 @@ class FurhatDriver:
             return None
         usr1 = json.loads(str(users[0]).replace("'", '"'))["id"]
         usr2 = json.loads(str(users[1]).replace("'", '"'))["id"]
-
-
+        
         return (usr1, usr2)
-
-    
+        
     def introduce_players(self, player_ids):
         print(player_ids[0])
         self.look_at_player(player_ids[0])
@@ -47,22 +42,25 @@ class FurhatDriver:
         self.say("Player 2, welcome to our game.")
 
 
-
     def say(self, text, blocking=True):
         self.furhat.say(text=text, blocking=blocking)
+
 
     def say_one_of_them(self, texts, blocking=True):
         text = random.choice(texts)
         self.say(text, blocking=blocking)
+    
     
     def ask_question(self, text = None, blocking=True):
         if text:
             self.furhat.say(text=text,blocking=blocking)
         return str(self.furhat.listen().message).lower()
     
+    
     def ask_one_of_them(self, texts, blocking=True):
         text = random.choice(texts)
         return self.ask_question(text,blocking=blocking)
+
 
     def listen_stop(self):
         self.furhat.listen_stop()
@@ -74,6 +72,7 @@ class FurhatDriver:
     
     def look_at_player(self, player_id):
         self.furhat.attend(userid=player_id)
+
 
     def look_at_other_player(self):
         self.furhat.attend(user="OTHER")

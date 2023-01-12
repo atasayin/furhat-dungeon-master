@@ -13,7 +13,7 @@ class MazeScene(SceneBase):
         self.slide = 0
         self.game, self.view = maze.MazeFactory(tribe,furhat)         
         print("New Maze game")
-
+        
     def ProcessInput(self, events, pressed_keys, game_params):
         mousepos = pygame.mouse.get_pos()
         for event in events:
