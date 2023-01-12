@@ -13,33 +13,41 @@ from furhat_remote_api import FurhatRemoteAPI
 class QuizMiniGame():
     def __init__(self):
         self.intro = True
-        self.solution = {1: "C", 2: "B", 3: "C", 4: "C", 5: "C"}
+        self.solution = {1: "C", 2: "B", 3: "C", 4: "A", 5: "B", 6: "D", 7: 'B'}
         self.answers = {
-            "A": ("A", "18","1992",'42'),
-            "B": ("B", "BEE", "BE", "20","1993",'33'),
-            "C": ("C", "SEE", "SAY", "SEA", "22","1994",'27'),
-            "D": ("D", "DC", "24","1995",'25'),
+            "A": ("A", "18","1992",'42','BROWN','Mars','1983'),
+            "B": ("B", "BEE", "BE", "20","1993",'33','RED','Jupiter','1989'),
+            "C": ("C", "SEE", "SAY", "SEA", "22","1994",'27','YELLOW','Venus','WHITE','1979'),
+            "D": ("D", "DC", "24","1995",'25','GREEN','Mercury','1982'),
         }
         self.questions = {
             1: "How many undergraduate programs there are at Koç University?",
             2: "Which year Koç University was founded?",
             3: "What is the ratio between double major graduates and non-double major graduates in 2019?",
-            4: "How many undergraduate programs there are at Koç University?",
-            5: "How many undergraduate programs there are at Koç University?",
+            4: "What is the rarest M&M color?",
+            5: "Which planet is the hottest in the solar system?",
+            6: "What color is Absinthe?",
+            7: "When did the Cold War end?"
         }
         self.choices = {
             1: ("A is 18", "B is 20", "C is 22", "D is 24"),
             2: ("A is 1992", "B is 1993", "C is 1994", "D is 1995"),
             3: ("A is 42", "B is 33", "C is 27", "D is 25"),
-            4: ("A is 22", "B is 20", "C is 21", "D is 46"),
-            5: ("A is 22", "B is 20", "C is 21", "D is 45"),
+            4: ("A is BROWN", "B is RED", "C is YELLOW", "D is GREEN"),
+            5: ("A is Mars", "B is Jupiter", "C is Venus", "D is Mercury"),
+            6: ("A is BROWN", "B is RED", "C is WHITE", "D is GREEN"),
+            7: ("A is 1983", "B is 1989", "C is 1979", "D is 1982")
+
         }
         self.button_choices = {
             1: {"A": 18, "B": 20, "C": 22, "D": 24},
             2: {"A": 1992, "B": 1993, "C": 1994, "D": 1995},
             3: {"A": 42, "B": 33, "C": 27, "D": 25},
-            4: {"A": 18, "B": 20, "C": 22, "D": 24},
-            5: {"A": 22, "B": 20, "C": 21, "D": 45},
+            4: {"A": 'BROWN', "B": 'RED', "C": 'YELLOW', "D": 'GREEN'},
+            5: {"A": 'Mars', "B":'Jupiter', "C": 'Venus', "D": 'Mercury'},
+            6: {"A": 'BROWN', "B": 'RED', "C": 'WHITE', "D": 'GREEN'},
+            7: {"A": '1983', "B": '1989', "C": '1979', "D": '1982'},
+
         }
         self.furhat = FurhatRemoteAPI("localhost")
         self.win_count = 0
