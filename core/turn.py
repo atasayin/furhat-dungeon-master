@@ -9,6 +9,7 @@ class Turn:
         self.milestone_requested = None
         self.powerup_requested = None
         self.success = False
+        self.powerup_requested = None
     
 
     def reset_turn(self):
@@ -21,6 +22,7 @@ class Turn:
         self.milestone_requested = None
         self.powerup_requested = None
         self.success = False
+        self.powerup_requested = None
     
     
     def get_changes(self):

@@ -9,3 +9,4 @@ class PowerupGameParams(PowerupBase):
     def use(self):
         for param,effect in self.effects.items():
             self.game_params[param] *= effect
+            print(self.game_params[param])

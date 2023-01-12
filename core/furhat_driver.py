@@ -11,15 +11,12 @@ turn_questions = ["how would you like to proceed?", "what is your next move?", "
 # ard = serial.Serial(port,9600,timeout=5)
 class FurhatDriver:
     def __init__(self) -> None:
-        #self.furhat = FurhatRemoteAPI("172.23.120.144")
         self.furhat = FurhatRemoteAPI("localhost")
         self.test_furhat()
-
-    
+  
     def test_furhat(self):
         self.furhat.say(text="I am online")
 
-    
     def get_user_ids(self):
         users = self.furhat.get_users()
         if len(users) < 2:
