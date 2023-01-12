@@ -7,8 +7,8 @@ import serial
 positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]
 turn_questions = ["how would you like to proceed?", "what is your next move?", "so, what now?",
                     "what will you do this time?"]
-port = "/dev/cu.usbserial-0001"
-ard = serial.Serial(port,9600,timeout=5)
+# port = "/dev/cu.usbserial-0001"
+# ard = serial.Serial(port,9600,timeout=5)
 class FurhatDriver:
     def __init__(self) -> None:
         #self.furhat = FurhatRemoteAPI("172.23.120.144")
@@ -164,12 +164,15 @@ class FurhatDriver:
 
     def get_passive_selection(self):
         self.say()
-        
+
+    def get_gesture(self,gesture):
+        self.furhat.gesture(name=gesture)
+
     def shaka(self):
         print("I DIDN\'T know you were cool like that...")
         self.say("I DIDN\'T know you were cool like that...")
 
-        ard.write(b"a")
+        # ard.write(b"a")
 
 
 

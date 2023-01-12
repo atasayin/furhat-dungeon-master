@@ -49,16 +49,14 @@ powerup_words = ["power", "up", "powerup", "special", "ability",
 				"tribe"]
 
 quiz_words = ["quiz","chris", "negotiation","who is", "trivia", "question"]
-protest_words = ["protest", "emotion", "grotesque",'beretta',"princess"]
+protest_words = ["protest", "emotion", "grotesque",'beretta',"princess",'carretas']
 
 maze_words = ["maze", "labyrinth", "lab", "tribe", "approach"]
 
-milestone_list = ['Lower Exile', 'Open GYM', 'Remove Dresscode','Salicaz', 'Student Clubs']
-
 initial_territory_list = [Territory(name='Dorms',size=20),Territory(name='Henry Ford',size=5),Territory(name='Ömer',size=10),Territory(name='Odeon',size=10),
-				  Territory(name='Library',size=8),Territory(name='SOS',size=6),Territory(name='CASE',size=5),Territory(name='Engineering',size=15),Territory(name='Science',size=12)]
-territory_dict = {0:('DORMS','DORMITORY'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','ÖMER'),3:('ODEON','A DOWN','NERO'),
-				  4:('LIBRARY','LIB'),5:('SOS','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
+				  Territory(name='Library',size=8),Territory(name='Social Science',size=6),Territory(name='CASE',size=5),Territory(name='Engineering',size=15),Territory(name='Science',size=12)]
+territory_dict = {0:('DORMS','SARMS','DORMITORY','DORMITORIES','BARB','ALARMS','DARMS','DORM'),1:('HENRYFORD','HENRY FORD','HENRY','FORD','HENRY FORD','HEY FART'),2:('OMER','OMAR','AMAR','WALMART','ÖMER'),3:('ODEON','CALL DOWN', 'DOWN','A DOWN','NERO'),
+				  4:('LIBRARY','LIB'),5:('SOS','SAUCE','SOCIAL','SOCIAL SCIENCE','HUMANITIES'),6:('CASE','PACE','BUSSINESS'),7:('ENGINEERING','ENG'),8:('SCIENCE','SIGNS','SIGN','SCIEN')}
 
 milestone_types_dict = {"sallyjazz": ["sally", "jazz"], "open gym": ["gym", "jim", "sports", "field"],
 									"remove dress code": ["dress", "code", "remove"], "student clubs": ["club", "student"],
@@ -75,8 +73,8 @@ class Game:
 		self.captain, self.assistant = None, None
 		self.discontent_gain = 1
 		self.hope_gain = 1
-		self.assign_user_ids()
-		self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
+		#self.assign_user_ids()
+		#self.right_player = self.furhat.find_the_player_on_the_right(self.player1.id, self.player2.id)
 
 		self.milestone_manager = MilestoneManager()
 		self.turn = Turn()
@@ -89,6 +87,7 @@ class Game:
 		# furhat.introduce_players((self.player1.id, self.player2.id))
 		self.tribe_manager = TribeManager(self.game_params)
 		self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
+		self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
 		self.run_game(TitleScene(self.furhat))
 
 
@@ -155,7 +154,7 @@ class Game:
 			game_params = {"discontent": self.discontent, "hope": self.hope, "rebellion": self.rebellion_points,
 			"player1": self.player1.id, "player2": self.player2.id, "captain": self.captain, "assistant": self.assistant, 
 			"discontent_gain": self.discontent_gain, "hope_gain": self.hope_gain,"territory_list": self.territory_list,
-			"milestone_list": self.milestone_list, "initial_territory": initial_territory_list, 'initial_milestone':milestone_list}
+			"milestone_list": self.milestone_list, "initial_territory": initial_territory_list, 'initial_milestone': self.milestone_list_initial_list}
 
 			self.active_scene.ProcessInput(filtered_events, pressed_keys, game_params)
 
@@ -351,18 +350,21 @@ class Game:
 			
 			# check if already bought
 			if not self.milestone_manager.is_already_bought(self.turn.milestone_requested):
+				print("MILESOTNE INITAL LIST ",self.milestone_list_initial_list)
 				if self.milestone_manager.is_money_enough(self.turn.milestone_requested, self.rebellion_points):
 					cost = self.milestone_manager.buy_milestone(self.turn.milestone_requested)
 					self.turn.rebellion_point_change = -cost
 					self.furhat.say(f"You successfully bought the {self.turn.milestone_requested}!")
 					self.furhat.furhat.gesture(name="Wink")
 					self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
+					self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
 				else:
 					self.furhat.say("My G you are broke")
 					self.turn.turn_type = None
 			else:
 				self.furhat.say(f"You have already unlocked {self.turn.milestone_requested}!")
 				self.turn.turn_type = None
+			print("MILESOTNE NEW INITAL LIST ", self.milestone_list_initial_list)
 
 		elif selection == "cool":
 			self.furhat.shaka()
@@ -454,7 +456,7 @@ class Game:
 			self.turn.turn_type = "chess"
 			attempt = 3
 			flag = 0
-			while attempt > 0 and not flag == 1:
+			while attempt > 0 and  flag != 1:
 				print("FLAG ", flag)
 				attempt = attempt - 1
 				print("attempt ", attempt)
@@ -467,16 +469,23 @@ class Game:
 				print("territory_selection is ", territory_selection)
 				try:
 					for index, value in territory_dict.items():
+						if flag ==1:
+							break
 						for val in value:
+							if flag == 1:
+								break
 							if val in territory_selection:
 								print("IN IF ",self.territory_list)
 								print("IN I 3 ",  self.territory_list[index])
-								if self.territory_list[index] is not None:
-									flag = 2
-									break
-								elif self.territory_list[index] is None:
+								if self.territory_list[index] is None:
 									self.turn.attack_territory = index
+									print("ATTACK INDEX IS ", index)
 									flag = 1
+									self.furhat.say(
+										"ALSO KEEP IN MIND THAT WHILE YOU GO ON A QUEST TO CONQUER YOUR MIGHT GET ATTACKED")
+									break
+								elif self.territory_list[index] is not None:
+									flag = 2
 									break
 
 				except:
@@ -485,7 +494,8 @@ class Game:
 
 
 			territory_lose_prob = random.uniform(0, 1)
-			if territory_lose_prob > 0.8:
+			if territory_lose_prob > 0.7:
+				self.furhat.say("IT SEEMS THERE IS AN ATTACK ON YOUR TERRITORIES")
 				range_of_territory = len(self.territory_list)
 				number =random.randint(0,range_of_territory)
 				print("LOST TERITTORY IS  ",number,self.territory_list.get(number))

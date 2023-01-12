@@ -32,6 +32,8 @@ class FurhatPhotoScene(SceneBase):
 		self.territory_name_list = []
 		self.milestone_name_list = []
 		self.initial_territory_name = []
+		self.initial_milestone_list = []
+		self.initial_milestone_name = []
 
 
 	def ProcessInput(self, events, pressed_keys, game_params):
@@ -48,10 +50,10 @@ class FurhatPhotoScene(SceneBase):
 		elif pressed_keys[pygame.K_a]:
 			self.SwitchToScene(QuizScene(self.furhat,self.quiz_anwered))
 		print(game_params)
-		self.game_discontent , self.game_hope, self.rebellion, self.territory_list,self.milestone_list, self.initial_territory  = game_params["discontent"], game_params["hope"],\
+		self.game_discontent , self.game_hope, self.rebellion, self.territory_list,self.milestone_list, self.initial_territory, self.initial_milestone_list  = game_params["discontent"], game_params["hope"],\
 																																						  game_params["rebellion"], game_params['territory_list'],\
-																																						  game_params['milestone_list'], game_params['initial_territory'],\
-
+																																						  game_params['milestone_list'], game_params['initial_territory'], \
+																																							   game_params['initial_milestone']
 		for ter in self.territory_list.values():
 			if ter != None and ter.name not in self.territory_name_list:
 				self.territory_name_list.append(ter.name)
@@ -64,10 +66,16 @@ class FurhatPhotoScene(SceneBase):
 			if mil != None and mil.name not in self.milestone_name_list:
 				self.milestone_name_list.append(mil.name)
 
-		# for mil in self.initial_milestone:
-		# 	if mil != None and mil not in self.milestone_name_list and mil not in self.initial_milestone:
-		# 		self.initial_milestone.append(mil.name)
+		for mil in self.initial_milestone_list:
+			if mil != None and mil.name not in self.initial_milestone_name:
+				self.initial_milestone_name.append(mil.name)
 
+		for mil in self.initial_milestone_name:
+			if mil != None and mil in self.milestone_name_list:
+				self.initial_milestone_name.remove(mil)
+
+		print("milestone_name_list MILESTONE LIST ",self.milestone_name_list)
+		print("INITAL MILESTONE LIST ",self.initial_milestone_name)
 	def Update(self):
 		pass
 	
@@ -113,9 +121,9 @@ class FurhatPhotoScene(SceneBase):
 		text_rect = territory.get_rect(topleft=(750, 100))
 		WIN.blit(territory, text_rect)
 
-		# territory = self.font.render("MileStones To Buy: ", True, (0, 0, 0))
-		# text_rect = territory.get_rect(topleft=(750, 650))
-		# WIN.blit(territory, text_rect)
+		territory = self.font.render("MileStones To Buy: ", True, (0, 0, 0))
+		text_rect = territory.get_rect(topleft=(800, 650))
+		WIN.blit(territory, text_rect)
 
 		item_count = 1
 		for item in self.territory_name_list:
@@ -151,22 +159,22 @@ class FurhatPhotoScene(SceneBase):
 			WIN.blit(mile, text_rect)
 			item_count_mile +=1
 
-		# item_count = 1
-		# for item3 in self.initial_milestone:
-		# 	y_coord = 650 + 35 * item_count
-		# 	x_coord = 600 * item_count + 20
-		# 	if item_count % 2 == 0:
-		# 		mile = self.font.render(f"{item2}", True, (0, 0, 0))
-		# 		text_rect = mile.get_rect(topleft=(100, y_coord))
-		# 		WIN.blit(mile, text_rect)
-		# 	elif item_count % 2 == 1:
-		# 		if item_count == 1:
-		# 			mile = self.font.render(f"{item2}", True, (0, 0, 0))
-		# 			text_rect = mile.get_rect(topleft=(750 * item_count + 20, 650))
-		# 			WIN.blit(mile, text_rect)
-		# 		else:
-		# 			mile = self.font.render(f"{item2}", True, (0, 0, 0))
-		# 			text_rect = mile.get_rect(topleft=(750 + 20, 650 + 35 * (item_count - 1)))
-		# 			WIN.blit(mile, text_rect)
-		#
-		# 	item_count += 1
+		item_count = 1
+		for item3 in self.initial_milestone_name:
+			y_coord = 650 + 35 * item_count
+			x_coord = 600 * item_count + 20
+			if item_count % 2 == 0:
+				mile = self.font.render(f"{item3}", True, (0, 0, 0))
+				text_rect = mile.get_rect(topleft=(800, y_coord))
+				WIN.blit(mile, text_rect)
+			elif item_count % 2 == 1:
+				if item_count == 1:
+					mile = self.font.render(f"{item3}", True, (0, 0, 0))
+					text_rect = mile.get_rect(topleft=(800 + 350, 650))
+					WIN.blit(mile, text_rect)
+				else:
+					mile = self.font.render(f"{item3}", True, (0, 0, 0))
+					text_rect = mile.get_rect(topleft=(800 + 350, 650 + 35 * (item_count - 1)))
+					WIN.blit(mile, text_rect)
+
+			item_count += 1
