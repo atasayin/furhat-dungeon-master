@@ -1,10 +1,17 @@
 from furhat_remote_api import FurhatRemoteAPI
 from time import sleep
 import json
+import os
 
 # furhat = FurhatRemoteAPI("172.23.120.144")
 furhat = FurhatRemoteAPI("localhost")
 
+cwd = os.getcwd()
+img_folder = os.path.join(cwd, "images")
+riff = os.path.join(img_folder, "riff.wav")
+print(riff)
+furhat.say(text="bruh", blocking=True)
+furhat.say(url="/Users/deniz/Desktop/Furh/furhat-dungeon-master/images/riff.wav", lipsync=False, blocking=True)
 
 # furhat.say(text="Imam hatipler kapatilsin", blocking=True)
 # furhat.say(text="Kafana sikacagim gunu bekle hahaha", blocking=True)

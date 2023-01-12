@@ -2,13 +2,22 @@ from furhat_remote_api import FurhatRemoteAPI
 import json
 import random
 import serial 
+import os
+from pydub import AudioSegment
+from pydub.playback import play
 
+
+
+
+cwd = os.getcwd()
+img_folder = os.path.join(cwd, "images")
+wav_path = os.path.join(img_folder, "riff.wav")
 
 positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]
 turn_questions = ["how would you like to proceed?", "what is your next move?", "so, what now?",
                     "what will you do this time?"]
-# port = "/dev/cu.usbserial-0001"
-# ard = serial.Serial(port,9600,timeout=5)
+port = "/dev/cu.usbserial-0001"
+ard = serial.Serial(port,9600,timeout=5)
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
@@ -167,9 +176,12 @@ class FurhatDriver:
 
     def shaka(self):
         print("I DIDN\'T know you were cool like that...")
-        self.say("I DIDN\'T know you were cool like that...")
+        ard.write(b"a")
 
-        # ard.write(b"a")
+
+        song = AudioSegment.from_wav(wav_path)
+        play(song)
+
 
 
 
