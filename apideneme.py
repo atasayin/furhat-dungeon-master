@@ -2,7 +2,8 @@ from furhat_remote_api import FurhatRemoteAPI
 from time import sleep
 import json
 
-furhat = FurhatRemoteAPI("172.23.120.144")
+# furhat = FurhatRemoteAPI("172.23.120.144")
+furhat = FurhatRemoteAPI("localhost")
 
 
 # furhat.say(text="Imam hatipler kapatilsin", blocking=True)
@@ -13,9 +14,9 @@ furhat = FurhatRemoteAPI("172.23.120.144")
 # furhat.say(text="{Now I will} +  delay(2000) + pause yes", blocking=True)
 # print(furhat.get_gestures())
 
-# furhat.say_stop()
+furhat.say_stop()
 
-furhat.say(text="wahhhhh death", blocking=True)
+# furhat.say(text="wahhhhh death", blocking=True)
 
 # furhat.gesture(body={
 #     "frames": [
@@ -74,7 +75,7 @@ furhat.say(text="wahhhhh death", blocking=True)
 # usr1 = json.loads(usr1)
 
 # print(usr1["id"])
-furhat.attend(user="OTHER")
+# furhat.attend(user="OTHER")
 # furhat.attend(location="-0.4, -0.27, 0.2")
 
 # users_dict = json.loads(users)

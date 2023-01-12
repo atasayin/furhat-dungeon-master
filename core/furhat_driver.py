@@ -1,22 +1,22 @@
 from furhat_remote_api import FurhatRemoteAPI
 import json
 import random
+import serial 
 
 
 positive = ["yes", "sure", "i do", "of course", "alright", "i will", "yes i will", "ok"]
 turn_questions = ["how would you like to proceed?", "what is your next move?", "so, what now?",
                     "what will you do this time?"]
+# port = "/dev/cu.usbserial-0001"
+# ard = serial.Serial(port,9600,timeout=5)
 class FurhatDriver:
     def __init__(self) -> None:
         self.furhat = FurhatRemoteAPI("localhost")
-        # self.furhat = FurhatRemoteAPI("localhost")
         self.test_furhat()
-
-    
+  
     def test_furhat(self):
         self.furhat.say(text="I am online")
 
-    
     def get_user_ids(self):
         users = self.furhat.get_users()
         if len(users) < 2:
@@ -161,7 +161,15 @@ class FurhatDriver:
 
     def get_passive_selection(self):
         self.say()
-        
+
+    def get_gesture(self,gesture):
+        self.furhat.gesture(name=gesture)
+
+    def shaka(self):
+        print("I DIDN\'T know you were cool like that...")
+        self.say("I DIDN\'T know you were cool like that...")
+
+        # ard.write(b"a")
 
 
 
