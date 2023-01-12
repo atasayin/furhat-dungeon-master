@@ -102,7 +102,7 @@ class QuizMiniGame():
         for line in open('quiz_mini_game/AskedQuestions.txt', "r").readlines():
             self.to_exclude.append(int(line))
         print( "Exclude", self.to_exclude)  # Prints out the
-        while self.win_count < 1 and self.correct:
+        while self.question_count <= 0:
             print("Total Win : ", self.win_count)
             number = random.randint(1, 5)
             print("THE QUESTION NUMBER IS : ", number)
@@ -171,4 +171,4 @@ class QuizMiniGame():
             self.result = 1
         else:
             self.result = 0
-        return result
+        return self.win_count

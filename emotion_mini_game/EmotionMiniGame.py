@@ -74,85 +74,86 @@ class EmotionMiniGame:
     # def play_game(self):
     #     warnings.filterwarnings("ignore")
 
-    #     emotion_list = (
-    #         (("Happy 80%"), "happy", 80),
-    #         (("Sad 80%"), "sad", 80),
-    #         (("Angry 70%"), "angry", 70),
-    #         (("Happy 10%"), "happy", 10),
-    #         (("Fear 80%"), "fear", 80),
-    #         (("Neutral 80%"), "neutral", 80),
-    #         (("Disgust 70%"), "disgust", 70),
-    #         (("Surprise 70%"), "surprise", 70)
-    #     )
-    #     win_count = 0
-    #     for i in range(1, 3):
-    #         print(f"NOW YOU ARE IN TURN {i} ")
-    #         self.furhat.say(
-    #             f"NOW YOU ARE IN TURN {i} AND YOUR Total Attempt count is 3 "
-    #         )
-    #         result = False
-    #         attempt = 0
-    #         number = random.randint(0, len(emotion_list))
-    #         for line in open('emotion_mini_game/AskedQuestions.txt', "r").readlines():
-    #             self.to_exclude.append(int(line))
-    #             print("LEN EMOTION LIST ",len(emotion_list) )
-    #         while number in self.to_exclude:
-    #             number = random.randint(0, len(emotion_list)-1)
-    #         self.to_exclude.append(number)
-    #         print("TO EXCLUDE ", self.to_exclude)
-    #         while attempt < 3:
-    #             if not result:
-    #                 print("Attempt for this turn is ", attempt+1)
-    #                 self.furhat.say(f"Attempt for this turn is {attempt+1} ")
-    #                 print(
-    #                     f"IN TURN {i} YOU NEED TO MATCH {emotion_list[number][0]} percentages "
-    #                 )
-    #                 self.furhat.say(
-    #                     f"IN TURN {i} YOU NEED TO MATCH {emotion_list[number][0]} "
-    #                 )
-    #                 self.furhat.say(f"GET READY You Have 3 Seconds ")
 
-    #                 if attempt >= 1:
-    #                     self.n_emotion
-    #                     self.furhat.look_at_other_player()
-    #                     self.furhat.say(f"HMM You seem to need help. Let me show you have I express {self.n_emotion}")
-    #                     self.furhat.say(f"Watch it very carefully")
-    #                     if self.n_emotion == 'happy':
-    #                         self.furhat.get_gesture("BigSmile")
-    #                     elif self.n_emotion == 'Sad' :
-    #                         self.furhat.get_gesture("ExpressSad")
-    #                     elif self.n_emotion == 'Angry':
-    #                         self.furhat.get_gesture("ExpressAnger")
-    #                     elif self.n_emotion == 'disgust':
-    #                         self.furhat.get_gesture("ExpressDisgust")
-    #                     elif self.n_emotion == 'surprise':
-    #                         self.furhat.get_gesture("Surprise")
-    #                     elif self.n_emotion == 'fear':
-    #                         self.furhat.get_gesture("ExpressFear")
-    #                 time.sleep(3)
-    #                 capture = self.capture_write()
-    #                 if capture:
-    #                     turn = i
-    #                     turn = turn - 1
-    #                     emotion = emotion_list[number]
-    #                     self.n_emotion = emotion[1]
-    #                     self.n_percantage = emotion[1 + 1]
-    #                     print("self.n_percantage ", self.n_percantage)
-    #                     try:
-    #                         obj = DeepFace.analyze(
-    #                             img_path="image.jpeg", actions=["emotion"]
-    #                         )
-    #                         attempt, result = self.check_emotion(
-    #                             obj, emotion_list, attempt,number
-    #                         )
-    #                         time.sleep(5)
-    #                     except:
-    #                         print("YOUR FACE CANNOT BE FOUND")
-    #                         self.furhat.say(
-    #                             text=f"DO NOT HIDE YOUR FACE ", blocking=True
-    #                         )
-    #                         attempt = attempt + 1
-    #                         result = False
+        emotion_list = (
+            (("Happy 80%"), "happy", 80),
+            (("Sad 80%"), "sad", 80),
+            (("Angry 70%"), "angry", 70),
+            (("Happy 10%"), "happy", 10),
+            (("Fear 80%"), "fear", 80),
+            (("Neutral 80%"), "neutral", 80),
+            (("Disgust 70%"), "disgust", 70),
+            (("Surprise 70%"), "surprise", 70)
+        )
+        win_count = 0
+        for i in range(1, 2):
+            print(f"NOW YOU ARE IN TURN {i} ")
+            self.furhat.say(
+                f"NOW YOU ARE IN TURN {i} AND YOUR Total Attempt count is 3 "
+            )
+            result = False
+            attempt = 0
+            number = random.randint(0, len(emotion_list))
+            for line in open('emotion_mini_game/AskedQuestions.txt', "r").readlines():
+                self.to_exclude.append(int(line))
+                print("LEN EMOTION LIST ",len(emotion_list) )
+            while number in self.to_exclude:
+                number = random.randint(0, len(emotion_list)-1)
+            self.to_exclude.append(number)
+            print("TO EXCLUDE ", self.to_exclude)
+            emotion = emotion_list[number]
+            self.n_emotion = emotion[1]
+            self.n_percantage = emotion[1 + 1]
+            print("self.n_percantage ", self.n_percantage)
+            while attempt < 2:
+                if not result:
+                    print("Attempt for this turn is ", attempt+1)
+                    self.furhat.say(f"Attempt for this turn is {attempt+1} ")
+                    print(
+                        f"IN TURN {i} YOU NEED TO MATCH {self.n_emotion} {self.n_percantage} percent "
+                    )
+                    self.furhat.say(
+                        f"IN TURN {i} YOU NEED TO MATCH {self.n_emotion} "
+                    )
+                    self.furhat.say(f"GET READY You Have 3 Seconds ")
+
+                    if attempt > 1:
+                        self.furhat.look_at_other_player()
+                        self.furhat.say(f"HMM You seem to need help. Let me show you have I express {self.n_emotion}")
+                        self.furhat.say(f"Watch it very carefully")
+                        if self.n_emotion == 'happy':
+                            self.furhat.get_gesture("BigSmile")
+                        elif self.n_emotion == 'Sad' :
+                            self.furhat.get_gesture("ExpressSad")
+                        elif self.n_emotion == 'Angry':
+                            self.furhat.get_gesture("ExpressAnger")
+                        elif self.n_emotion == 'disgust':
+                            self.furhat.get_gesture("ExpressDisgust")
+                        elif self.n_emotion == 'surprise':
+                            self.furhat.get_gesture("Surprise")
+                        elif self.n_emotion == 'fear':
+                            self.furhat.get_gesture("ExpressFear")
+                    time.sleep(3)
+                    capture = self.capture_write()
+                    if capture:
+                        turn = i
+                        turn = turn - 1
+                        try:
+                            obj = DeepFace.analyze(
+                                img_path="image.jpeg", actions=["emotion"]
+                            )
+                            attempt, result = self.check_emotion(
+                                obj, emotion_list, attempt,number
+                            )
+                            time.sleep(5)
+                        except:
+                            print("YOUR FACE CANNOT BE FOUND")
+                            self.furhat.say(
+                                text=f"DO NOT HIDE YOUR FACE ", blocking=True
+                            )
+                            attempt = attempt + 1
+                            result = False
+
 
     #             else:
     #                 win_count = win_count + 1
@@ -163,4 +164,6 @@ class EmotionMiniGame:
     #         file.write(f"{num}\n")  # Writes the entire list + the appended element into new file
     #         file.close()  # Closes the file
 
-    #     return float(win_count/self.total_emotion_count)
+
+        return win_count
+

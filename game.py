@@ -282,17 +282,17 @@ class Game:
 		elif update_result[0] == "QUIZ":
 			# 0, 1, 2 ---> number of correct answers
 			success = update_result[1]
-			self.turn.hope_change = (success - 1) * 10
+			self.turn.hope_change = success * 10
 			self.turn.discontent_change = (1 - success) * 5
 			self.turn.rebellion_point_change = success * 20
-	
+			print("QUIZ CHANGES ", self.turn.hope_change,self.turn.discontent_change,self.turn.rebellion_point_change)
 		elif update_result[0] == "MAZE":
 			self.turn.success = update_result[1]
       
 		elif update_result[0] == "EMOTION":
 			success = update_result[1]
-			self.turn.hope_change = (success - 0.5) * 10
-			self.turn.discontent_change = (0.5 - success) * 5
+			self.turn.hope_change = (success) * 10
+			self.turn.discontent_change = (2 - success) * 5
 			self.turn.rebellion_point_change = success * 20
 
 		return return_to_furhat
@@ -364,6 +364,8 @@ class Game:
 					self.furhat.furhat.gesture(name="Wink")
 					self.milestone_list = self.milestone_manager.unlocked_oneTimes + self.milestone_manager.unlocked_pasifs
 					self.milestone_list_initial_list = self.milestone_manager.locked_oneTimes + self.milestone_manager.locked_pasifs
+					self.game_params['milestone_list'] = self.milestone_list
+					self.game_params['initial_milestone'] = self.milestone_list_initial_list
 				else:
 					self.furhat.say("My G you are broke")
 					self.turn.turn_type = None
@@ -417,9 +419,6 @@ class Game:
 			self.turn.turn_type = "regular"
 			self.active_scene.SwitchToScene(QuizScene(self.furhat))
 
-		print(" UNLOCKED: ", self.milestone_manager.unlocked_oneTimes)
-		print(" UNLOCKED: ", self.milestone_manager.unlocked_pasifs)
-
 		
 	def wrap_up_turn(self):
 		print(f"wrap trurn type: {self.turn.turn_type}")
@@ -445,21 +444,22 @@ class Game:
 				print("CONQUERED TERRITORY IS ", initial_territory_list[self.turn.attack_territory].name)
 				initial_territory_list[self.turn.attack_territory] = None
 
-				self.game_params["territory_list"].append(territory)
+
 				print(f"TERRITORY PASSIVE {territory.passive_generation}")
 				self.game_params["passive_rp_income"] += territory.passive_generation
-
 				self.territory_list[self.turn.attack_territory] = territory
+				self.game_params["territory_list"] = self.territory_list
 				print("NEW TERITTORY LIST IS ",self.territory_list )
 				self.turn.rebellion_point_change = territory.generate_passif_income(self.territory_list)
-				self.rebellion_points += self.turn.rebellion_point_change
-				self.passive_rp_income += territory.passive_generation
+				self.game_params["rebellion"] = self.game_params["rebellion"] + self.turn.rebellion_point_change
+				self.game_params["passive_rp_income"] = self.game_params["passive_rp_income"] + territory.passive_generation
 				print(f"TERRITORY PASSIVE {territory.passive_generation}")
 
 			hope, dis, reb = self.turn.get_changes()
-			self.hope += hope
-			self.discontent += dis
-			self.rebellion_points += reb
+			self.game_params["hope"] = self.game_params["hope"] + hope
+			self.game_params["discontent"] = self.game_params["discontent"] + dis
+			self.game_params["rebellion"] = self.game_params["rebellion"] + reb
+
 
 
 		elif self.turn.turn_type == "milestone":
@@ -532,6 +532,7 @@ class Game:
 					self.furhat.say(f"WHILE you go to {initial_territory_list[self.turn.attack_territory].name} to conquer it, your {lost_ter.name} was lost ")
 					self.furhat.say(f"BUT DO NOT LOSE HOPE, YOU CAN STILL TRY TO CONQUER  {initial_territory_list[self.turn.attack_territory].name} ")
 					self.territory_list = lost_ter.losing_territory(self.territory_list,number)
+					self.game_params["territory_list"] = self.territory_list
 					print("SELF TERITTORY LIST 3 AFTER LOST ", self.territory_list)
 				except:
 					print("YOU DO NOT HAVE TERRITORY TO LOSE")
